@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 @Component({
     selector: 'my-app',
-    template: `<div class="app_title">
+    template: `
+
+
+    <div class="app_title">
     {{title}}
     </div>
 
@@ -34,15 +37,14 @@ import { Component } from '@angular/core';
     <div class="app_footer">
         OM  2016
     </div>
+
     `,
 
     styles:[`
         .canvas {
-
             border: 1px solid black;
             width: 100%;
             height: 100%;
-            margin: .5em;
         }
         .nav{
             float: left;
@@ -53,10 +55,9 @@ import { Component } from '@angular/core';
             height: 100%;
         }
         .activities {
-
             margin: 0 0 2em 0;
+            position: relative;
             list-style-type: none;
-            padding: 0;
             width: 20em;
         }
         .activities li {
