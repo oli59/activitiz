@@ -17,21 +17,25 @@ import { Component } from '@angular/core';
     </div>
 
     <div class="canvas">
-
-
-    <h2>{{activity.name}} details!</h2>
     <ul class="activities">
-        <li *ngFor="let activity of activities" draggable="true">
+        <li *ngFor="let activity of activities" draggable="true" (click)="onSelect(activity)"
+            [class.selected]="activity === selectedActivity"
+            [class.done]="activity.status === 'done'">
             <span class="badge">{{activity.status}}</span> {{activity.name}}
         </li>
     </ul>
-    <div>
-        <label>name: </label> 
-        <input [(ngModel)]="activity.name" placeholder="name"> 
     </div>
-    <div><label>status: </label> {{activity.status}}</div>
 
+    <div *ngIf="selectedActivity" class="details">
+
+    <h2>{{selectedActivity.name}} details!</h2>
+    <div>
+        <label>name: </label>
+        <input [(ngModel)]="selectedActivity.name" placeholder="name">
     </div>
+    <div><label>status: </label> {{selectedActivity.status}}</div>
+    </div>
+
     </div>
 
     <div class="app_footer">
@@ -44,7 +48,6 @@ import { Component } from '@angular/core';
         .canvas {
             border: 1px solid black;
             width: 100%;
-            height: 100%;
         }
         .nav{
             float: left;
@@ -55,7 +58,7 @@ import { Component } from '@angular/core';
             height: 100%;
         }
         .activities {
-            margin: 0 0 2em 0;
+            margin: 0 0 2em 110px;
             position: relative;
             list-style-type: none;
             width: 20em;
@@ -70,7 +73,14 @@ import { Component } from '@angular/core';
             height: 4em;
             border-radius: 4px;
         }
-        .activities li:hoover {
+        .activities li.done {
+            background-color: green;
+        }
+        .activities li.selected {
+            background-color: #BBD8DC !important;
+            color: white;
+        }
+        .activities li:hover {
             color: #607D8B;
             background-color: #DDD;
             left: .1em;  
@@ -93,6 +103,11 @@ import { Component } from '@angular/core';
             margin-right: .8em;
             border-radius: 4px 0 0 4px;
         }
+        .details {
+            width: 100%;
+            minimum-height: 50em;
+            border: 1px solid black;
+        }
     `]
 })
 
@@ -100,11 +115,9 @@ export class AppComponent {
     title = 'Activitiz'
     public activities = ACTIVITIES;
 
-    activity: Activity = {
-        id: 1,
-        name: 'Working',
-        status: 'new'
-    }
+    selectedActivity: Activity;
+
+    onSelect(activity: Activity) {this.selectedActivity = activity}
 }
 
 export class Activity {
