@@ -3,12 +3,13 @@ import { Component } from '@angular/core';
     selector: 'my-app',
     template: `
 
+    <div id="wrapper">
 
     <div class="app_title">
     {{title}}
     </div>
 
-    <div class="app-body">
+    <div class="app_body">
 
     <div class="nav">
     Top<br>
@@ -20,11 +21,12 @@ import { Component } from '@angular/core';
     <ul class="activities">
         <li *ngFor="let activity of activities" draggable="true" (click)="onSelect(activity)"
             [class.selected]="activity === selectedActivity"
-            [class.done]="activity.status === 'done'">
+            [class.done]="activity.status === 'done'"
+            [class.cancelled]="activity.status === 'cancelled'">
             <span class="badge">{{activity.status}}</span> {{activity.name}}
         </li>
     </ul>
-    </div>
+
 
     <div *ngIf="selectedActivity" class="details">
 
@@ -35,6 +37,7 @@ import { Component } from '@angular/core';
     </div>
     <div><label>status: </label> {{selectedActivity.status}}</div>
     </div>
+    </div>
 
     </div>
 
@@ -42,23 +45,26 @@ import { Component } from '@angular/core';
         OM  2016
     </div>
 
+    </div>
+
     `,
 
     styles:[`
         .canvas {
             border: 1px solid black;
-            width: 100%;
+            -webkit-flex: 1;
+            flex: 1;
+            margin: 0 0.5em 0.5em;
         }
         .nav{
-            float: left;
+            margin: 0 0 0.5em 0.5em;
             line-height:30px;
             border: 1px solid black;
             background-color:#eeeeee;
             width:100px;
-            height: 100%;
         }
         .activities {
-            margin: 0 0 2em 110px;
+            margin: 0 0 2em 2em;
             position: relative;
             list-style-type: none;
             width: 20em;
@@ -74,7 +80,12 @@ import { Component } from '@angular/core';
             border-radius: 4px;
         }
         .activities li.done {
-            background-color: green;
+            color:#000 !important;
+            background-color:#a2cf6f !important
+        }
+        .activities li.cancelled {
+            color:#fff !important;
+            background-color:#f6665c !important
         }
         .activities li.selected {
             background-color: #BBD8DC !important;
@@ -104,6 +115,8 @@ import { Component } from '@angular/core';
             border-radius: 4px 0 0 4px;
         }
         .details {
+            posititon:relative;
+            bottom: -5em;
             width: 100%;
             minimum-height: 50em;
             border: 1px solid black;
