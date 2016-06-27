@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import {OnInit} from '@angular/core';
+import {Activity} from './activity';
+import {ActivityDetailComponent} from './activity-detail.component';
+import {ActivityService} from './activity.service';
+
 @Component({
     selector: 'my-app',
     template: `
@@ -28,15 +33,7 @@ import { Component } from '@angular/core';
     </ul>
 
 
-    <div *ngIf="selectedActivity" class="details">
-
-    <h2>{{selectedActivity.name}} details!</h2>
-    <div>
-        <label>name: </label>
-        <input [(ngModel)]="selectedActivity.name" placeholder="name">
-    </div>
-    <div><label>status: </label> {{selectedActivity.status}}</div>
-    </div>
+    <my-activity-detail [activity]="selectedActivity"></my-activity-detail>
     </div>
 
     </div>
@@ -121,28 +118,27 @@ import { Component } from '@angular/core';
             minimum-height: 50em;
             border: 1px solid black;
         }
-    `]
+    `],
+    directives: [ActivityDetailComponent],
+    providers: [ActivityService],
 })
 
-export class AppComponent {
-    title = 'Activitiz'
-    public activities = ACTIVITIES;
-
+export class AppComponent implements OnInit{
+    title = 'Activitiz';
+    activities: Activity[];
     selectedActivity: Activity;
 
+    constructor(private activityService: ActivityService) {}
+
     onSelect(activity: Activity) {this.selectedActivity = activity}
+
+    ngOnInit(){
+        this.getActivities();
+    }
+
+    getActivities () {
+        this.activityService.getActivities().then(activities => this.activities = activities);
+    }
 }
 
-export class Activity {
-    id: number;
-    name: string;
-    status: string;
-}
 
-var ACTIVITIES: Activity[] = [
-    {"id": 1, "name" : "Work", "status" : "new"},
-    {"id": 2, "name" : "Maison", "status" : "done"},
-    {"id": 3, "name" : "Todo", "status" : "cancelled"},
-    {"id": 4, "name" : "Menage", "status" : "new"},
-    {"id": 5, "name" : "Sport", "status" : "new"},
-];
