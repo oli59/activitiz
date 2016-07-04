@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"encoding/json"
+	"io/ioutil"
+	"io"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -12,17 +14,41 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActivityIndex(w http.ResponseWriter, r *http.Request) {
-
-	activities := Activities{
-		Activity{Name: "test1"},
-		Activity{Name: "test2"},
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(activities); err != nil {
+		panic(err)
 	}
-
-	json.NewEncoder(w).Encode(activities)
 }
 
 func ActivityShow(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	activityId := vars["activityId"]
 	fmt.Fprintln(w, "Activity show:", activityId)
+}
+
+func ActivityCreate(w http.ResponseWriter, r *http.Request) {
+	var activity Activity
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+	if err != nil {
+		panic(err)
+	}
+	if err := r.Body.Close(); err != nil {
+		panic(err)
+	}
+	if err := json.Unmarshal(body, &activity); err != nil {
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(422) // unprocessable entity
+		if err := json.NewEncoder(w).Encode(err); err != nil {
+			panic(err)
+		}
+	}
+
+	a := RepoCreateTodo(activity)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusCreated)
+	if err := json.NewEncoder(w).Encode(a); err != nil {
+		panic(err)
+	}
 }

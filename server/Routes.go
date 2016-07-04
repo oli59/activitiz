@@ -32,4 +32,10 @@ var routes = Routes{
 		"/activities/{activityId}",
 		ActivityShow,
 	},
+	Route{
+		"ActivityCreate",
+		"POST",
+		"/activities",
+		ActivityCreate,
+	},
 }

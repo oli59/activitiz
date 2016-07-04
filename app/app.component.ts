@@ -28,7 +28,7 @@ import {ActivityService} from './activity.service';
             [class.selected]="activity === selectedActivity"
             [class.done]="activity.status === 'done'"
             [class.cancelled]="activity.status === 'cancelled'">
-            <span class="badge">{{activity.status}}</span> {{activity.name}}
+            {{activity.name}}
         </li>
     </ul>
 
@@ -67,12 +67,13 @@ import {ActivityService} from './activity.service';
             width: 20em;
         }
         .activities li {
+            text-align: center;
             cursor: pointer;
             position: relative;
             left: 0;
             background-color: #EEE;
             margin: .5em;
-            padding: .3em 0;
+            padding: 0.3em 0;
             height: 4em;
             border-radius: 4px;
         }
@@ -96,20 +97,6 @@ import {ActivityService} from './activity.service';
         .activities .text {
              position: relative;
              top: -3px;
-        }
-        .activities .badge {
-            display: inline-block;
-            font-size: small;
-            color: white;
-            padding: 0.8em 0.7em 0 0.7em;
-            background-color: #607D8B;
-            line-height: 1em;
-            position: relative;
-            left: -1px;
-            top: -4px;
-            height: 4.7em;
-            margin-right: .8em;
-            border-radius: 4px 0 0 4px;
         }
         .details {
             posititon:relative;
