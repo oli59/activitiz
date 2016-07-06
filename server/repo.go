@@ -10,7 +10,7 @@ var activities Activities
 func init() {
 	RepoCreateTodo(Activity{Name: "JSON WEb Tokens for authentification", Status: "new"})
 	RepoCreateTodo(Activity{Name: "not this", Status: "cancelled"})
-	RepoCreateTodo(Activity{Name: "not this", Status: "Go rest server"})
+	RepoCreateTodo(Activity{Name: "Go rest server", Status: "done"})
 	RepoCreateTodo(Activity{Name: "Database", Status: "new"})
 	RepoCreateTodo(Activity{Name: "json server api", Status: "new"})
 	RepoCreateTodo(Activity{Name: "Format tiles", Status: "new"})
@@ -18,7 +18,9 @@ func init() {
 	RepoCreateTodo(Activity{Name: "add new / modify", Status: "new"})
 	RepoCreateTodo(Activity{Name: "change status", Status: "new"})
 	RepoCreateTodo(Activity{Name: "split css/html/ts files", Status: "new"})
-
+	RepoCreateTodo(Activity{Name: "handle server errors on angular side", Status: "new"})
+	RepoCreateTodo(Activity{Name: "trim useless http methods from go server", Status: "new"})
+	RepoCreateTodo(Activity{Name: "check bootstraps css + angular material for templates", Status: "new"})
 }
 
 func RepoFindActivity(id int) Activity {
@@ -46,4 +48,14 @@ func RepoDestroyTodo(id int) error {
 		}
 	}
 	return fmt.Errorf("Could not find Activity with id of %d to delete", id)
+}
+
+func RepoUpdateTodo(act Activity) error {
+	for i, a := range activities {
+		if a.Id == act.Id {
+			activities = append(append(activities[:i], act) , activities[i+1:]...)
+			return nil
+		}
+	}
+	return fmt.Errorf("Could not find Activity with id of %d to delete", act.Id)
 }

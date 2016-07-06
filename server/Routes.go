@@ -38,4 +38,16 @@ var routes = Routes{
 		"/activities",
 		ActivityCreate,
 	},
+	Route{
+		"ActivityUpdate",
+		"PUT",
+		"/activities",
+		ActivityUpdate,
+	},
+	Route{
+		"Options",
+		"OPTIONS",
+		"/activities",
+		Options,
+	},
 }
