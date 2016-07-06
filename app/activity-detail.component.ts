@@ -3,9 +3,10 @@ import {Activity} from './activity';
 
 import { ActivityService } from './activity.service';
 
+
 @Component({
     selector: 'my-activity-detail',
-    template:    `<div *ngIf="activity" class="details">
+    template:    `<div class="details">
 
         <h2>{{activity.name}} details!</h2>
         <div>
@@ -14,17 +15,26 @@ import { ActivityService } from './activity.service';
         </div>
     <div><label>status: </label> {{activity.status}}</div>
     <button (click)="save()">Save</button>
-</div>`
+    </div>
+`
 })
 
-export class ActivityDetailComponent{
+
+export class ActivityDetailComponent implements OnInit {
     @Input() activity: Activity;
-    @Output() close = new EventEmitter();
+    @Output() eventEmitter = new EventEmitter();
     error: any;
 
     constructor (
         private activityService: ActivityService
     ) {}
+
+    ngOnInit () {
+        if (this.activity == undefined)
+            this.activity = new Activity();
+    }
+
+
 
     save() {
         this.activityService
@@ -32,6 +42,7 @@ export class ActivityDetailComponent{
             .then(activity => {
                 this.activity=activity;
             })
-            .catch(error => this.error = error);
+            .catch(error => this.error = error)
+        this.eventEmitter.emit(this.activity);
     }
 }

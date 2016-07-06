@@ -32,9 +32,18 @@ import {ActivityService} from './activity.service';
         </li>
     </ul>
 
-
-    <my-activity-detail [activity]="selectedActivity"></my-activity-detail>
+    <div class="error" *ngIf="error">{{error}}</div>
+    <button (click)="addActivity()">Add New Activity</button>
+    <div *ngIf="addingActivity">
+        <my-activity-detail>(eventEmitter)="close($event)"</my-activity-detail>
     </div>
+
+    <div *ngIf="selectedActivity">
+        <my-activity-detail [activity]="selectedActivity"></my-activity-detail>
+    </div>
+    
+    
+    
 
     </div>
 
@@ -114,6 +123,10 @@ export class AppComponent implements OnInit{
     title = 'Activitiz';
     activities: Activity[];
     selectedActivity: Activity;
+    error: any;
+    addingActivity;
+
+
 
     constructor(private activityService: ActivityService) {}
 
@@ -125,6 +138,16 @@ export class AppComponent implements OnInit{
 
     getActivities () {
         this.activityService.getActivities().then(activities => this.activities = activities);
+    }
+
+    addActivity() {
+        this.addingActivity = true;
+        this.selectedActivity = null;
+    }
+
+    close(savedActivity: Activity) {
+        this.addingActivity = false;
+        if (savedActivity) { this.getActivities(); }
     }
 }
 
