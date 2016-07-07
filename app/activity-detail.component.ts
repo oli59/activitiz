@@ -22,7 +22,7 @@ import { ActivityService } from './activity.service';
 
 export class ActivityDetailComponent implements OnInit {
     @Input() activity: Activity;
-    @Output() eventEmitter = new EventEmitter();
+    @Output() savedNewActivity = new EventEmitter();
     error: any;
 
     constructor (
@@ -34,15 +34,15 @@ export class ActivityDetailComponent implements OnInit {
             this.activity = new Activity();
     }
 
-
-
     save() {
         this.activityService
             .save(this.activity)
             .then(activity => {
                 this.activity=activity;
+                this.savedNewActivity.emit({
+                    value: "yeash"
+                });
             })
             .catch(error => this.error = error)
-        this.eventEmitter.emit(this.activity);
     }
 }

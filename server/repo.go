@@ -11,7 +11,7 @@ func init() {
 	RepoCreateTodo(Activity{Name: "JSON WEb Tokens for authentification", Status: "new"})
 	RepoCreateTodo(Activity{Name: "not this", Status: "cancelled"})
 	RepoCreateTodo(Activity{Name: "Go rest server", Status: "done"})
-	RepoCreateTodo(Activity{Name: "Database", Status: "new"})
+	RepoCreateTodo(Activity{Name: "Database (sqlLite ?)", Status: "new"})
 	RepoCreateTodo(Activity{Name: "json server api", Status: "new"})
 	RepoCreateTodo(Activity{Name: "Format tiles", Status: "new"})
 	RepoCreateTodo(Activity{Name: "routing parent/child", Status: "new"})
@@ -21,6 +21,8 @@ func init() {
 	RepoCreateTodo(Activity{Name: "handle server errors on angular side", Status: "new"})
 	RepoCreateTodo(Activity{Name: "trim useless http methods from go server", Status: "new"})
 	RepoCreateTodo(Activity{Name: "check bootstraps css + angular material for templates", Status: "new"})
+	RepoCreateTodo(Activity{Name: "deploy on server ? dyndns from home ?", Status: "new"})
+	RepoCreateTodo(Activity{Name: "hide done", Status: "new"})
 }
 
 func RepoFindActivity(id int) Activity {

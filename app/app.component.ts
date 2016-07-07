@@ -33,9 +33,10 @@ import {ActivityService} from './activity.service';
     </ul>
 
     <div class="error" *ngIf="error">{{error}}</div>
-    <button (click)="addActivity()">Add New Activity</button>
+    <button (click)="addActivity()" class="round-button add-button">+</button>
+
     <div *ngIf="addingActivity">
-        <my-activity-detail>(eventEmitter)="close($event)"</my-activity-detail>
+        <my-activity-detail (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
     </div>
 
     <div *ngIf="selectedActivity">
@@ -57,6 +58,7 @@ import {ActivityService} from './activity.service';
 
     styles:[`
         .canvas {
+            position: relative;
             border: 1px solid black;
             -webkit-flex: 1;
             flex: 1;
@@ -114,6 +116,27 @@ import {ActivityService} from './activity.service';
             minimum-height: 50em;
             border: 1px solid black;
         }
+        .round-button {
+    background-color: #369;
+    border: none;
+    color:#f5f5f5;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 25px;
+    margin: 2px 2px;
+    cursor: pointer;
+    border-radius: 48%;
+        }
+        .round-button:hover {
+            color: #369;
+            background-color: #DDD;
+        }
+        .add-button {
+            position:absolute;
+            top:20px;
+            right:20px;
+        }
     `],
     directives: [ActivityDetailComponent],
     providers: [ActivityService],
@@ -130,7 +153,11 @@ export class AppComponent implements OnInit{
 
     constructor(private activityService: ActivityService) {}
 
-    onSelect(activity: Activity) {this.selectedActivity = activity}
+    onSelect(activity: Activity) {
+        this.selectedActivity = activity;
+        this.addingActivity = null;
+
+    }
 
     ngOnInit(){
         this.getActivities();
@@ -145,10 +172,10 @@ export class AppComponent implements OnInit{
         this.selectedActivity = null;
     }
 
-    close(savedActivity: Activity) {
+    listActivitiesChanged(event) {
+        console.log("received");
+        console.log(event);
         this.addingActivity = false;
-        if (savedActivity) { this.getActivities(); }
+        this.getActivities();
     }
 }
-
-
