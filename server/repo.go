@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 var currentId int
-
+/*
 var activities Activities
 
 // Give us some seed data
@@ -15,7 +15,7 @@ func init() {
 	RepoCreateTodo(Activity{Name: "json server api", Status: "new"})
 	RepoCreateTodo(Activity{Name: "Format tiles", Status: "new"})
 	RepoCreateTodo(Activity{Name: "routing parent/child", Status: "new"})
-	RepoCreateTodo(Activity{Name: "add new / modify", Status: "new"})
+	RepoCreateTodo(Activity{Name: "add new / modify", Status: "done"})
 	RepoCreateTodo(Activity{Name: "change status", Status: "new"})
 	RepoCreateTodo(Activity{Name: "split css/html/ts files", Status: "new"})
 	RepoCreateTodo(Activity{Name: "handle server errors on angular side", Status: "new"})
@@ -23,7 +23,7 @@ func init() {
 	RepoCreateTodo(Activity{Name: "check bootstraps css + angular material for templates", Status: "new"})
 	RepoCreateTodo(Activity{Name: "deploy on server ? dyndns from home ?", Status: "new"})
 	RepoCreateTodo(Activity{Name: "hide done", Status: "new"})
-}
+}*/
 
 func RepoFindActivity(id int) Activity {
 	for _, a := range activities {
