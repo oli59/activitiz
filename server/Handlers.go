@@ -56,7 +56,7 @@ func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	a := RepoCreateTodo(activity)
+	a := CreateActivity(activity)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
@@ -83,7 +83,7 @@ func ActivityUpdate(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	a := RepoUpdateTodo(activity)
+	a := UpdateActivity(activity)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
