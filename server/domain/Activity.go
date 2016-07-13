@@ -1,4 +1,4 @@
-package main
+package domain
 
 type Activity struct {
 	Id 	int             `json:"id"`

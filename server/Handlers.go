@@ -7,6 +7,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"io"
+
+	"github.com/oli59/activitiz/server/domain"
+	"github.com/oli59/activitiz/server/business"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +19,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func ActivityIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(activities); err != nil {
+	if err := json.NewEncoder(w).Encode(business.GetActivities()); err != nil {
 		panic(err)
 	}
 }
@@ -27,19 +30,25 @@ func Options(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Accept", "application/json")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, PUT, POST, DELETE, GET")
 	w.WriteHeader(200)
-	if err := json.NewEncoder(w).Encode(activities); err != nil {
+	/*
+	if err := json.NewEncoder(w).Encode(dao.GetActivities()); err != nil {
+		panic(err)
+	}
+	*/
+}
+
+func ActivitiesByParent(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	activityId := vars["parentActivityId"]
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(business.GetActivitiesByParent(activityId)); err != nil {
 		panic(err)
 	}
 }
 
-func ActivityShow(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	activityId := vars["activityId"]
-	fmt.Fprintln(w, "Activity show:", activityId)
-}
-
 func ActivityCreate(w http.ResponseWriter, r *http.Request) {
-	var activity Activity
+	var activity domain.Activity
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		panic(err)
@@ -56,7 +65,7 @@ func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	a := CreateActivity(activity)
+	a := business.CreateActivity(activity)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)
@@ -66,7 +75,7 @@ func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActivityUpdate(w http.ResponseWriter, r *http.Request) {
-	var activity Activity
+	var activity domain.Activity
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		panic(err)
@@ -83,7 +92,7 @@ func ActivityUpdate(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	a := UpdateActivity(activity)
+	a := business.UpdateActivity(activity)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusCreated)

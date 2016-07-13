@@ -1,14 +1,15 @@
-package main
+package dao
 
 import ("log"
 	"fmt"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/oli59/activitiz/server/domain"
 )
 
 var nextId int
 
-var activities Activities
+var  activities domain.Activities
 
 func init () {
 	db, err := sql.Open("sqlite3", "./activity.db")
@@ -33,20 +34,20 @@ func init () {
 	checkErr(err)
 
 	for rows.Next() {
-		var act Activity
+		var act domain.Activity
 		var name string
 		var status string
 		var id int
 		err = rows.Scan(&id, &name, &status)
 		checkErr(err)
-		act = Activity{id, name, status}
+		act = domain.Activity{id, name, status}
 		activities = append(activities, act)
 	}
 
 	db.Close();
 }
 
-func UpdateActivity (act Activity) error {
+func UpdateActivity (act domain.Activity) error {
 	db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
 
@@ -70,7 +71,7 @@ func UpdateActivity (act Activity) error {
 }
 
 
-func CreateActivity (a Activity) Activity {
+func CreateActivity (a domain.Activity) domain.Activity {
 	db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
 
@@ -90,6 +91,14 @@ func CreateActivity (a Activity) Activity {
 	return a
 }
 
+func GetActivities () domain.Activities {
+	return activities;
+}
+
+
+func GetActivitiesByParent (actId int) domain.Activities {
+	return activities;
+}
 
 
 
@@ -98,4 +107,3 @@ func checkErr(err error) {
 		panic(err)
 	}
 }
-

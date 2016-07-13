@@ -11,7 +11,7 @@ type Route struct {
 	HandlerFunc http.HandlerFunc
 }
 
-type Routes []Route
+type Routes [] Route
 
 var routes = Routes{
 	Route{
@@ -27,10 +27,10 @@ var routes = Routes{
 		ActivityIndex,
 	},
 	Route{
-		"ActivityShow",
+		"ActivitiesByParent",
 		"GET",
-		"/activities/{activityId}",
-		ActivityShow,
+		"/activities/{parentActivityId}",
+		ActivitiesByParent,
 	},
 	Route{
 		"ActivityCreate",
