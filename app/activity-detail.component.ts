@@ -13,7 +13,12 @@ import { ActivityService } from './activity.service';
             <label>name: </label>
             <input [(ngModel)]="activity.name" placeholder="name">
         </div>
-    <div><label>status: </label> {{activity.status}}</div>
+    <div>
+        <label>status: </label>
+        <select (change)="onChangeStatus($event.target.value)">
+            <option *ngFor="let status of statuses">{{status}}</option>         
+        </select>
+    </div>
     <button (click)="save()">Save</button>
     </div>
 `
@@ -25,6 +30,9 @@ export class ActivityDetailComponent implements OnInit {
     @Output() savedNewActivity = new EventEmitter();
     error: any;
 
+    statuses =['new', 'done', 'cancelled'];
+
+
     constructor (
         private activityService: ActivityService
     ) {}
@@ -32,6 +40,10 @@ export class ActivityDetailComponent implements OnInit {
     ngOnInit () {
         if (this.activity == undefined)
             this.activity = new Activity();
+    }
+
+    onChangeStatus(newStatus) {
+        this.activity.status = newStatus;
     }
 
     save() {

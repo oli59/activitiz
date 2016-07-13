@@ -1,6 +1,7 @@
 package main
 
-import ("fmt"
+import ("log"
+	"fmt"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -16,16 +17,19 @@ func init () {
 	stmt, err := db.Prepare("SELECT MAX(act_id) FROM activities")
 	checkErr(err)
 
-	rows, err := stmt.Query();
+	rows, err := stmt.Query()
 	checkErr(err)
 
+	rows.Next()
 	rows.Scan(&nextId)
-	nextId++
+	rows.Close()
+
+	nextId += 1
 
 	stmt, err = db.Prepare("SELECT * FROM activities")
 	checkErr(err)
 
-	rows, err = stmt.Query();
+	rows, err = stmt.Query()
 	checkErr(err)
 
 	for rows.Next() {
@@ -72,6 +76,8 @@ func CreateActivity (a Activity) Activity {
 
 	stmt, err := db.Prepare("INSERT INTO activities (act_id, act_name, act_status) values (?,?,?)")
 	checkErr(err)
+
+	log.Print(nextId)
 
 	_ , err = stmt.Exec(nextId,a.Name,a.Status)
 	checkErr(err)

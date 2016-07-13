@@ -65,6 +65,7 @@ export class ActivityService {
         if (activity.id) {
             return this.put(activity);
         }
+        activity.status = 'new';
         return this.post(activity);
     }
 

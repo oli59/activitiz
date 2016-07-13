@@ -17,6 +17,10 @@ import {ActivityService} from './activity.service';
     <div class="app_body">
 
     <div class="nav">
+    <div>
+        <input type="checkbox" [ngModel]="hideDone" (change)="hide()">
+        hide done
+    </div>
     Top<br>
     Work<br>
     epay<br>
@@ -25,6 +29,7 @@ import {ActivityService} from './activity.service';
     <div class="canvas">
     <ul class="activities">
         <li *ngFor="let activity of activities" draggable="true" (click)="onSelect(activity)"
+            [class.hidden]="hideDone && activity.status != 'new'"
             [class.selected]="activity === selectedActivity"
             [class.done]="activity.status === 'done'"
             [class.cancelled]="activity.status === 'cancelled'">
@@ -42,9 +47,6 @@ import {ActivityService} from './activity.service';
     <div *ngIf="selectedActivity">
         <my-activity-detail [activity]="selectedActivity"></my-activity-detail>
     </div>
-    
-    
-    
 
     </div>
 
@@ -57,6 +59,9 @@ import {ActivityService} from './activity.service';
     `,
 
     styles:[`
+        .hidden {
+            display: none
+        }
         .canvas {
             position: relative;
             border: 1px solid black;
@@ -149,7 +154,7 @@ export class AppComponent implements OnInit{
     error: any;
     addingActivity;
 
-
+    hideDone = false;
 
     constructor(private activityService: ActivityService) {}
 
@@ -177,5 +182,9 @@ export class AppComponent implements OnInit{
         console.log(event);
         this.addingActivity = false;
         this.getActivities();
+    }
+
+    hide() {
+        this.hideDone = (this.hideDone) ? false : true
     }
 }
