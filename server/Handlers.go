@@ -10,6 +10,7 @@ import (
 
 	"github.com/oli59/activitiz/server/domain"
 	"github.com/oli59/activitiz/server/business"
+	"strconv"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -39,13 +40,14 @@ func Options(w http.ResponseWriter, r *http.Request) {
 
 func ActivitiesByParent(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	activityId := vars["parentActivityId"]
+	activityId, _ := strconv.Atoi(vars["parentActivityId"])
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(business.GetActivitiesByParent(activityId)); err != nil {
 		panic(err)
 	}
 }
+
 
 func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 	var activity domain.Activity
