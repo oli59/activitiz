@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {ACTIVITIES} from  './mock-activities';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Activity} from "./activity";
@@ -8,11 +7,25 @@ import {Activity} from "./activity";
 export class ActivityService {
 
     private activitiesUrl = 'http://localhost:8080/activities';
+    private allParentsUrl = 'http://localhost:8080/allParents';
 
     constructor(private http: Http) {}
 
-    getActivities() {
-        return this.http.get(this.activitiesUrl)
+    getActivities(parentActivity: Activity) {
+        let id = null;
+        if (parentActivity != null)
+            id = parentActivity.id;
+        return this.http.get(this.activitiesUrl + "/" + id)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    getAllParents(activity: Activity) {
+        let id = null;
+        if (activity != null)
+            id = activity.id;
+        return this.http.get(this.allParentsUrl + "/" + id)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
@@ -23,6 +36,8 @@ export class ActivityService {
     private post(activity: Activity): Promise<Activity> {
         let headers = new Headers({
             'Content-Type': 'application/json'});
+
+        console.log("activity_parent: " + activity.parent_id);
 
         return this.http
             .post(this.activitiesUrl, JSON.stringify(activity), {headers: headers})

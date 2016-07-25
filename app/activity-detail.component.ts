@@ -7,7 +7,6 @@ import { ActivityService } from './activity.service';
 @Component({
     selector: 'my-activity-detail',
     template:    `<div class="details">
-
         <h2>{{activity.name}} details!</h2>
         <div>
             <label>name: </label>
@@ -27,6 +26,7 @@ import { ActivityService } from './activity.service';
 
 export class ActivityDetailComponent implements OnInit {
     @Input() activity: Activity;
+    @Input() parentActivity;
     @Output() savedNewActivity = new EventEmitter();
     error: any;
 
@@ -38,8 +38,12 @@ export class ActivityDetailComponent implements OnInit {
     ) {}
 
     ngOnInit () {
-        if (this.activity == undefined)
+        if (this.activity == undefined) {
             this.activity = new Activity();
+        }
+        if (this.parentActivity != null) {
+            this.activity.parent_id = this.parentActivity.id;
+        }
     }
 
     onChangeStatus(newStatus) {
@@ -52,7 +56,7 @@ export class ActivityDetailComponent implements OnInit {
             .then(activity => {
                 this.activity=activity;
                 this.savedNewActivity.emit({
-                    value: "yeash"
+                    value: activity
                 });
             })
             .catch(error => this.error = error)

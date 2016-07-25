@@ -30,7 +30,6 @@ func Options(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Accept", "application/json")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, PUT, POST, DELETE, GET")
-	w.WriteHeader(200)
 	/*
 	if err := json.NewEncoder(w).Encode(dao.GetActivities()); err != nil {
 		panic(err)
@@ -49,6 +48,17 @@ func ActivitiesByParent(w http.ResponseWriter, r *http.Request) {
 }
 
 
+/*Get all parents for activity given as a parameter*/
+func GetAllParents(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	activityId, _ := strconv.Atoi(vars["activityId"])
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(business.GetAllParents(activityId)); err != nil {
+		panic(err)
+	}
+}
+
 func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 	var activity domain.Activity
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
@@ -66,7 +76,7 @@ func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 	}
-
+	fmt.Println(string(body));
 	a := business.CreateActivity(activity)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")

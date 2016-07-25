@@ -4,6 +4,7 @@ import ("log"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/oli59/activitiz/server/domain"
+	"fmt"
 )
 
 var nextId int
@@ -46,6 +47,8 @@ func UpdateActivity (act domain.Activity) error {
 func CreateActivity (a domain.Activity) domain.Activity {
 	db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
+
+	fmt.Println(a.ParentId)
 
 	stmt, err := db.Prepare("INSERT INTO activities (act_id, act_parent_id, act_name, act_status) values (?,?,?,?)")
 	checkErr(err)
@@ -129,6 +132,38 @@ func GetActivitiesByParent (actId int) domain.Activities {
 	return activities;
 }
 
+
+func GetAllParents (actId int) domain.Activities {
+	var activities domain.Activities;
+
+	db, err := sql.Open("sqlite3", "./activity.db")
+	checkErr(err)
+
+	stmt, err := db.Prepare("SELECT activities.* FROM activities_parent_closure INNER JOIN activities ON activities.act_id = activities_parent_closure.apc_parent_id WHERE apc_child_id = ? ORDER BY apc_depth DESC;")
+	checkErr(err)
+
+	rows, err := stmt.Query(actId);
+	checkErr(err)
+
+	for rows.Next() {
+		var act domain.Activity
+		var name string
+		var status string
+		var id int
+		var parentId domain.JsonNullInt64
+		err = rows.Scan(&id, &parentId, &name, &status)
+		checkErr(err)
+		act = domain.Activity{id, parentId, name, status}
+		activities = append(activities, act)
+	}
+
+	fmt.Println(activities);
+
+	db.Close();
+
+	return activities;
+
+}
 
 
 func checkErr(err error) {

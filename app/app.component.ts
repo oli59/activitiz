@@ -3,9 +3,11 @@ import {OnInit} from '@angular/core';
 import {Activity} from './activity';
 import {ActivityDetailComponent} from './activity-detail.component';
 import {ActivityService} from './activity.service';
+import {TruncatePipe} from './truncate';
 
 @Component({
     selector: 'my-app',
+    pipes: [TruncatePipe],
     template: `
 
     <div id="wrapper">
@@ -21,14 +23,17 @@ import {ActivityService} from './activity.service';
         <input type="checkbox" [ngModel]="hideDone" (change)="hide()">
         hide done
     </div>
-    Top<br>
-    Work<br>
-    epay<br>
+        <ul class="all-parents">
+            <li *ngFor="let activity of allParents" draggable="false" (click)="enterActivity(activity)"
+                [class.curr]="activity.id === parentActivity.id">
+                {{activity.name | truncate : 15}}
+            </li>
+        </ul>
     </div>
 
     <div class="canvas">
     <ul class="activities">
-        <li *ngFor="let activity of activities" draggable="true" (click)="onSelect(activity)"
+        <li *ngFor="let activity of activities" draggable="true"  (dblclick)="enterActivity(activity)" (click)="onSelect(activity)"
             [class.hidden]="hideDone && activity.status != 'new'"
             [class.selected]="activity === selectedActivity"
             [class.done]="activity.status === 'done'"
@@ -41,7 +46,7 @@ import {ActivityService} from './activity.service';
     <button (click)="addActivity()" class="round-button add-button">+</button>
 
     <div *ngIf="addingActivity">
-        <my-activity-detail (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
+        <my-activity-detail [parentActivity]="parentActivity" (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
     </div>
 
     <div *ngIf="selectedActivity">
@@ -73,8 +78,34 @@ import {ActivityService} from './activity.service';
             margin: 0 0 0.5em 0.5em;
             line-height:30px;
             border: 1px solid black;
-            background-color:#eeeeee;
             width:100px;
+        }
+        .all-parents {
+            margin: 0 0 0 0;
+            position: relative;
+            list-style-type: none;
+            width: 110px;
+        }
+        .all-parents li {
+            text-align: center;
+            position: relative;
+            color: #eee;
+            margin: .5em;
+            left: -45px;
+            background-color: #607D8B;
+            border-radius: 4px;
+        }
+        .all-parents li:hover {
+            background-color: #EEE;
+            cursor: pointer;
+            color: #607d8b;
+        }
+        .all-parents li.curr {
+            background-color: #BBD8DC !important;
+            color: white;
+        }
+        .all-parents li.curr:hover {
+            cursor: default;
         }
         .activities {
             margin: 0 0 2em 2em;
@@ -122,16 +153,16 @@ import {ActivityService} from './activity.service';
             border: 1px solid black;
         }
         .round-button {
-    background-color: #369;
-    border: none;
-    color:#f5f5f5;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 25px;
-    margin: 2px 2px;
-    cursor: pointer;
-    border-radius: 48%;
+             background-color: #369;
+             border: none;
+             color:#f5f5f5;
+             padding: 8px 12px;
+             text-align: center;
+             text-decoration: none;
+             font-size: 25px;
+             margin: 2px 2px;
+             cursor: pointer;
+             border-radius: 48%;
         }
         .round-button:hover {
             color: #369;
@@ -152,16 +183,34 @@ export class AppComponent implements OnInit{
     activities: Activity[];
     selectedActivity: Activity;
     error: any;
-    addingActivity;
-
+    addingActivity: boolean;
     hideDone = false;
+    parentActivity: Activity;
+    allParents: Activity[] = [];
+
+    topActivity: Activity = {
+        id: 0,
+        name: 'Top',
+        parent_id: 0,
+        status: 'new'
+    };
+
 
     constructor(private activityService: ActivityService) {}
 
     onSelect(activity: Activity) {
         this.selectedActivity = activity;
         this.addingActivity = null;
+    }
 
+    enterActivity(activity) {
+        if (activity != this.parentActivity) {
+            this.selectedActivity = null;
+            this.addingActivity = null;
+            this.parentActivity = activity;
+            this.getActivities();
+            this.getAllParents();
+        }
     }
 
     ngOnInit(){
@@ -169,7 +218,15 @@ export class AppComponent implements OnInit{
     }
 
     getActivities () {
-        this.activityService.getActivities().then(activities => this.activities = activities);
+        this.activityService.getActivities(this.parentActivity).then(activities => this.activities = activities);
+    }
+    
+    getAllParents() {
+        this.activityService.getAllParents(this.parentActivity).then(activities => {
+                this.allParents = activities;
+                this.allParents.unshift(this.topActivity);
+            }
+        );
     }
 
     addActivity() {
@@ -178,8 +235,6 @@ export class AppComponent implements OnInit{
     }
 
     listActivitiesChanged(event) {
-        console.log("received");
-        console.log(event);
         this.addingActivity = false;
         this.getActivities();
     }

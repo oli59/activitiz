@@ -7,7 +7,7 @@ import (
 
 type Activity struct {
 	Id 	  	int             `json:"id"`
-	ParentId	JsonNullInt64	`json:parent_id`
+	ParentId	JsonNullInt64	`json:"parent_id"`
 	Name    	string		`json:"name"`
 	Status    	string		`json:"status"`
 }
@@ -28,6 +28,7 @@ func (v JsonNullInt64) MarshalJSON() ([]byte, error) {
 
 func (v *JsonNullInt64) UnmarshalJSON(data []byte) error {
 	var x *int64
+
 	if err := json.Unmarshal(data, &x); err != nil {
 		return err
 	}

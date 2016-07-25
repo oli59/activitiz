@@ -33,6 +33,12 @@ var routes = Routes{
 		ActivitiesByParent,
 	},
 	Route{
+		"GetAllParents",
+		"GET",
+		"/allParents/{activityId}",
+		GetAllParents,
+	},
+	Route{
 		"ActivityCreate",
 		"POST",
 		"/activities",
