@@ -191,7 +191,7 @@ export class AppComponent implements OnInit{
     topActivity: Activity = {
         id: 0,
         name: 'Top',
-        parent_id: 0,
+        parent_id: null,
         status: 'new'
     };
 
