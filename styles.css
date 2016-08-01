@@ -29,8 +29,6 @@ body {
     min-height: 90%;
     width:100%;
     padding-bottom:30px;
-    display: -webkit-flex;
-    display: flex;
 }
 
 .app_footer {
