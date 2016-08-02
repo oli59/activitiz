@@ -1,0 +1,14 @@
+<div class="details">
+    <h2>{{activity.name}} details!</h2>
+    <div>
+        <label>name: </label>
+        <input [(ngModel)]="activity.name" placeholder="name">
+    </div>
+    <div>
+        <label>status: </label>
+        <select (change)="onChangeStatus($event.target.value)">
+            <option *ngFor="let status of statuses">{{status}}</option>
+        </select>
+    </div>
+    <button (click)="save()">Save</button>
+</div>

@@ -1,0 +1,37 @@
+<div class="activities-component">
+    <div class="nav">
+        <div>
+            <input type="checkbox" [ngModel]="hideDone" (change)="hide()">
+            hide done
+        </div>
+        <ul class="all-parents">
+            <li *ngFor="let activity of allParents" draggable="false" (click)="enterActivity(activity)"
+                [class.curr]="activity.id === parentActivity.id">
+                {{activity.name | truncate : 15}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="canvas">
+        <ul class="activities">
+            <li *ngFor="let activity of activities" draggable="true"  (dblclick)="enterActivity(activity)" (click)="onSelect(activity)"
+                [class.hidden]="hideDone && activity.status != 'new'"
+                [class.selected]="activity === selectedActivity"
+                [class.done]="activity.status === 'done'"
+                [class.cancelled]="activity.status === 'cancelled'">
+                {{activity.name}}
+            </li>
+        </ul>
+
+
+        <button (click)="addActivity()" class="round-button add-button">+</button>
+
+        <div *ngIf="addingActivity">
+            <my-activity-detail [parentActivity]="parentActivity" (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
+        </div>
+
+        <div *ngIf="selectedActivity">
+            <my-activity-detail [activity]="selectedActivity"></my-activity-detail>
+        </div>
+    </div>
+</div>

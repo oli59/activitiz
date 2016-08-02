@@ -10,6 +10,8 @@ import {ActivityService} from './activity.service'
     {{title}}
     </div>
     
+    <div class="error" *ngIf="error">{{error}}</div>
+    
     <a [routerLink]="['/activities']">Activities</a>
     
     <router-outlet class="app_body"></router-outlet>
@@ -27,4 +29,5 @@ import {ActivityService} from './activity.service'
 
 export class AppComponent {
     title = 'Activitiz';
+    error: any;
 }
