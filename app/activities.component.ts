@@ -55,8 +55,12 @@ export class ActivitiesComponent implements OnInit{
     
     getAllParents() {
         this.activityService.getAllParents(this.parentActivity).then(activities => {
-                this.allParents = activities;
-                this.allParents.unshift(this.topActivity);
+                if (activities != null) {
+                    this.allParents = activities;
+                    this.allParents.unshift(this.topActivity);
+                }
+                else
+                    this.allParents = [];
             }
         );
     }
