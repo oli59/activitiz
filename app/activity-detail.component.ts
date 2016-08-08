@@ -26,6 +26,7 @@ export class ActivityDetailComponent implements OnInit {
     ngOnInit () {
         if (this.activity == undefined) {
             this.activity = new Activity();
+            this.activity.status = 'new';
         }
         if (this.parentActivity != null) {
             this.activity.parent_id = this.parentActivity.id;
