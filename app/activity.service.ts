@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {Activity} from "./activity";
+import {Activity} from './activity';
+import {ErrorService} from './error.service'
 
 @Injectable()
 export class ActivityService {
@@ -9,7 +10,7 @@ export class ActivityService {
     private activitiesUrl = 'http://localhost:8080/activities';
     private allParentsUrl = 'http://localhost:8080/allParents';
 
-    constructor(private http: Http) {}
+    constructor(private http: Http, private errorService: ErrorService) {}
 
     getActivities(parentActivity: Activity) {
         let id = null;
@@ -18,7 +19,9 @@ export class ActivityService {
         return this.http.get(this.activitiesUrl + "/" + id)
             .toPromise()
             .then(response => response.json())
-            .catch(this.handleError);
+            .catch(err => {
+                this.handleError(err);
+            });
     }
 
     getAllParents(activity: Activity) {
@@ -28,7 +31,9 @@ export class ActivityService {
         return this.http.get(this.allParentsUrl + "/" + id)
             .toPromise()
             .then(response => response.json())
-            .catch(this.handleError);
+            .catch(err => {
+                this.handleError(err);
+            });
     }
 
 
@@ -43,7 +48,9 @@ export class ActivityService {
             .post(this.activitiesUrl, JSON.stringify(activity), {headers: headers})
             .toPromise()
             .then(res => res.json())
-            .catch(this.handleError);
+            .catch(err => {
+                this.handleError(err);
+            });
     }
 
 
@@ -58,7 +65,9 @@ export class ActivityService {
             .put(url, JSON.stringify(activity), {headers: headers})
             .toPromise()
             .then(() => activity)
-            .catch(this.handleError);
+            .catch(err => {
+                this.handleError(err);
+            });
     }
 
 
@@ -72,7 +81,9 @@ export class ActivityService {
         return this.http
             .delete(url, headers)
             .toPromise()
-            .catch(this.handleError);
+            .catch(err => {
+                this.handleError(err);
+            });
     }
 
 
@@ -84,9 +95,13 @@ export class ActivityService {
         return this.post(activity);
     }
 
-
     private handleError(error: any) {
         console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
+
+        let errMsg = (error.message) ? error.message :
+            error.status ? `${error.status} - ${error.statusText}` : 'Server did not reply';
+
+        this.errorService.addError(errMsg);
+        return Promise.reject(errMsg);
     }
 }

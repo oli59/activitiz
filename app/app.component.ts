@@ -1,6 +1,8 @@
 import { Component }       from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
-import {ActivityService} from './activity.service'
+import {ActivityService} from './activity.service';
+import {ErrorsComponent} from './errors.component'
+import {ErrorService} from './error.service'
 
 @Component({
     selector: 'my-app',
@@ -10,9 +12,9 @@ import {ActivityService} from './activity.service'
     {{title}}
     </div>
     
-    <div class="error" *ngIf="error">{{error}}</div>
-    
     <a [routerLink]="['/activities']">Activities</a>
+    
+    <my-errors></my-errors>
     
     <router-outlet class="app_body"></router-outlet>
 
@@ -23,8 +25,8 @@ import {ActivityService} from './activity.service'
     </div>
 
     `,
-    directives: [ROUTER_DIRECTIVES],
-    providers: [ActivityService]
+    directives: [ROUTER_DIRECTIVES, ErrorsComponent],
+    providers: [ActivityService, ErrorService]
 })
 
 export class AppComponent {

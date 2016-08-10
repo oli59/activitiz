@@ -4,6 +4,7 @@ import {Activity} from './activity';
 import {ActivityDetailComponent} from './activity-detail.component';
 import {ActivityService} from './activity.service';
 import {TruncatePipe} from './truncate';
+import {ErrorService} from './error.service'
 
 @Component({
     selector: 'my-activities',
@@ -28,7 +29,7 @@ export class ActivitiesComponent implements OnInit{
         status: 'new'
     };
 
-    constructor(private activityService: ActivityService) {}
+    constructor(private activityService: ActivityService, private errorService: ErrorService) {}
 
     onSelect(activity: Activity) {
         this.selectedActivity = activity;
@@ -37,6 +38,7 @@ export class ActivitiesComponent implements OnInit{
 
     enterActivity(activity) {
         if (activity != this.parentActivity) {
+            this.errorService.reset();
             this.selectedActivity = null;
             this.addingActivity = null;
             this.parentActivity = activity;
@@ -50,7 +52,8 @@ export class ActivitiesComponent implements OnInit{
     }
 
     getActivities () {
-        this.activityService.getActivities(this.parentActivity).then(activities => this.activities = activities);
+        this.activityService.getActivities(this.parentActivity).then(activities => this.activities = activities)
+            .catch();
     }
     
     getAllParents() {
@@ -62,7 +65,7 @@ export class ActivitiesComponent implements OnInit{
                 else
                     this.allParents = [];
             }
-        );
+        ).catch();
     }
 
     addActivity() {
