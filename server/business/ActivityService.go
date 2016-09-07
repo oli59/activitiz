@@ -9,6 +9,9 @@ func UpdateActivity (act domain.Activity) error {
 	return dao.UpdateActivity(act)
 }
 
+func DeleteActivity (activityId int) error {
+	return dao.DeleteActivity(activityId)
+}
 
 func CreateActivity (a domain.Activity) domain.Activity {
 	return dao.CreateActivity(a)

@@ -31,7 +31,7 @@
         </div>
 
         <div *ngIf="selectedActivity">
-            <my-activity-detail [activity]="selectedActivity"></my-activity-detail>
+            <my-activity-detail [activity]="selectedActivity" (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
         </div>
     </div>
 </div>

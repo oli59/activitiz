@@ -75,6 +75,7 @@ export class ActivitiesComponent implements OnInit{
 
     listActivitiesChanged(event) {
         this.addingActivity = false;
+        this.selectedActivity = null;
         this.getActivities();
     }
 

@@ -51,9 +51,22 @@ var routes = Routes{
 		ActivityUpdate,
 	},
 	Route{
+    		"ActivityDelete",
+    		"DELETE",
+    		"/activities/{activityId}",
+    		ActivityDelete,
+    },
+	Route{
 		"Options",
 		"OPTIONS",
 		"/activities",
 		Options,
 	},
+
+	Route{
+    		"OptionsId",
+    		"OPTIONS",
+    		"/activities/{activityId}",
+    		Options,
+    },
 }

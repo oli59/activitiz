@@ -15,6 +15,8 @@ export class ActivityDetailComponent implements OnInit {
     @Input() parentActivity;
     @Output() savedNewActivity = new EventEmitter();
     error: any;
+    showDeleteConfirmation = false;
+    existingActivity;
 
     statuses =['new', 'done', 'cancelled'];
 
@@ -27,6 +29,10 @@ export class ActivityDetailComponent implements OnInit {
         if (this.activity == undefined) {
             this.activity = new Activity();
             this.activity.status = 'new';
+            this.existingActivity = false;
+        }
+        else {
+            this.existingActivity = true;
         }
         if (this.parentActivity != null) {
             this.activity.parent_id = this.parentActivity.id;
@@ -44,6 +50,26 @@ export class ActivityDetailComponent implements OnInit {
                 this.activity=activity;
                 this.savedNewActivity.emit({
                     value: activity
+                });
+            })
+            .catch(error => this.error = error)
+    }
+
+    deleteConfirmation() {
+        this.showDeleteConfirmation = true;
+    }
+
+    abortDelete() {
+        this.showDeleteConfirmation = false;
+    }
+
+    delete() {
+        this.activityService
+            .delete(this.activity)
+            .then(response => {
+                this.showDeleteConfirmation = false;
+                this.savedNewActivity.emit({
+                    value: this.activity
                 });
             })
             .catch(error => this.error = error)

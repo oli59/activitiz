@@ -43,6 +43,21 @@ func UpdateActivity (act domain.Activity) error {
 	return nil;
 }
 
+func DeleteActivity (activityId int) error {
+	db, err := sql.Open("sqlite3", "./activity.db")
+	checkErr(err)
+
+	stmt, err := db.Prepare("DELETE FROM activities WHERE act_id=?")
+	checkErr(err)
+
+	_ , err = stmt.Exec(activityId)
+	checkErr(err)
+
+	db.Close();
+
+	return nil;
+}
+
 
 func CreateActivity (a domain.Activity) domain.Activity {
 	db, err := sql.Open("sqlite3", "./activity.db")

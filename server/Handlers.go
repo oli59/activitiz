@@ -112,3 +112,20 @@ func ActivityUpdate(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 }
+
+
+func ActivityDelete(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    activityId, _ := strconv.Atoi(vars["activityId"])
+
+    business.DeleteActivity(activityId)
+
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.WriteHeader(http.StatusOK)
+    if err := json.NewEncoder(w).Encode(business.GetAllParents(activityId)); err != nil {
+    	panic(err)
+   	}
+
+
+
+}
