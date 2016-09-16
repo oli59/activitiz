@@ -14,7 +14,8 @@
 
     <div class="canvas">
         <ul class="activities">
-            <li *ngFor="let activity of activities" draggable="true"  (dblclick)="enterActivity(activity)" (click)="onSelect(activity)"
+            <li *ngFor="let activity of activities" draggable="true" (contextmenu)="contextMenu($event, activity)"
+                    (dblclick)="enterActivity(activity)" (click)="onSelect(activity)"
                 [class.hidden]="hideDone && activity.status != 'new'"
                 [class.selected]="activity === selectedActivity"
                 [class.done]="activity.status === 'done'"

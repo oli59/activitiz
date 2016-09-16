@@ -3,6 +3,8 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 import {ActivityService} from './activity.service';
 import {ErrorsComponent} from './errors.component'
 import {ErrorService} from './error.service'
+import {ActivityContextMenuService} from './activity-contextmenu.service'
+import {ActivityContextmenuComponent} from './activity-contextmenu.component'
 
 @Component({
     selector: 'my-app',
@@ -16,6 +18,8 @@ import {ErrorService} from './error.service'
     
     <my-errors></my-errors>
     
+    <activity-contextmenu></activity-contextmenu>
+    
     <router-outlet class="app_body"></router-outlet>
 
     <div class="app_footer">
@@ -25,8 +29,8 @@ import {ErrorService} from './error.service'
     </div>
 
     `,
-    directives: [ROUTER_DIRECTIVES, ErrorsComponent],
-    providers: [ActivityService, ErrorService]
+    directives: [ROUTER_DIRECTIVES, ErrorsComponent, ActivityContextmenuComponent],
+    providers: [ActivityService, ErrorService, ActivityContextMenuService]
 })
 
 export class AppComponent {

@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output, OnInit, OnDestroy} from '@angular/core';
 import {Activity} from './activity';
+import {activityStatuses} from './activity-statuses';
 
 import { ActivityService } from './activity.service';
 
@@ -17,9 +18,7 @@ export class ActivityDetailComponent implements OnInit {
     error: any;
     showDeleteConfirmation = false;
     existingActivity;
-
-    statuses =['new', 'done', 'cancelled'];
-
+    statuses = activityStatuses;
 
     constructor (
         private activityService: ActivityService

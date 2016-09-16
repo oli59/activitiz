@@ -1,0 +1,1 @@
+export const activityStatuses =['new', 'done', 'cancelled'];

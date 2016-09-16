@@ -4,7 +4,8 @@ import {Activity} from './activity';
 import {ActivityDetailComponent} from './activity-detail.component';
 import {ActivityService} from './activity.service';
 import {TruncatePipe} from './truncate';
-import {ErrorService} from './error.service'
+import {ErrorService} from './error.service';
+import {ActivityContextMenuService} from './activity-contextmenu.service'
 
 @Component({
     selector: 'my-activities',
@@ -21,6 +22,7 @@ export class ActivitiesComponent implements OnInit{
     hideDone = true;
     parentActivity: Activity;
     allParents: Activity[] = [];
+    links = ["one", "two"];
 
     topActivity: Activity = {
         id: 0,
@@ -29,7 +31,8 @@ export class ActivitiesComponent implements OnInit{
         status: 'new'
     };
 
-    constructor(private activityService: ActivityService, private errorService: ErrorService) {}
+    constructor(private activityService: ActivityService, private errorService: ErrorService,
+                private activityContextMenuService: ActivityContextMenuService) {}
 
     onSelect(activity: Activity) {
         this.selectedActivity = activity;
@@ -49,6 +52,11 @@ export class ActivitiesComponent implements OnInit{
 
     ngOnInit(){
         this.getActivities();
+    }
+
+    contextMenu(event, activity: Activity) {
+        this.activityContextMenuService.showMenu(event, activity);
+        return false;
     }
 
     getActivities () {
