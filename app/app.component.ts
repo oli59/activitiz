@@ -9,13 +9,19 @@ import {ActivityContextmenuComponent} from './activity-contextmenu.component'
 @Component({
     selector: 'my-app',
     template: `<div id="wrapper">
-
-    <div class="app_title">
-    {{title}}
-    </div>
     
-    <a [routerLink]="['/activities']">Activities</a>
-    
+    <nav class="navbar navbar-default navbar-custom">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand navbar-brand-custom" href="#">{{title}}</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="#" [routerLink]="['/activities']">Activities</a></li>
+                <li><a href="#">Page 2</a></li> 
+            </ul>
+        </div>
+    </nav>
+        
     <my-errors></my-errors>
     
     <activity-contextmenu></activity-contextmenu>

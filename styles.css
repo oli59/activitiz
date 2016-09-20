@@ -8,6 +8,32 @@
     margin: 0 0 .2em;
 }
 
+.navbar-custom {
+    background-color:#369;
+    border-color: #369;
+    color: white;
+}
+
+.navbar-custom .navbar-brand-custom {
+    font-size: 250%;
+    font-family: Arial, Helvetica, sans-serif;
+    pading: 5px;
+    margin: 0 0 .2em;
+    color:white;
+}
+
+.navbar-custom .navbar-nav>li>a {
+    color:white;
+    font-size: 150%;
+}
+
+.navbar-custom .navbar-nav>li>a:hover {
+    color:white;
+    font-size: 150%;
+    background-color: #00a0f2;
+}
+
+
 #wrapper {
     min-height: 100%;
     position:relative;
