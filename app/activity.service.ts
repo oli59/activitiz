@@ -88,11 +88,14 @@ export class ActivityService {
 
 
     save(activity: Activity): Promise<Activity>  {
+        console.log("save");
         if (activity.id) {
             return this.put(activity);
         }
-        activity.status = 'new';
-        return this.post(activity);
+        else {
+            activity.status = 'new';
+            return this.post(activity);
+        }
     }
 
     private handleError(error: any) {

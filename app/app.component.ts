@@ -13,11 +13,13 @@ import {ActivityContextmenuComponent} from './activity-contextmenu.component'
     <nav class="navbar navbar-default navbar-custom">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand navbar-brand-custom" href="#">{{title}}</a>
+                <p class="navbar-brand-custom">{{title}}</p>
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="#" [routerLink]="['/activities']">Activities</a></li>
-                <li><a href="#">Page 2</a></li> 
+                <li><a href="#">Time Log</a></li> 
+                <li><a href="#">Stats</a></li>
+                <li><a href="#">Bullet Journal</a></li>
             </ul>
         </div>
     </nav>

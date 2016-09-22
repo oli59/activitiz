@@ -1,15 +1,18 @@
 <div class="activities-component">
-    <div class="nav">
-        <div>
-            <input type="checkbox" [ngModel]="hideDone" (change)="hide()">
-            hide done
-        </div>
-        <ul class="all-parents">
-            <li *ngFor="let activity of allParents" draggable="false" (click)="enterActivity(activity)"
-                [class.curr]="activity.id === parentActivity.id">
-                {{activity.name | truncate : 15}}
+    <div class="navi">
+        <ul class="nav nav-pills nav-stacked" role="tablist">
+            <li *ngFor="let activity of allParents" draggable="false">
+                <a (click)="enterActivity(activity)" >{{activity.name | truncate : 15}}</a>
             </li>
         </ul>
+        <hr>
+        <div>
+            <label>Hide Closed</label>
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" [ngModel]="hideDone" (change)="hide()">
+                <label class="onoffswitch-label" for="myonoffswitch">
+                    <span class="onoffswitch-inner"></span>
+                </label>
+        </div>
     </div>
 
     <div class="canvas">
@@ -28,7 +31,7 @@
         <button (click)="addActivity()" class="round-button add-button">+</button>
 
         <div *ngIf="addingActivity">
-            <my-activity-detail [parentActivity]="parentActivity" (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
+            <my-activity-detail [parentActivity]="parentActivity" [activity]="null" (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
         </div>
 
         <div *ngIf="selectedActivity">

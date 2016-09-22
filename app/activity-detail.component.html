@@ -1,18 +1,21 @@
-<div class="details">
-    <h2>{{activity.name}} details!</h2>
-    <div>
-        <label>name: </label>
-        <input [(ngModel)]="activity.name" placeholder="name">
+<div class="panel panel-primary">
+    <div  class="panel-heading">{{activity.name}}</div>
+    <div class="panel-body">
+        <div>
+            <label>name: </label>
+            <input [(ngModel)]="activity.name" placeholder="name">
+        </div>
+        <div>
+            <label>status: </label>
+            <select [(ngModel)]="activity.status">
+                <option *ngFor="let status of statuses" value="{{status}}">{{status}}</option>
+            </select>
+        </div>
     </div>
-    <div>
-        <label>status: </label>
-        <select [(ngModel)]="activity.status">
-            <option *ngFor="let status of statuses" value="{{status}}">{{status}}</option>
-        </select>
+    <div class="panel-footer">
+        <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+        <button type="button" class="btn btn-primary" *ngIf="existingActivity" (click)="deleteConfirmation()">Delete</button>
     </div>
-    <button (click)="save()">Save</button>
-    <button *ngIf="existingActivity" (click)="deleteConfirmation()">Delete</button>
-
 
     <div *ngIf="showDeleteConfirmation" class="modal fade show in danger">
         <div class="modal-dialog">
@@ -26,8 +29,8 @@
                     <p>Are you sure you want to delete this activity ?</p>
                 </div>
                 <div class="modal-footer">
-                    <button (click)="delete()">Delete</button>
-                    <button (click)="abortDelete()">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="delete()">Delete</button>
+                    <button type="button" class="btn btn-primary" (click)="abortDelete()">Cancel</button>
                 </div>
             </div>
         </div>

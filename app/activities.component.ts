@@ -21,15 +21,15 @@ export class ActivitiesComponent implements OnInit{
     addingActivity: boolean;
     hideDone = true;
     parentActivity: Activity;
-    allParents: Activity[] = [];
-    links = ["one", "two"];
-
     topActivity: Activity = {
         id: 0,
         name: 'Top',
         parent_id: null,
         status: 'new'
     };
+    allParents = [this.topActivity];
+    links = ["one", "two"];
+
 
     constructor(private activityService: ActivityService, private errorService: ErrorService,
                 private activityContextMenuService: ActivityContextMenuService) {}
@@ -70,15 +70,17 @@ export class ActivitiesComponent implements OnInit{
                     this.allParents = activities;
                     this.allParents.unshift(this.topActivity);
                 }
-                else
+                else {
                     this.allParents = [];
+                    this.allParents.unshift(this.topActivity);
+                }
             }
         ).catch();
     }
 
     addActivity() {
-        this.addingActivity = true;
         this.selectedActivity = null;
+        this.addingActivity = true;
     }
 
     listActivitiesChanged(event) {
