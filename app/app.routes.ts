@@ -1,18 +1,17 @@
-import { provideRouter, RouterConfig }  from '@angular/router';
+import { ModuleWithProviders }  from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { ActivitiesComponent} from './activities.component'
 
-const routes: RouterConfig = [
+const routes: Routes = [
     {
         path: 'activities',
         component: ActivitiesComponent
     },
     {
         path: '',
-        redirectTo: '/activities',
+        redirectTo: 'activities',
         pathMatch: 'full'
     },
 ];
 
-export const appRouterProviders = [
-    provideRouter(routes)
-];
+export const routing: ModuleWithProviders = RouterModule.forRoot(routes);

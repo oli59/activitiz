@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, Output, OnInit, OnDestroy} from '@angular/core';
 import {Activity} from './activity';
 import {activityStatuses} from './activity-statuses';
-
 import { ActivityService } from './activity.service';
+
 
 
 @Component({

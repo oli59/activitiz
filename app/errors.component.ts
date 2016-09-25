@@ -1,5 +1,4 @@
 import { Component }       from '@angular/core';
-import {Observable} from 'rxjs/Observable';
 import {ErrorService} from "./error.service";
 
 @Component({selector: 'my-errors',

@@ -1,18 +1,14 @@
 import { Component } from '@angular/core';
 import {OnInit} from '@angular/core';
 import {Activity} from './activity';
-import {ActivityDetailComponent} from './activity-detail.component';
 import {ActivityService} from './activity.service';
-import {TruncatePipe} from './truncate';
 import {ErrorService} from './error.service';
 import {ActivityContextMenuService} from './activity-contextmenu.service'
 
 @Component({
     selector: 'my-activities',
-    pipes: [TruncatePipe],
     templateUrl: 'app/activities.component.html',
     styleUrls:['app/activities.component.css'],
-    directives: [ActivityDetailComponent],
 })
 
 export class ActivitiesComponent implements OnInit{

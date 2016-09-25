@@ -2,15 +2,16 @@
     <div  class="panel-heading">{{activity.name}}</div>
     <div class="panel-body">
         <div>
-            <label>name: </label>
-            <input [(ngModel)]="activity.name" placeholder="name">
+            <md-input [(ngModel)]="activity.name" placeholder="name"></md-input>
         </div>
+
         <div>
             <label>status: </label>
             <select [(ngModel)]="activity.status">
                 <option *ngFor="let status of statuses" value="{{status}}">{{status}}</option>
             </select>
         </div>
+
     </div>
     <div class="panel-footer">
         <button type="button" class="btn btn-primary" (click)="save()">Save</button>
