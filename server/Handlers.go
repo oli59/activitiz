@@ -17,6 +17,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Welcome!")
 }
 
+/*return all activities*/
 func ActivityIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
@@ -25,6 +26,7 @@ func ActivityIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*Says what kind of request should be accepted by the server*/
 func Options(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -37,6 +39,7 @@ func Options(w http.ResponseWriter, r *http.Request) {
 	*/
 }
 
+/*Gives all activities with a common parent*/
 func ActivitiesByParent(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	activityId, _ := strconv.Atoi(vars["parentActivityId"])
@@ -59,6 +62,7 @@ func GetAllParents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*Create a new activity with given parameters*/
 func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 	var activity domain.Activity
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
@@ -86,6 +90,7 @@ func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*Update activity with given parameters*/
 func ActivityUpdate(w http.ResponseWriter, r *http.Request) {
 	var activity domain.Activity
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
@@ -114,6 +119,7 @@ func ActivityUpdate(w http.ResponseWriter, r *http.Request) {
 }
 
 
+/*Delete the activity with given activity_id*/
 func ActivityDelete(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     activityId, _ := strconv.Atoi(vars["activityId"])
@@ -128,4 +134,41 @@ func ActivityDelete(w http.ResponseWriter, r *http.Request) {
 
 
 
+}
+
+/*return all timeLogs order by date desc*/
+func TimeLogIndex(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(business.GetTimeLogs()); err != nil {
+		panic(err)
+	}
+}
+
+/*Create a new TimeLog with given parameters*/
+func TimeLogCreate(w http.ResponseWriter, r *http.Request) {
+	var timeLog domain.TimeLog
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+	if err != nil {
+		panic(err)
+	}
+	if err := r.Body.Close(); err != nil {
+		panic(err)
+	}
+	if err := json.Unmarshal(body, &timeLog); err != nil {
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(422) // unprocessable entity
+		if err := json.NewEncoder(w).Encode(err); err != nil {
+			panic(err)
+		}
+	}
+	fmt.Println(string(body));
+	tl := business.CreateTimeLog(timeLog)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusCreated)
+	if err := json.NewEncoder(w).Encode(tl); err != nil {
+		panic(err)
+	}
 }

@@ -69,4 +69,24 @@ var routes = Routes{
     		"/activities/{activityId}",
     		Options,
     },
+
+    Route{
+    		"OptionsTL",
+    		"OPTIONS",
+    		"/time_log",
+    		Options,
+    },
+    Route{
+    		"TimeLogCreate",
+    		"POST",
+    		"/time_log",
+    		TimeLogCreate,
+    	},
+
+    Route{
+      		"TimeLogIndex",
+       		"GET",
+       		"/time_log",
+       		TimeLogIndex,
+   	},
 }

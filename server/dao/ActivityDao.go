@@ -179,10 +179,3 @@ func GetAllParents (actId int) domain.Activities {
 	return activities;
 
 }
-
-
-func checkErr(err error) {
-	if err != nil {
-		panic(err)
-	}
-}

@@ -1,3 +1,13 @@
+--create time_log
+create table timelog (tl_id int PRIMARY KEY,
+                      tl_date TEXT NOT NULL,
+                      tl_startHour TEXT NOT NULL,
+                      tl_endHour TEXT NOT NULL,
+                      tl_duration REAL not null,
+                      tl_act_id int,
+                      tl_comment VARCHAR(255),
+                      FOREIGN KEY (tl_act_id) REFERENCES activities(act_id)
+);
 
 --create activities
 create table activities (act_id int PRIMARY KEY,
