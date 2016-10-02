@@ -47,22 +47,20 @@ func GetTimeLogs () domain.TimeLogs {
 		var dateStr string
 		var startHourStr string
 		var endHourStr string
-		var durationStr string
+		var duration float64
 		var activityId domain.JsonNullInt64
 		var comment string
 
 
-		err = rows.Scan(&id, &dateStr, &startHourStr, &endHourStr, &durationStr, &activityId, &comment)
+		err = rows.Scan(&id, &dateStr, &startHourStr, &endHourStr, &duration, &activityId, &comment)
 		checkErr(err)
 
 		date, err := time.Parse("20060102", dateStr);
 		checkErr(err)
-		startHour, err := time.Parse("20060102", startHourStr);
+		startHour, err := time.Parse("1504", startHourStr);
 		checkErr(err)
-        endHour, err := time.Parse("20060102", endHourStr);
-        checkErr(err)
-        duration, err := time.ParseDuration(durationStr);
-        checkErr(err)
+        	endHour, err := time.Parse("1504", endHourStr);
+       	 	checkErr(err)
 
 		tl = domain.TimeLog{id, date, startHour, endHour, duration, activityId, comment}
 		timeLogs = append(timeLogs, tl)
