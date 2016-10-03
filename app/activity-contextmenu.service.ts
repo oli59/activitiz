@@ -8,6 +8,7 @@ export class ActivityContextMenuService {
     public activity: Activity;
     public visible = false;
     public links = [];
+    private timelogLink = 'Log Time';
     private mouseLocation :{left:number,top:number} = {left:0,top:0};
 
     constructor(private activityService: ActivityService) {}
@@ -20,6 +21,7 @@ export class ActivityContextMenuService {
                 this.links.push(status);
             }
         }
+        this.links.push(this.timelogLink);
         this.mouseLocation = {
             left:event.clientX,
             top:event.clientY
@@ -36,10 +38,15 @@ export class ActivityContextMenuService {
         };
     }
 
-    changeStatus(status) {
-        this.activity.status = status;
+    menuClicked(link) {
+        if (link == this.timelogLink) {
+
+        }
+        else {
+            this.activity.status = status;
+            this.activityService.save(this.activity);
+        }
         this.visible = false;
-        this.activityService.save(this.activity);
     }
 
 }
