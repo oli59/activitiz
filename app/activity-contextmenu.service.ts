@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {Activity} from "./activity"
 import {activityStatuses} from './activity-statuses';
 import {ActivityService} from './activity.service'
+import {TimelogService} from './timelog.service'
 
 @Injectable()
 export class ActivityContextMenuService {
@@ -11,7 +12,7 @@ export class ActivityContextMenuService {
     private timelogLink = 'Log Time';
     private mouseLocation :{left:number,top:number} = {left:0,top:0};
 
-    constructor(private activityService: ActivityService) {}
+    constructor(private activityService: ActivityService, private timelogService: TimelogService) {}
 
     showMenu(event, activity: Activity) {
         this.activity = activity;
@@ -40,7 +41,7 @@ export class ActivityContextMenuService {
 
     menuClicked(link) {
         if (link == this.timelogLink) {
-
+            this.timelogService.logtimeForActivity(this.activity);
         }
         else {
             this.activity.status = status;

@@ -1,7 +1,4 @@
 import { Component }       from '@angular/core';
-import {ActivityService} from './activity.service';
-import {ErrorService} from './error.service'
-import {ActivityContextMenuService} from './activity-contextmenu.service'
 
 @Component({
     selector: 'my-app',
@@ -24,6 +21,7 @@ import {ActivityContextMenuService} from './activity-contextmenu.service'
     <my-errors></my-errors>
     
     <activity-contextmenu></activity-contextmenu>
+    <my-timelog></my-timelog>
 
     <router-outlet class="app_body"></router-outlet>
     
@@ -35,7 +33,7 @@ import {ActivityContextMenuService} from './activity-contextmenu.service'
 
     `,
     /*directives: [ErrorsComponent, ActivityContextmenuComponent],*/
-    providers: [ActivityService, ErrorService, ActivityContextMenuService]
+    /*providers: [ActivityService, ErrorService, ActivityContextMenuService]*/
 })
 
 export class AppComponent {

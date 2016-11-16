@@ -5,11 +5,15 @@ import { HttpModule }    from '@angular/http';
 import {AppComponent }         from './app.component';
 import {ActivitiesComponent }      from './activities.component';
 import {ActivityService} from './activity.service';
+import {ErrorService} from './error.service'
+import {ActivityContextMenuService} from './activity-contextmenu.service'
 import {ErrorsComponent} from './errors.component';
 import {ActivityContextmenuComponent} from './activity-contextmenu.component';
 import {TruncatePipe} from './truncate';
 import {ActivityDetailComponent} from './activity-detail.component';
 import {MdInputModule} from '@angular2-material/input';
+import {LogtimeComponent} from './timelog.component'
+import {TimelogService} from './timelog.service'
 
 import {routing} from './app.routes'
 
@@ -28,9 +32,10 @@ import {routing} from './app.routes'
         ActivityContextmenuComponent,
         TruncatePipe,
         ActivityDetailComponent,
+        LogtimeComponent,
     ],
     providers: [
-        ActivityService,
+        ActivityService, ErrorService, ActivityContextMenuService, TimelogService
     ],
     bootstrap: [ AppComponent ]
 })
