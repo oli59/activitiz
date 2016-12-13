@@ -10,5 +10,11 @@ func GetTimeLogs () domain.TimeLogs {
 }
 
 func CreateTimeLog (tl domain.TimeLog) domain.TimeLog {
-	return dao.CreateTimeLog(tl)
+	tl.Duration = CalculateDuration(tl);
+	return dao.CreateTimeLog(tl);
+}
+
+func CalculateDuration (tl domain.TimeLog) float64 {
+	Duration := tl.EndHour.Time.Sub(tl.StartHour.Time);
+	return Duration.Hours();
 }

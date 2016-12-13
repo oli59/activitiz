@@ -155,6 +155,7 @@ func TimeLogCreate(w http.ResponseWriter, r *http.Request) {
 	if err := r.Body.Close(); err != nil {
 		panic(err)
 	}
+	fmt.Println(string(body));
 	if err := json.Unmarshal(body, &timeLog); err != nil {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -163,7 +164,7 @@ func TimeLogCreate(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 	}
-	fmt.Println(string(body));
+
 	tl := business.CreateTimeLog(timeLog)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")

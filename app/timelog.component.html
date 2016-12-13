@@ -3,13 +3,32 @@
 
         <div class="modal-content">
             <div class="modal-header">
-                <button (click)="abort()" type="button" class="close" data-dismiss="modal">&times;</button>
+                <button (click)="timelogService.abortLogtime()" type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Log Time</h4>
             </div>
             <div class="modal-body">
-                <p>Name    status</p>
-                <p>Date      start hour    endHour</p>
-                <p>Commentaire :    </p>
+                <table>
+                    <tr>
+                        <td>
+                            <md-input type="text" disabled placeholder="Name" value="{{timelogService.activity.name}}"></md-input>
+                        </td>
+                        <td>
+                            <md-input type="text" disabled placeholder="Status" value="{{timelogService.activity.status}}"></md-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <md-input type="date" required placeholder="Date" [value]="timelogService.timelog.date | date:'yyyy-MM-dd'" (input)="timelogService.timelog.date=parseDate($event.target.value)"></md-input>
+                        </td>
+                        <td>
+                            <md-input type="time" required placeholder="Start" [(ngModel)]="timelogService.timelog.start_hour"></md-input>
+                        </td>
+                        <td>
+                            <md-input type="time" required placeholder="End" [(ngModel)]="timelogService.timelog.end_hour"></md-input>
+                        </td>
+                    </tr>
+                </table>
+                <md-input type="textarea" placeholder="Commentaire" style="width: 100%" [(ngModel)]="timelogService.timelog.comment"></md-input>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="timelogService.logtime()">Log Time</button>

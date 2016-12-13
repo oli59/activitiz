@@ -57,9 +57,12 @@ func GetTimeLogs () domain.TimeLogs {
 
 		date, err := time.Parse("20060102", dateStr);
 		checkErr(err)
-		startHour, err := time.Parse("1504", startHourStr);
+		startHourTime, err := time.Parse("1504", startHourStr);
+		startHour := domain.HourMinute{startHourTime};
+
 		checkErr(err)
-        	endHour, err := time.Parse("1504", endHourStr);
+        	endHourTime, err := time.Parse("1504", endHourStr);
+		endHour := domain.HourMinute{endHourTime};
        	 	checkErr(err)
 
 		tl = domain.TimeLog{id, date, startHour, endHour, duration, activityId, comment}
@@ -80,7 +83,7 @@ func CreateTimeLog (tl domain.TimeLog) domain.TimeLog {
 
 	log.Print(nextId)
 
-	_ , err = stmt.Exec(tlNextId, tl.Date, tl.StartHour, tl.EndHour, tl.Duration, tl.ActivityId, tl.Comment)
+	_ , err = stmt.Exec(tlNextId, tl.Date.Format("20060102"), tl.StartHour.Time.Format("1504"), tl.EndHour.Time.Format("1504"), tl.Duration, tl.ActivityId, tl.Comment)
 	checkErr(err)
 
 	db.Close();
