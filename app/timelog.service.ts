@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import {Headers, Http, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Activity} from './activity';
 import {ErrorService} from './error.service';
@@ -50,6 +50,18 @@ export class TimelogService {
             });
     }
 
+    getTimelogs() {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('test', 'wow');
+
+        return this.http.get(this.timelogUrl, {search: params})
+            .toPromise()
+            .then(response => response.json())
+            .catch(err => {
+                this.handleError(err);
+            });
+    }
+
     private handleError(error: any) {
         console.error('An error occurred', error);
 
@@ -59,5 +71,7 @@ export class TimelogService {
         this.errorService.addError(errMsg);
         return Promise.reject(errMsg);
     }
+
+
 
 }

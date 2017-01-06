@@ -10,8 +10,8 @@ import { Component }       from '@angular/core';
                 <p class="navbar-brand-custom">{{title}}</p>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="#" [routerLink]="activities">Activities</a></li>
-                <li><a href="#">Time Log</a></li> 
+                <li><a href="#" routerLink="/activities" routerLinkActive="active">Activities</a></li>
+                <li><a href="#" routerLink="/timelogs" routerLinkActive="active">Time Log</a></li> 
                 <li><a href="#">Stats</a></li>
                 <li><a href="#">Bullet Journal</a></li>
             </ul>
