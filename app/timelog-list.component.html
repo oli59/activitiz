@@ -1,0 +1,22 @@
+<div>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Duration</th>
+            <th>Comment</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tl of timelogs">
+                <td>{{tl.activity_id}}</td>
+                <td>{{tl.date}}</td>
+                <td>{{tl.start_hour}}</td>
+                <td>{{tl.end_hour}}</td>
+                <td>{{tl.duration}}</td>
+                <td>{{tl.comment}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
