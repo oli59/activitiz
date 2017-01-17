@@ -6,4 +6,5 @@ export class Timelog {
     duration: number;
     activity_id: number;
     comment: string;
+    name: string;
 }

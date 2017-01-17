@@ -31,6 +31,7 @@ func init () {
 
 func GetTimeLogs () domain.TimeLogs {
 	var timeLogs domain.TimeLogs;
+	var activityIdMap map[domain.JsonNullInt64] string;
 
 	db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
@@ -65,9 +66,24 @@ func GetTimeLogs () domain.TimeLogs {
 		endHour := domain.HourMinute{endHourTime};
        	 	checkErr(err)
 
-		tl = domain.TimeLog{id, date, startHour, endHour, duration, activityId, comment}
+		tl = domain.TimeLog{id, date, startHour, endHour, duration, activityId, comment, ""}
 		timeLogs = append(timeLogs, tl)
 	}
+
+
+	for _,tl := range timeLogs {
+		name, ok := activityIdMap[tl.ActivityId];
+		if !ok {
+			act := GetActivity(tl.ActivityId);
+			tl.Name = act.Name;
+			activityIdMap[tl.ActivityId] = act.Name;
+		} else {
+			tl.Name = name;
+		}
+
+	}
+
+
 
 	return timeLogs;
 }

@@ -107,6 +107,35 @@ func GetActivities () domain.Activities {
 	return activities;
 }
 
+/*return the activity with the given id*/
+func GetActivity (actId int) domain.Activity {
+	var activity domain.Activity;
+	var rows *sql.Rows;
+
+	db, err := sql.Open("sqlite3", "./activity.db")
+	checkErr(err)
+
+	stmt, err := db.Prepare("SELECT * FROM activities WHERE act_parent_id =?")
+	checkErr(err)
+
+	rows, err = stmt.Query(actId);
+	checkErr(err)
+
+	for rows.Next() {
+		var name string
+		var status string
+		var id int
+		var parentId domain.JsonNullInt64
+		err = rows.Scan(&id, &parentId, &name, &status)
+		checkErr(err)
+		activity = domain.Activity{id, parentId, name, status}
+	}
+
+	db.Close();
+
+	return activity;
+}
+
 
 func GetActivitiesByParent (actId int) domain.Activities {
 	var activities domain.Activities;
