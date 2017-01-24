@@ -70,15 +70,16 @@ func GetTimeLogs () domain.TimeLogs {
 		timeLogs = append(timeLogs, tl)
 	}
 
+	activityIdMap = make(map[domain.JsonNullInt64] string)
 
-	for _,tl := range timeLogs {
+	for i,tl := range timeLogs {
 		name, ok := activityIdMap[tl.ActivityId];
 		if !ok {
-			act := GetActivity(tl.ActivityId);
-			tl.Name = act.Name;
+			act := GetActivity(int(tl.ActivityId.Int64));
+			timeLogs[i].Name = act.Name;
 			activityIdMap[tl.ActivityId] = act.Name;
 		} else {
-			tl.Name = name;
+			timeLogs[i].Name = name;
 		}
 
 	}

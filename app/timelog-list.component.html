@@ -10,11 +10,11 @@
         </thead>
         <tbody>
             <tr *ngFor="let tl of timelogs">
-                <td>{{tl.activity_id}}</td>
+                <td>{{tl.name}}</td>
                 <td>{{tl.date | date: yMd}}</td>
                 <td>{{tl.start_hour}}</td>
                 <td>{{tl.end_hour}}</td>
-                <td>{{tl.duration}}</td>
+                <td>{{tl.duration | durationPipe}}</td>
                 <td>{{tl.comment}}</td>
             </tr>
         </tbody>

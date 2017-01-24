@@ -115,7 +115,7 @@ func GetActivity (actId int) domain.Activity {
 	db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
 
-	stmt, err := db.Prepare("SELECT * FROM activities WHERE act_parent_id =?")
+	stmt, err := db.Prepare("SELECT * FROM activities WHERE act_id =?")
 	checkErr(err)
 
 	rows, err = stmt.Query(actId);
