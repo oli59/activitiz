@@ -18,6 +18,7 @@ import {LogtimeListComponent} from './timelog-list.component'
 import {DurationPipe} from './durationPipe'
 
 import {routing} from './app.routes'
+import {TimerService} from "./timer.service";
 
 @NgModule({
     imports: [
@@ -39,7 +40,7 @@ import {routing} from './app.routes'
         DurationPipe
     ],
     providers: [
-        ActivityService, ErrorService, ActivityContextMenuService, TimelogService
+        ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService
     ],
     bootstrap: [ AppComponent ]
 })
