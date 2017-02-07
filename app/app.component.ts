@@ -15,6 +15,7 @@ import { Component }       from '@angular/core';
                 <li><a href="#">Stats</a></li>
                 <li><a href="#">Bullet Journal</a></li>
             </ul>
+            <timer></timer>
         </div>
     </nav>
    

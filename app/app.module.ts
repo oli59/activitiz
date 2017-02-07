@@ -16,9 +16,9 @@ import {LogtimeComponent} from './timelog.component'
 import {TimelogService} from './timelog.service'
 import {LogtimeListComponent} from './timelog-list.component'
 import {DurationPipe} from './durationPipe'
-
 import {routing} from './app.routes'
 import {TimerService} from "./timer.service";
+import {TimerComponent} from "./timer.component"
 
 @NgModule({
     imports: [
@@ -37,7 +37,8 @@ import {TimerService} from "./timer.service";
         ActivityDetailComponent,
         LogtimeComponent,
         LogtimeListComponent,
-        DurationPipe
+        DurationPipe,
+        TimerComponent
     ],
     providers: [
         ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService
