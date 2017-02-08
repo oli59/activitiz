@@ -7,8 +7,8 @@ import {ActivityContextMenuService} from './activity-contextmenu.service'
 
 @Component({
     selector: 'my-activities',
-    templateUrl: 'app/activities.component.html',
-    styleUrls:['app/activities.component.css'],
+    templateUrl: 'activities.component.html',
+    styleUrls:['activities.component.css'],
 })
 
 export class ActivitiesComponent implements OnInit{
@@ -56,10 +56,11 @@ export class ActivitiesComponent implements OnInit{
     }
 
     getActivities () {
-        this.activityService.getActivities(this.parentActivity).then(activities => this.activities = activities)
-            .catch();
+        this.activityService.getActivities(this.parentActivity)
+            .then(activities => this.activities = activities)
+            /*.catch();*/
     }
-    
+
     getAllParents() {
         this.activityService.getAllParents(this.parentActivity).then(activities => {
                 if (activities != null) {
@@ -71,7 +72,7 @@ export class ActivitiesComponent implements OnInit{
                     this.allParents.unshift(this.topActivity);
                 }
             }
-        ).catch();
+        )/*.catch()*/;
     }
 
     addActivity() {

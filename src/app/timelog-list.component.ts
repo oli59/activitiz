@@ -5,8 +5,8 @@ import {Timelog} from "./timelog";
 
 @Component({
     selector: 'my-timelog-list',
-    templateUrl: 'app/timelog-list.component.html',
-    styleUrls:['app/timelog-list.component.css'],
+    templateUrl: 'timelog-list.component.html',
+    styleUrls:['timelog-list.component.css'],
 })
 
 
@@ -21,7 +21,7 @@ export class LogtimeListComponent implements OnInit {
 
     getTimelogs() {
         this.timelogService.getTimelogs().then(timelogs => this.timelogs = timelogs)
-            .catch();
+        /*.catch();*/
     }
 
 

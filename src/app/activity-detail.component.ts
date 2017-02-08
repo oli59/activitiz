@@ -7,7 +7,7 @@ import { ActivityService } from './activity.service';
 
 @Component({
     selector: 'my-activity-detail',
-    templateUrl: 'app/activity-detail.component.html'
+    templateUrl: 'activity-detail.component.html'
 })
 
 

@@ -3,7 +3,7 @@ import {TimelogService} from './timelog.service';
 
 @Component({
     selector: 'my-timelog',
-    templateUrl: 'app/timelog.component.html'
+    templateUrl: 'timelog.component.html'
 })
 
 
