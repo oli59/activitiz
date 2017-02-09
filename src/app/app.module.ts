@@ -11,7 +11,7 @@ import {ErrorsComponent} from './errors.component';
 import {ActivityContextmenuComponent} from './activity-contextmenu.component';
 import {TruncatePipe} from './truncate';
 import {ActivityDetailComponent} from './activity-detail.component';
-import {MdInputModule} from '@angular2-material/input';
+//import {MdInputModule} from '@angular2-material/input';
 import {LogtimeComponent} from './timelog.component'
 import {TimelogService} from './timelog.service'
 import {LogtimeListComponent} from './timelog-list.component'
@@ -19,6 +19,7 @@ import {DurationPipe} from './durationPipe'
 import {routing} from './app.routes'
 import {TimerService} from "./timer.service";
 import {TimerComponent} from "./timer.component"
+import { MaterialModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -26,7 +27,8 @@ import {TimerComponent} from "./timer.component"
         FormsModule,
         HttpModule,
         routing,
-        MdInputModule.forRoot(),
+        //MdInputModule.forRoot(),
+        MaterialModule.forRoot()
     ],
     declarations: [
         AppComponent,
