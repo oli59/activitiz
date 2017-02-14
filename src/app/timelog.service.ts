@@ -31,11 +31,23 @@ export class TimelogService {
         this.timelog.id = null;
         this.timelog.duration = null;
         this.timelog.date = new Date(Date.now());
-        this.timelog.start_hour = '10:00';
-        this.timelog.end_hour = '10:00';
+        let hours = this.timelog.date.getHours();
+        let minutes = this.timelog.date.getMinutes();
+        this.timelog.start_hour = hours - 1  + ':' + minutes;
+        this.timelog.end_hour = hours - 1 + ':' + minutes;
         this.showLogTimePanel = true;
     }
 
+    logtimeForActivityAndDuration(activity: Activity, hours: number, minutes: number) {
+      this.activity = activity;
+      this.timelog = new Timelog();
+      this.timelog.id = null;
+      this.timelog.duration = null;
+      this.timelog.date = new Date(Date.now());
+      this.timelog.start_hour = (this.timelog.date.getMinutes() >= minutes) ? ((this.timelog.date.getHours() - hours) + ':' + (this.timelog.date.getMinutes() - minutes )) : ((this.timelog.date.getHours() - hours - 1) + ':' + (60 + this.timelog.date.getMinutes() - minutes)) ;
+      this.timelog.end_hour = this.timelog.date.getHours() + ':' + this.timelog.date.getMinutes();
+      this.showLogTimePanel = true;
+    }
 
     private post(timelog: Timelog): Promise<Timelog> {
         let headers = new Headers({
