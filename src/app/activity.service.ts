@@ -7,8 +7,8 @@ import {ErrorService} from './error.service'
 @Injectable()
 export class ActivityService {
 
-    private activitiesUrl = 'http://localhost:8080/activities';
-    private allParentsUrl = 'http://localhost:8080/allParents';
+    private activitiesUrl = 'http://activities.chickenkiller.com:8080/activities';
+    private allParentsUrl = 'http://activities.chickenkiller.com:8080/allParents';
 
     constructor(private http: Http, private errorService: ErrorService) {}
 

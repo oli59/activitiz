@@ -4,6 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import {Activity} from './activity';
 import {ErrorService} from './error.service';
 import {Timelog} from './timelog';
+//import {TimerService} from './timer.service';
 
 @Injectable()
 export class TimelogService {
@@ -11,7 +12,7 @@ export class TimelogService {
     activity: Activity;
     timelog: Timelog;
 
-    private timelogUrl = 'http://localhost:8080/time_log';
+    private timelogUrl = 'http://activities.chickenkiller.com:8080/time_log';
 
     constructor(private http: Http, private errorService: ErrorService) {}
 
@@ -23,6 +24,7 @@ export class TimelogService {
         this.timelog.activity_id = this.activity.id;
         this.post(this.timelog);
         this.showLogTimePanel = false;
+//        this.timerService.cancelTimer();
     }
 
     logtimeForActivity(activity: Activity) {
@@ -33,8 +35,8 @@ export class TimelogService {
         this.timelog.date = new Date(Date.now());
         let hours = this.timelog.date.getHours();
         let minutes = this.timelog.date.getMinutes();
-        this.timelog.start_hour = hours - 1  + ':' + minutes;
-        this.timelog.end_hour = hours - 1 + ':' + minutes;
+        this.timelog.start_hour = this.formatHourMinute(hours - 1, minutes);
+        this.timelog.end_hour = this.formatHourMinute(hours, minutes);
         this.showLogTimePanel = true;
     }
 
@@ -44,10 +46,17 @@ export class TimelogService {
       this.timelog.id = null;
       this.timelog.duration = null;
       this.timelog.date = new Date(Date.now());
-      this.timelog.start_hour = (this.timelog.date.getMinutes() >= minutes) ? ((this.timelog.date.getHours() - hours) + ':' + (this.timelog.date.getMinutes() - minutes )) : ((this.timelog.date.getHours() - hours - 1) + ':' + (60 + this.timelog.date.getMinutes() - minutes)) ;
-      this.timelog.end_hour = this.timelog.date.getHours() + ':' + this.timelog.date.getMinutes();
+      let startHour = (this.timelog.date.getHours() - hours) - (this.timelog.date.getMinutes() >= minutes ? 0  : 1);
+      let startMinute = (this.timelog.date.getMinutes() - minutes) + (this.timelog.date.getMinutes() >= minutes ? 0 : 60);
+      this.timelog.start_hour = this.formatHourMinute(startHour, startMinute);
+      this.timelog.end_hour = this.formatHourMinute(this.timelog.date.getHours(), this.timelog.date.getMinutes());
       this.showLogTimePanel = true;
     }
+
+    private formatHourMinute(hours: number, minutes: number) {
+      return (hours < 10 ? '0': '') + hours + ':' + (minutes < 10 ? '0': '') + minutes;
+    }
+
 
     private post(timelog: Timelog): Promise<Timelog> {
         let headers = new Headers({

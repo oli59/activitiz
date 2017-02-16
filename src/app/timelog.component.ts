@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {TimelogService} from './timelog.service';
+import {TimerService} from './timer.service'
 
 @Component({
     selector: 'my-timelog',
@@ -7,8 +8,8 @@ import {TimelogService} from './timelog.service';
 })
 
 
-export class LogtimeComponent {    
-    constructor(private timelogService: TimelogService) {}
+export class LogtimeComponent {
+    constructor(private timelogService: TimelogService, private timerService: TimerService) {}
 
     parseDate(dateString: string): Date {
         if (dateString) {
@@ -17,4 +18,10 @@ export class LogtimeComponent {
             return null;
         }
     }
+
+    logtime () {
+      this.timelogService.logtime()
+      this.timerService.cancelTimer();
+    }
 }
+
