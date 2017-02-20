@@ -36,7 +36,7 @@ func GetTimeLogs () domain.TimeLogs {
 	db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
 
-	stmt, err := db.Prepare("SELECT * FROM timelog ORDER BY tl_date DESC")
+	stmt, err := db.Prepare("SELECT * FROM timelog ORDER BY tl_date DESC, tl_startHour DESC")
 	checkErr(err)
 
 	rows, err := stmt.Query()
