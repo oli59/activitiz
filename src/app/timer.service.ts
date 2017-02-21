@@ -7,7 +7,7 @@ import {TimelogService} from './timelog.service';
 @Injectable()
 export class TimerService {
 
-    timers = [];
+    timers: TimerData[] = [];
 
     constructor(private timelogService: TimelogService) {}
 
@@ -26,21 +26,24 @@ export class TimerService {
         timerData.subscription = timer.subscribe(t=> this.calculateMinutesHours(t, timerData));
     }
 
-    cancelTimer() {
-        this.timers[0].subscription.unsubscribe();
-        this.timers = [];
+    cancelTimer(timerData: TimerData) {
+        timerData.subscription.unsubscribe();
+        let index = this.timers.indexOf(timerData);
+        if (index >= 0) {
+          this.timers.splice(index, 1);
+        }
     }
 
-    pause() {
-      this.timers[0].isPaused = true;
+    pause(timerData: TimerData) {
+      timerData.isPaused = true;
     }
 
-    resume() {
-      this.timers[0].isPaused = false;
+    resume(timerData: TimerData) {
+      timerData.isPaused = false;
     }
 
-    logTime() {
-       this.timelogService.logtimeForActivityAndDuration(this.timers[0].activity, this.timers[0].hours, this.timers[0].minutes);
+    logTime(timerData: TimerData) {
+       this.timelogService.logtimeFromTimer(timerData);
     }
 
     calculateMinutesHours(seconds: number, timerData: TimerData) {
@@ -55,7 +58,7 @@ export class TimerService {
 
 }
 
-class TimerData {
+export class TimerData {
     timer: Observable<number>;
     minutes: number;
     hours: number;
