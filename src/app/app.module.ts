@@ -11,7 +11,6 @@ import {ErrorsComponent} from './errors.component';
 import {ActivityContextmenuComponent} from './activity-contextmenu.component';
 import {TruncatePipe} from './truncate';
 import {ActivityDetailComponent} from './activity-detail.component';
-//import {MdInputModule} from '@angular2-material/input';
 import {LogtimeComponent} from './timelog.component'
 import {TimelogService} from './timelog.service'
 import {LogtimeListComponent} from './timelog-list.component'

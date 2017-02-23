@@ -3,13 +3,10 @@
     <div class="panel-body">
         <div>
             <md-input [(ngModel)]="activity.name" required placeholder="name"></md-input>
-        </div>
-
-        <div>
-            <label>status: </label>
-            <select [(ngModel)]="activity.status">
-                <option *ngFor="let status of statuses" value="{{status}}">{{status}}</option>
-            </select>
+          <p><p>
+          <md-select placeholder="Status" [(ngModel)]="activity.status">
+            <md-option *ngFor="let status of statuses" [value]="status">{{ status }}</md-option>
+          </md-select>
         </div>
 
     </div>

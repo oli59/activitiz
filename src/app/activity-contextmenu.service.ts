@@ -46,10 +46,11 @@ export class ActivityContextMenuService {
         if (link == this.timelogLink) {
             this.timelogService.logtimeForActivity(this.activity);
         }
-        else if (link == this.startTimerLink)
+        else if (link == this.startTimerLink) {
             this.timerService.createTimer(this.activity);
+        }
         else {
-            this.activity.status = status;
+            this.activity.status = link;
             this.activityService.save(this.activity);
         }
         this.visible = false;
