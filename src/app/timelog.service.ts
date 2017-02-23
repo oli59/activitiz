@@ -4,27 +4,29 @@ import 'rxjs/add/operator/toPromise';
 import {Activity} from './activity';
 import {ErrorService} from './error.service';
 import {Timelog} from './timelog';
-//import {TimerService} from './timer.service';
+import {TimerData} from './timer.service';
 
 @Injectable()
 export class TimelogService {
     showLogTimePanel = false;
     activity: Activity;
     timelog: Timelog;
+    timerData: TimerData = null;
 
     private timelogUrl = 'http://activities.chickenkiller.com:8080/time_log';
 
     constructor(private http: Http, private errorService: ErrorService) {}
 
     abortLogtime() {
+        this.timerData = null;
         this.showLogTimePanel = false;
     }
 
     logtime() {
         this.timelog.activity_id = this.activity.id;
         this.post(this.timelog);
+        this.timerData = null;
         this.showLogTimePanel = false;
-//        this.timerService.cancelTimer();
     }
 
     logtimeForActivity(activity: Activity) {
@@ -40,8 +42,12 @@ export class TimelogService {
         this.showLogTimePanel = true;
     }
 
-    logtimeForActivityAndDuration(activity: Activity, hours: number, minutes: number) {
-      this.activity = activity;
+    logtimeFromTimer(timerData: TimerData) {
+      let hours = timerData.hours;
+      let minutes = timerData.minutes;
+
+      this.activity = timerData.activity;;
+      this.timerData = timerData;
       this.timelog = new Timelog();
       this.timelog.id = null;
       this.timelog.duration = null;
