@@ -13,7 +13,7 @@ import { Component }       from '@angular/core';
                 <li><a href="#" routerLink="/activities" routerLinkActive="active">Activities</a></li>
                 <li><a href="#" routerLink="/timelogs" routerLinkActive="active">Time Log</a></li> 
                 <li><a href="#">Stats</a></li>
-                <li><a href="#">Bullet Journal</a></li>
+                <li><a href="#" routerLink="/journal" routerLinkActive="active">Journal</a></li>
             </ul>
             <timer></timer>
         </div>

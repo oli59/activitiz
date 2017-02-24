@@ -24,9 +24,8 @@
             // other libraries
             'rxjs':                       'npm:rxjs',
             'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
-            '@angular/material': 'npm:@angular/material/bundles/material.umd.js'
-            //'@angular2-material/core' : 'npm:@angular2-material/core/core.umd.js',
-            //'@angular2-material/input' : 'npm:@angular2-material/input/input.umd.js'
+            '@angular/material': 'npm:@angular/material/bundles/material.umd.js',
+            '@angular/flex-layout': 'npm:@angular/flex-layout/bundles/flex-layout.umd.js'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

@@ -19,6 +19,8 @@ import {routing} from './app.routes'
 import {TimerService} from "./timer.service";
 import {TimerComponent} from "./timer.component"
 import { MaterialModule } from '@angular/material';
+import {JournalComponent} from './journal.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
     imports: [
@@ -26,7 +28,7 @@ import { MaterialModule } from '@angular/material';
         FormsModule,
         HttpModule,
         routing,
-        //MdInputModule.forRoot(),
+        FlexLayoutModule,
         MaterialModule.forRoot()
     ],
     declarations: [
@@ -39,7 +41,8 @@ import { MaterialModule } from '@angular/material';
         LogtimeComponent,
         LogtimeListComponent,
         DurationPipe,
-        TimerComponent
+        TimerComponent,
+        JournalComponent
     ],
     providers: [
         ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService

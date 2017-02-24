@@ -2,6 +2,7 @@ import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ActivitiesComponent} from './activities.component'
 import {LogtimeListComponent} from './timelog-list.component'
+import {JournalComponent} from './journal.component'
 
 const routes: Routes = [
     {
@@ -16,6 +17,10 @@ const routes: Routes = [
     {
         path: 'timelogs',
         component: LogtimeListComponent
+    },
+    {
+      path: 'journal',
+      component: JournalComponent
     }
 ];
 
