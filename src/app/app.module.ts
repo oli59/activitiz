@@ -28,7 +28,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         FormsModule,
         HttpModule,
         routing,
-        FlexLayoutModule,
+        FlexLayoutModule.forRoot(),
         MaterialModule.forRoot()
     ],
     declarations: [
