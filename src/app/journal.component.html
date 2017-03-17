@@ -1,41 +1,37 @@
-<md-grid-list cols="2">
-  <md-grid-tile
-    [colspan]="1"
-    [rowspan]="1"
-    [style.background]="'lightblue'"
-
-  >
-    <div class="containerX">
-      <div [fxLayout]="column">
-        <md-card fxflex>
-          <md-card-header>
-            <md-card-title>Today</md-card-title>
-          </md-card-header>
-          <md-card-content>
-          </md-card-content>
-          <md-card-actions>
-            <button md-button>LIKE</button>
-            <button md-button>SHARE</button>
-          </md-card-actions>
-        </md-card>
-        <md-card fxflex>
-          <md-card-header>
-            <md-card-title>Today</md-card-title>
-          </md-card-header>
-          <md-card-content>
-          </md-card-content>
-          <md-card-actions>
-            <button md-button>LIKE</button>
-            <button md-button>SHARE</button>
-          </md-card-actions>
-        </md-card>
-      </div>
+<div class="flex-container" fxlayout="row" fxLayoutAlign="start stretch" fxFill>
+  <div class="flex-container" fxLayout="column" fxLayoutAlign="start" [style.background]="'lightblue'" fxFlex="50">
+      <md-card fxflex style="margin-top: 8px; margin-left: 8px; margin-right: 8px">
+        <md-card-header>
+          <md-card-title>Today</md-card-title>
+        </md-card-header>
+        <md-card-content>
+          <md-list>
+            <md-list-item *ngFor="let tlog of todayLogs"
+                          [style.background]="getBackgroundColor(tlog.status)">
+              <md-icon md-list-avatar>{{getIcon(tlog.status)}}</md-icon>
+              <h4 md-line>{{tlog.name}}</h4>
+              <p md-line> 9:45 - 10:55 </p>
+            </md-list-item>
+          </md-list>
+        </md-card-content>
+      </md-card>
+    <md-card *ngFor="let dlog of dayLogs" fxflex style="margin-top: 8px; margin-left: 8px; margin-right: 8px">
+      <md-card-header>
+        <md-card-title>{{dlog[0]}}</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-list>
+          <md-list-item *ngFor="let tlog of dlog[1]"
+                        [style.background]="getBackgroundColor(tlog.status)">
+            <md-icon md-list-avatar>{{getIcon(tlog.status)}}</md-icon>
+            <h4 md-line>{{tlog.name}}</h4>
+            <p md-line> 9:45 - 10:55 </p>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+    </md-card>
     </div>
-  </md-grid-tile>
-  <md-grid-tile
-    [colspan]="1"
-    [rowspan]="1"
-    [style.background]="'#DDBDF1'">
-    Future
-  </md-grid-tile>
-</md-grid-list>
+  <div  class="flex-container" fxLayout="column" fxLayoutAlign="start stretch" [style.background]="'#B39EB5'" fxFlex="50">
+    future
+  </div>
+</div>

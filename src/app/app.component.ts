@@ -32,9 +32,7 @@ import { Component }       from '@angular/core';
 
     </div>
 
-    `,
-    /*directives: [ErrorsComponent, ActivityContextmenuComponent],*/
-    /*providers: [ActivityService, ErrorService, ActivityContextMenuService]*/
+    `
 })
 
 export class AppComponent {
