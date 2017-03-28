@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx'
 //import internal = require("stream");
-import {Activity} from './activity';
+import {Activity} from '../domain/activity';
 import {TimelogService} from './timelog.service';
 
 @Injectable()

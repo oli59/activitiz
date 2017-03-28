@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {OnInit} from '@angular/core'
-import {TimelogService} from './timelog.service';
-import {Timelog} from "./timelog";
+import {TimelogService} from '../../service/timelog.service';
+import {Timelog} from "../../domain/timelog";
 
 @Component({
     selector: 'my-timelog-list',

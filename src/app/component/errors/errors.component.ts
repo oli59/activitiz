@@ -1,5 +1,5 @@
 import { Component }       from '@angular/core';
-import {ErrorService} from "./error.service";
+import {ErrorService} from "../../service/error.service";
 
 @Component({selector: 'my-errors',
     template:`

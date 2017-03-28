@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import {OnInit} from '@angular/core';
-import {Activity} from './activity';
-import {ActivityService} from './activity.service';
-import {ErrorService} from './error.service';
-import {ActivityContextMenuService} from './activity-contextmenu.service'
+import {Activity} from '../../domain/activity';
+import {ActivityService} from '../../service/activity.service';
+import {ErrorService} from '../../service/error.service';
+import {ActivityContextMenuService} from '../../service/activity-contextmenu.service'
 
 @Component({
     selector: 'my-activities',

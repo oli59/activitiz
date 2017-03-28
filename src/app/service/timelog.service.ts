@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Headers, Http, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {Activity} from './activity';
+import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
-import {Timelog} from './timelog';
+import {Timelog} from '../domain/timelog';
 import {TimerData} from './timer.service';
 
 @Injectable()

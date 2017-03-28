@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {TimelogService} from './timelog.service';
-import {TimerService, TimerData} from './timer.service'
+import {TimelogService} from '../../service/timelog.service';
+import {TimerService, TimerData} from '../../service/timer.service'
 
 @Component({
     selector: 'my-timelog',

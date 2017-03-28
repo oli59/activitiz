@@ -1,5 +1,5 @@
 import {Component} from '@angular/core'
-import {TimerService} from './timer.service'
+import {TimerService} from '../../service/timer.service'
 
 @Component({
   selector: 'timer',

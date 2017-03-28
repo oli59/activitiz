@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {Activity} from './activity';
+import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service'
 
 @Injectable()

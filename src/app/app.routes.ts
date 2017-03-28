@@ -1,8 +1,8 @@
 import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ActivitiesComponent} from './activities.component'
-import {LogtimeListComponent} from './timelog-list.component'
-import {JournalComponent} from './journal.component'
+import { ActivitiesComponent} from './component/activities/activities.component'
+import {LogtimeListComponent} from './component/timelog-list/timelog-list.component'
+import {JournalComponent} from './component/journal/journal.component'
 
 const routes: Routes = [
     {

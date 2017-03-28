@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {Activity} from "./activity"
-import {activityStatuses} from './activity-statuses';
-import {ActivityService} from './activity.service'
+import {Activity} from "../domain/activity"
+import {activityStatuses} from '../domain/activity-statuses';
+import {ActivityService} from '../service/activity.service'
 import {TimelogService} from './timelog.service'
 import {TimerService} from './timer.service'
 

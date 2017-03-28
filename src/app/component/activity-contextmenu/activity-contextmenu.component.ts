@@ -1,5 +1,5 @@
 import {Component} from '@angular/core'
-import {ActivityContextMenuService} from './activity-contextmenu.service'
+import {ActivityContextMenuService} from '../../service/activity-contextmenu.service'
 
 @Component({
     selector: 'activity-contextmenu',
