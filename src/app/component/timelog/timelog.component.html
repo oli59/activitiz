@@ -10,25 +10,37 @@
                 <table>
                     <tr>
                         <td>
-                            <md-input type="text" disabled placeholder="Name" value="{{timelogService.activity.name}}"></md-input>
+                          <md-input-container>
+                            <input mdInput type="text" disabled placeholder="Name" value="{{timelogService.activity.name}}">
+                          </md-input-container>
                         </td>
                         <td>
-                            <md-input type="text" disabled placeholder="Status" value="{{timelogService.activity.status}}"></md-input>
+                          <md-input-container>
+                            <input mdInput type="text" disabled placeholder="Status" value="{{timelogService.activity.status}}">
+                          </md-input-container>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <md-input type="date" required placeholder="Date" [value]="timelogService.timelog.date | date:'yyyy-MM-dd'" (input)="timelogService.timelog.date=parseDate($event.target.value)"></md-input>
+                          <md-input-container>
+                            <input mdInput type="date" required placeholder="Date" [value]="timelogService.timelog.date | date:'yyyy-MM-dd'" (input)="timelogService.timelog.date=parseDate($event.target.value)">
+                            </md-input-container>
                         </td>
                         <td>
-                            <md-input type="time" required placeholder="Start" [(ngModel)]="timelogService.timelog.start_hour"></md-input>
+                          <md-input-container>
+                            <input mdInput type="time" required placeholder="Start" [(ngModel)]="timelogService.timelog.start_hour">
+                            </md-input-container>
                         </td>
                         <td>
-                            <md-input type="time" required placeholder="End" [(ngModel)]="timelogService.timelog.end_hour"></md-input>
+                          <md-input-container>
+                            <input mdInput type="time" required placeholder="End" [(ngModel)]="timelogService.timelog.end_hour">
+                            </md-input-container>
                         </td>
                     </tr>
                 </table>
-                <md-input type="textarea" placeholder="Commentaire" style="width: 100%" [(ngModel)]="timelogService.timelog.comment"></md-input>
+              <md-input-container style="width: 100%">
+                <input mdInput type="text" placeholder="Commentaire" style="width: 100%" [(ngModel)]="timelogService.timelog.comment">
+                </md-input-container>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="logtime()">Log Time</button>

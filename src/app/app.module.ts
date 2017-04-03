@@ -21,6 +21,7 @@ import {TimerComponent} from "./component/timer/timer.component"
 import { MaterialModule } from '@angular/material';
 import {JournalComponent} from './component/journal/journal.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {JournalLogDetailComponent} from './component/journallog-detail/journallog-detail.component'
 
 @NgModule({
     imports: [
@@ -42,8 +43,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         LogtimeListComponent,
         DurationPipe,
         TimerComponent,
-        JournalComponent
+        JournalComponent,
+        JournalLogDetailComponent
     ],
+    entryComponents: [JournalLogDetailComponent],
     providers: [
         ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService
     ],

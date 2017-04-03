@@ -1,5 +1,6 @@
 import { Component }       from '@angular/core';
-
+import {MdDialog, MdDialogRef} from '@angular/material';
+import {JournalLogDetailComponent} from '../journallog-detail/journallog-detail.component'
 
 @Component({selector: 'my-journal',
   templateUrl: 'journal.component.html'
@@ -8,6 +9,8 @@ import { Component }       from '@angular/core';
 export class JournalComponent {
     dayLogs: [[Date, JournalLog[]]] = DAYLOGS;
     todayLogs: JournalLog[] = LOGS;
+
+  constructor(public dialog: MdDialog) {}
 
   getBackgroundColor(status: string) {
     if (status === 'done')
@@ -33,6 +36,10 @@ export class JournalComponent {
     if (status === 'delayed')
       return 'arrow_forward'
     return '';
+  }
+
+  openAddDialog() {
+    let dialogRef = this.dialog.open(JournalLogDetailComponent);
   }
 
 }

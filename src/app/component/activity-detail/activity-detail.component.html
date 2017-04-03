@@ -2,8 +2,10 @@
     <div  class="panel-heading">{{activity.name}}</div>
     <div class="panel-body">
         <div>
-            <md-input [(ngModel)]="activity.name" required placeholder="name"></md-input>
-          <p><p>
+          <md-input-container>
+            <input mdInput [(ngModel)]="activity.name" required placeholder="name">
+          </md-input-container>
+          <p></p>
           <md-select placeholder="Status" [(ngModel)]="activity.status">
             <md-option *ngFor="let status of statuses" [value]="status">{{ status }}</md-option>
           </md-select>
