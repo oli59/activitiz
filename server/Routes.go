@@ -38,30 +38,46 @@ var routes = Routes{
 		"/allParents/{activityId}",
 		GetAllParents,
 	},
+  Route{
+    "GetAllLeafs",
+    "GET",
+    "/allLeafs",
+    GetAllLeafs,
+  },
 	Route{
 		"ActivityCreate",
 		"POST",
 		"/activities",
 		ActivityCreate,
 	},
+
 	Route{
 		"ActivityUpdate",
 		"PUT",
 		"/activities",
 		ActivityUpdate,
 	},
+
 	Route{
     		"ActivityDelete",
     		"DELETE",
     		"/activities/{activityId}",
     		ActivityDelete,
     },
-	Route{
-		"Options",
+
+  Route{
+		"OptionsAL",
 		"OPTIONS",
-		"/activities",
+		"/allLeafs",
 		Options,
 	},
+
+  Route{
+    "Options",
+    "OPTIONS",
+    "/activities",
+    Options,
+  },
 
 	Route{
     		"OptionsId",

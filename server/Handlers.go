@@ -26,8 +26,20 @@ func ActivityIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+
+/*return all leaf activities*/
+func GetAllLeafs(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusOK)
+  if err := json.NewEncoder(w).Encode(business.GetAllLeafs()); err != nil {
+    panic(err)
+  }
+}
+
 /*Says what kind of request should be accepted by the server*/
 func Options(w http.ResponseWriter, r *http.Request) {
+  fmt.Println("test");
+  w.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Accept", "application/json")
@@ -131,9 +143,6 @@ func ActivityDelete(w http.ResponseWriter, r *http.Request) {
     if err := json.NewEncoder(w).Encode(business.GetAllParents(activityId)); err != nil {
     	panic(err)
    	}
-
-
-
 }
 
 /*return all timeLogs order by date desc*/

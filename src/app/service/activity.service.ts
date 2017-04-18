@@ -7,8 +7,12 @@ import {ErrorService} from './error.service'
 @Injectable()
 export class ActivityService {
 
-    private activitiesUrl = 'http://activities.chickenkiller.com:8080/activities';
-    private allParentsUrl = 'http://activities.chickenkiller.com:8080/allParents';
+    //private activitiesUrl = 'http://activities.chickenkiller.com:8080/activities';
+    //private allParentsUrl = 'http://activities.chickenkiller.com:8080/allParents';
+    //private allLeafsUrl = 'http://activities.chickenkiller.com:8080/allLeafs';
+    private activitiesUrl = 'http://localhost:8080/activities';
+    private allParentsUrl = 'http://localhost:8080/allParents';
+    private allLeafsUrl = 'http://localhost:8080/allLeafs';
 
     constructor(private http: Http, private errorService: ErrorService) {}
 
@@ -22,6 +26,15 @@ export class ActivityService {
             .catch(err => {
                 this.handleError(err);
             });
+    }
+
+    getAllLeafActivities() {
+      return this.http.get('http://localhost:8080/allLeafs')
+        .toPromise()
+        .then(response => response.json())
+        .catch(err => {
+          this.handleError(err);
+        });
     }
 
     getAllParents(activity: Activity) {

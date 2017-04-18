@@ -1,8 +1,29 @@
 <h1 md-dialog-title>Create Journal Entry</h1>
-<md-dialog-content>
-    <md-radio-group>
-      <md-radio-button value="Activity">Activity</md-radio-button>
-      <md-radio-button value="Event" disabled>Event</md-radio-button>
+<md-dialog-content style="min-width: 50em">
+    <md-radio-group [(ngModel)]="logType">
+      <md-radio-button  value="activity">Activity</md-radio-button>
+      <md-radio-button  value="event" disabled>event</md-radio-button>
     </md-radio-group>
+
+  <div  *ngIf="logType === 'activity'">
+
+    <md-input-container style="width: 100%">
+      <input mdInput placeholder="Activity" [mdAutocomplete]="reactiveAuto" [formControl]="activityCtrl">
+    </md-input-container>
+
+
+    <md-autocomplete style="width: 50em" #reactiveAuto="mdAutocomplete" [displayWith]="displayFn">
+      <md-option style="width: 50em" *ngFor="let activity of filteredActivities | async" [value]="activity">
+        {{ activity.name }}
+      </md-option>
+    </md-autocomplete>
+  </div>
+
 </md-dialog-content>
-<md-dialog-actions>one</md-dialog-actions>
+
+<md-dialog-actions>
+  <button type="button" md-raised-button
+          (click)="createJournalLog()">Create</button>
+  <button type="button" md-button
+          (click)="dialogRef.close()">Cancel</button>
+</md-dialog-actions>

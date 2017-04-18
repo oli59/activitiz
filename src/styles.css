@@ -1,4 +1,4 @@
-@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 .app_title {
   font-family: Arial, Helvetica, sans-serif;

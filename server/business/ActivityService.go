@@ -28,3 +28,8 @@ func GetActivitiesByParent (actId int) domain.Activities {
 func GetAllParents (actId int) domain.Activities {
 	return dao.GetAllParents(actId)
 }
+
+func GetAllLeafs () domain.Activities {
+  return dao.GetAllLeafs()
+}
+

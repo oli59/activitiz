@@ -1,6 +1,6 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 import {AppComponent }         from './app.component';
 import {ActivitiesComponent }      from './component/activities/activities.component';
@@ -22,6 +22,7 @@ import { MaterialModule } from '@angular/material';
 import {JournalComponent} from './component/journal/journal.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {JournalLogDetailComponent} from './component/journallog-detail/journallog-detail.component'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     imports: [
@@ -30,7 +31,9 @@ import {JournalLogDetailComponent} from './component/journallog-detail/journallo
         HttpModule,
         routing,
         FlexLayoutModule.forRoot(),
-        MaterialModule.forRoot()
+        MaterialModule.forRoot(),
+        ReactiveFormsModule,
+        BrowserAnimationsModule
     ],
     declarations: [
         AppComponent,
@@ -50,7 +53,7 @@ import {JournalLogDetailComponent} from './component/journallog-detail/journallo
     providers: [
         ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService
     ],
-    bootstrap: [ AppComponent ]
+    bootstrap: [ AppComponent, [] ]
 })
 
 export class AppModule {

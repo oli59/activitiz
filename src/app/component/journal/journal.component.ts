@@ -39,7 +39,7 @@ export class JournalComponent {
   }
 
   openAddDialog() {
-    let dialogRef = this.dialog.open(JournalLogDetailComponent);
+    let dialogRef = this.dialog.open(JournalLogDetailComponent, {disableClose: true});
   }
 
 }
