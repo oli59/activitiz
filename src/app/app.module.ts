@@ -23,6 +23,7 @@ import {JournalComponent} from './component/journal/journal.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {JournalLogDetailComponent} from './component/journallog-detail/journallog-detail.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {JournallogService} from './service/journallog.service';
 
 @NgModule({
     imports: [
@@ -51,7 +52,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ],
     entryComponents: [JournalLogDetailComponent],
     providers: [
-        ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService
+        ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService, JournallogService
     ],
     bootstrap: [ AppComponent, [] ]
 })

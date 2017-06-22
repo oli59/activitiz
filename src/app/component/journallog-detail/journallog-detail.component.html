@@ -13,7 +13,7 @@
 
 
     <md-autocomplete style="width: 50em" #reactiveAuto="mdAutocomplete" [displayWith]="displayFn">
-      <md-option style="width: 50em" *ngFor="let activity of filteredActivities | async" [value]="activity">
+      <md-option style="width: 50em" *ngFor="let activity of filteredActivities | async" [value]="activity" (onSelectionChange)="selected(activity)">
         {{ activity.name }}
       </md-option>
     </md-autocomplete>

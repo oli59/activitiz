@@ -1,16 +1,18 @@
 import { Component }       from '@angular/core';
 import {MdDialog, MdDialogRef} from '@angular/material';
-import {JournalLogDetailComponent} from '../journallog-detail/journallog-detail.component'
+import {JournalLogDetailComponent} from '../journallog-detail/journallog-detail.component';
+import {Journallog, DAYLOGS, LOGS} from '../../domain/journallog';
+import {JournallogService} from '../../service/journallog.service';
 
 @Component({selector: 'my-journal',
   templateUrl: 'journal.component.html'
   })
 
 export class JournalComponent {
-    dayLogs: [[Date, JournalLog[]]] = DAYLOGS;
-    todayLogs: JournalLog[] = LOGS;
+    dayLogs: [[Date, Journallog[]]] = this.journallogService.getJournallog();
+    todayLogs: Journallog[] = this.journallogService.getTodayJournallog();
 
-  constructor(public dialog: MdDialog) {}
+  constructor(public dialog: MdDialog, private journallogService: JournallogService) {}
 
   getBackgroundColor(status: string) {
     if (status === 'done')
@@ -40,37 +42,11 @@ export class JournalComponent {
 
   openAddDialog() {
     let dialogRef = this.dialog.open(JournalLogDetailComponent, {disableClose: true});
+    dialogRef.afterClosed().subscribe(journalLog => {
+      if (journalLog) {
+        this.todayLogs.push(journalLog);
+      }
+    });
   }
 
 }
-
-class JournalLog {
-  date: Date;
-  status: string;
-  activityId: number;
-  timeLogId: number;
-  name: string;
-}
-
-
-
-const LOGS: JournalLog[] = [
-  {date: new Date(), status: 'done' , activityId: 3, timeLogId: 1, name: 'activitiz'},
-  {date: new Date(), status: 'event' , activityId: 3, timeLogId: 1, name: 'dentiste'},
-  {date: new Date(), status: 'open' , activityId: 3, timeLogId: 1, name: 'appeler SDRB'},
-  {date: new Date(), status: 'started' , activityId: 3, timeLogId: 1, name: 'activitiz'},
-  {date: new Date(), status: 'delayed' , activityId: 3, timeLogId: 1, name: 'combo'},
-];
-
-const DAYLOGS: [[Date, JournalLog[]]] = [[ new Date(2017,1,1),[
-  {date: new Date(), status: 'done' , activityId: 3, timeLogId: 1, name: 'activitiz'},
-  {date: new Date(), status: 'event' , activityId: 3, timeLogId: 1, name: 'dentiste'},
-  {date: new Date(), status: 'open' , activityId: 3, timeLogId: 1, name: 'appeler SDRB'},
-  {date: new Date(), status: 'started' , activityId: 3, timeLogId: 1, name: 'activitiz'},
-  {date: new Date(), status: 'delayed' , activityId: 3, timeLogId: 1, name: 'combo'}
-  ]],
-  [ new Date(2017,1,5),[
-    {date: new Date(), status: 'done' , activityId: 3, timeLogId: 1, name: 'activitiz'},
-    {date: new Date(), status: 'event' , activityId: 3, timeLogId: 1, name: 'dentiste'},
-  ]],
-];

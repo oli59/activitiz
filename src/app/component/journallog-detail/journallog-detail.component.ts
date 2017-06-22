@@ -4,6 +4,7 @@ import 'rxjs/add/operator/startWith';
 import { FormControl} from '@angular/forms';
 import {Activity} from '../../domain/activity';
 import {ActivityService} from '../../service/activity.service';
+import {Journallog} from '../../domain/journallog'
 
 
 @Component({selector: 'my-journallog-detail',
@@ -12,6 +13,7 @@ import {ActivityService} from '../../service/activity.service';
 
 
 export class JournalLogDetailComponent {
+  logDate: Date = new Date;
   logType: string;
   activityCtrl: FormControl;
   filteredActivities: any;
@@ -41,10 +43,19 @@ export class JournalLogDetailComponent {
   }
 
   createJournalLog() {
-    console.log();
     if (this.selectedActivity) {
-      this.dialogRef.close(this.selectedActivity);
+      var journalLog : Journallog = new Journallog;
+      journalLog.activityId = this.selectedActivity.id;
+      journalLog.date = this.logDate;
+      journalLog.name = this.selectedActivity.name;
+      journalLog.status = 'open';
+      this.dialogRef.close(journalLog);
     }
+  }
+
+  selected(activity) {
+    this.selectedActivity = activity;
+
   }
 
 }
