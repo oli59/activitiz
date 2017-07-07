@@ -45,7 +45,7 @@ export class JournalLogDetailComponent {
   createJournalLog() {
     if (this.selectedActivity) {
       var journalLog : Journallog = new Journallog;
-      journalLog.activityId = this.selectedActivity.id;
+      journalLog.activity_id = this.selectedActivity.id;
       journalLog.date = this.logDate;
       journalLog.name = this.selectedActivity.name;
       journalLog.status = 'open';

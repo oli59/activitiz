@@ -11,6 +11,7 @@ import (
 	"github.com/oli59/activitiz/server/domain"
 	"github.com/oli59/activitiz/server/business"
 	"strconv"
+  "time"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +67,7 @@ func ActivitiesByParent(w http.ResponseWriter, r *http.Request) {
 /*Get all parents for activity given as a parameter*/
 func GetAllParents(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	activityId, _ := strconv.Atoi(vars["activityId"])
+	activityId, _ := strconv.Atoi(vars["activity_Id"])
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(business.GetAllParents(activityId)); err != nil {
@@ -134,7 +135,7 @@ func ActivityUpdate(w http.ResponseWriter, r *http.Request) {
 /*Delete the activity with given activity_id*/
 func ActivityDelete(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
-    activityId, _ := strconv.Atoi(vars["activityId"])
+    activityId, _ := strconv.Atoi(vars["activity_Id"])
 
     business.DeleteActivity(activityId)
 
@@ -181,4 +182,53 @@ func TimeLogCreate(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(tl); err != nil {
 		panic(err)
 	}
+}
+
+/*Create a new journallog*/
+func JournallogCreate (w http.ResponseWriter, r *http.Request) {
+
+  var journallog domain.Journallog;
+  body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+  if err != nil {
+    panic(err)
+  }
+
+  if err := r.Body.Close(); err != nil {
+    panic(err)
+  }
+
+  if err := json.Unmarshal(body, &journallog); err != nil {
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.WriteHeader(422) // unprocessable entity
+    if err := json.NewEncoder(w).Encode(err); err != nil {
+      panic(err)
+    }
+  }
+
+  fmt.Println(string(body));
+  jl := business.CreateJournallog(journallog)
+
+  w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusCreated)
+  if err := json.NewEncoder(w).Encode(jl); err != nil {
+    panic(err)
+  }
+}
+
+/*Get all journallogs for a given date*/
+func GetJournallogForDate(w http.ResponseWriter, r *http.Request) {
+  vars := mux.Vars(r)
+  fmt.Println(vars["jl_date"])
+  date, err := time.Parse("20060102", vars["jl_date"])
+  if err != nil {
+    panic(err)
+  }
+
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusOK)
+  if err := json.NewEncoder(w).Encode(business.GetJournallogForDate(date)); err != nil {
+    panic(err)
+  }
 }

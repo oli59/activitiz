@@ -10,9 +10,12 @@ import {JournallogService} from '../../service/journallog.service';
 
 export class JournalComponent {
     dayLogs: [[Date, Journallog[]]] = this.journallogService.getJournallog();
-    todayLogs: Journallog[] = this.journallogService.getTodayJournallog();
+    todayLogs: Journallog[];
 
-  constructor(public dialog: MdDialog, private journallogService: JournallogService) {}
+
+  constructor(public dialog: MdDialog, private journallogService: JournallogService) {
+    this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
+  }
 
   getBackgroundColor(status: string) {
     if (status === 'done')
@@ -44,7 +47,9 @@ export class JournalComponent {
     let dialogRef = this.dialog.open(JournalLogDetailComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe(journalLog => {
       if (journalLog) {
-        this.todayLogs.push(journalLog);
+        this.journallogService.save(journalLog).then(result =>
+          this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
+        )
       }
     });
   }

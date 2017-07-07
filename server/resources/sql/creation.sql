@@ -1,3 +1,11 @@
+--create activities
+create table activities (act_id int PRIMARY KEY,
+                          act_parent_id int,
+                          act_name varchar(255),
+                          act_status VARCHAR(15),
+                      FOREIGN KEY(act_parent_id) REFERENCES activities(act_id)
+);
+
 --create time_log
 create table timelog (tl_id int PRIMARY KEY,
                       tl_date TEXT NOT NULL,
@@ -9,12 +17,15 @@ create table timelog (tl_id int PRIMARY KEY,
                       FOREIGN KEY (tl_act_id) REFERENCES activities(act_id)
 );
 
---create activities
-create table activities (act_id int PRIMARY KEY,
-                          act_parent_id int,
-                          act_name varchar(255),
-                          act_status VARCHAR(15),
-                      FOREIGN KEY(act_parent_id) REFERENCES activities(act_id)
+--create journallog
+create table journallog (jl_id int PRIMARY KEY,
+                         jl_date TEXT NOT NULL,
+                         jl_status VARCHAR(15) NOT NULL,
+                         jl_act_id int,
+                         jl_timelog_id int,
+                         jl_name varchar(255),
+                        FOREIGN KEY (jl_act_id) REFERENCES activities(act_id),
+                        FOREIGN KEY (jl_timelog_id) REFERENCES timelog(tl_id)
 );
 
 --create activities_parent_closure

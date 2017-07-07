@@ -35,7 +35,7 @@ var routes = Routes{
 	Route{
 		"GetAllParents",
 		"GET",
-		"/allParents/{activityId}",
+		"/allParents/{activity_Id}",
 		GetAllParents,
 	},
   Route{
@@ -61,7 +61,7 @@ var routes = Routes{
 	Route{
     		"ActivityDelete",
     		"DELETE",
-    		"/activities/{activityId}",
+    		"/activities/{activity_Id}",
     		ActivityDelete,
     },
 
@@ -82,7 +82,7 @@ var routes = Routes{
 	Route{
     		"OptionsId",
     		"OPTIONS",
-    		"/activities/{activityId}",
+    		"/activities/{activity_Id}",
     		Options,
     },
 
@@ -105,4 +105,36 @@ var routes = Routes{
        		"/time_log",
        		TimeLogIndex,
    	},
+
+
+  /*JournalLogs*/
+  Route{
+    "JournallogCreate",
+    "POST",
+    "/journal_log",
+    JournallogCreate,
+  },
+
+  Route{
+    "Options",
+    "OPTIONS",
+    "/journal_log",
+    Options,
+  },
+
+  Route{
+    "OptionsDate",
+    "OPTIONS",
+    "/journal_log/{jl_date}",
+    Options,
+  },
+
+  Route{
+    "GetJournallogForDate",
+    "GET",
+    "/journal_log/{jl_date}",
+    GetJournallogForDate,
+  },
+
+
 }
