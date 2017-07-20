@@ -3,17 +3,17 @@ import 'rxjs/add/operator/toPromise';
 import { Headers, Http } from '@angular/http';
 import {ErrorService} from './error.service';
 import {Journallog, DAYLOGS, LOGS} from '../domain/journallog'
+import {isUndefined} from "util";
 
 @Injectable()
 export class JournallogService {
 
   private journallogUrl = 'http://localhost:8080/journal_log';
+  private journallogNextUrl = 'http://localhost:8080/journal_log/next';
 
   constructor(private http: Http, private errorService: ErrorService) {}
 
   getTodayJournallog() {
-      let dateUrl = this.formatDate(new Date());
-      console.log(dateUrl)
       return this.http.get(this.journallogUrl + "/" + this.formatDate(new Date()))
         .toPromise()
         .then(response => response.json())
@@ -24,6 +24,44 @@ export class JournallogService {
 
   getJournallog() {
     return DAYLOGS;
+  }
+
+  getNextNJournallog(date: Date, iterationsNb: number) {
+    let result: [[Date, Journallog[]]];
+    let tempDate = date;
+    let i: number;
+    let journallogList: Journallog[];
+
+    for(i = iterationsNb;  i > 0;i--) {
+      this.getNextJournallog(tempDate).then(jl => {
+        journallogList = jl;
+        if (typeof journallogList === 'undefined' || journallogList === null) {
+          return result;
+        }
+        if (journallogList.length === 0) {
+          return result;
+        }
+        tempDate = journallogList[0].date;
+        let jle: [Date, Journallog[]] = [tempDate, journallogList]
+        if (typeof result === 'undefined') {
+          result = [jle];
+        }
+        else {
+          result.push(jle);
+        }
+      })
+    }
+    console.log(result);
+    return result;
+  }
+
+  getNextJournallog(date: Date) {
+    return this.http.get(this.journallogNextUrl + "/" + this.formatDate(date))
+      .toPromise()
+      .then(response => response.json())
+      .catch(err => {
+        this.handleError(err);
+      });
   }
 
   save(journalLog: Journallog) {
@@ -61,8 +99,6 @@ export class JournallogService {
   }
 
   private formatDate(date: Date) {
-    console.log(date);
-    console.log(date.getMonth());
     return date.getUTCFullYear()
       + (date.getUTCMonth() < 11 ? "0" : "") + (date.getUTCMonth()+1)
       + (date.getUTCDate() < 10 ? "0" : "") + date.getUTCDate()

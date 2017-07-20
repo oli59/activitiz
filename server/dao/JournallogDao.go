@@ -84,10 +84,37 @@ func GetJournallogForDate (date time.Time) domain.Journallogs {
     journallogs = append(journallogs, journallog)
   }
 
-
-
   db.Close();
   return journallogs
+}
 
+
+  func GetJournallogForNextDate (date time.Time) domain.Journallogs {
+    var rows *sql.Rows;
+    var tempDate time.Time;
+
+    db, err := sql.Open("sqlite3", "./activity.db")
+    checkErr(err)
+
+    stmt, err := db.Prepare("SELECT jl_date FROM journallog WHERE jl_date < ? ORDER BY jl_date DESC LIMIT 1")
+    checkErr(err)
+
+    rows, err = stmt.Query(date.Format("20060102"));
+    checkErr(err)
+
+    tempDate = date.AddDate(0,0,1);
+
+    if rows.Next() {
+      var dateStr string;
+      err = rows.Scan(&dateStr)
+      checkErr(err)
+
+      tempDate, err = time.Parse("20060102", dateStr);
+      checkErr(err)
+    }
+
+    db.Close();
+
+    return GetJournallogForDate(tempDate)
 }
 

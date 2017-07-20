@@ -220,7 +220,6 @@ func JournallogCreate (w http.ResponseWriter, r *http.Request) {
 /*Get all journallogs for a given date*/
 func GetJournallogForDate(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
-  fmt.Println(vars["jl_date"])
   date, err := time.Parse("20060102", vars["jl_date"])
   if err != nil {
     panic(err)
@@ -229,6 +228,21 @@ func GetJournallogForDate(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Access-Control-Allow-Origin", "*")
   w.WriteHeader(http.StatusOK)
   if err := json.NewEncoder(w).Encode(business.GetJournallogForDate(date)); err != nil {
+    panic(err)
+  }
+}
+
+/*Get all journallogs for the first date after the date given as parameter*/
+func GetJournallogForNextDate(w http.ResponseWriter, r *http.Request) {
+  vars := mux.Vars(r)
+  date, err := time.Parse("20060102", vars["jl_date"])
+  if err != nil {
+    panic(err)
+  }
+
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusOK)
+  if err := json.NewEncoder(w).Encode(business.GetJournallogForNextDate(date)); err != nil {
     panic(err)
   }
 }

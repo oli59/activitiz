@@ -136,5 +136,20 @@ var routes = Routes{
     GetJournallogForDate,
   },
 
+  Route{
+    "OptionsNDate",
+    "OPTIONS",
+    "/journal_log/next/{jl_date}",
+    Options,
+  },
+
+  Route{
+    "GetJournallogForNextDate",
+    "GET",
+    "/journal_log/next/{jl_date}",
+    GetJournallogForNextDate,
+  },
+
+
 
 }

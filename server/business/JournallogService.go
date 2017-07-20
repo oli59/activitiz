@@ -13,3 +13,7 @@ func CreateJournallog (a domain.Journallog) domain.Journallog {
 func GetJournallogForDate(date time.Time) domain.Journallogs {
   return dao.GetJournallogForDate(date);
 }
+
+func GetJournallogForNextDate(date time.Time) domain.Journallogs {
+  return dao.GetJournallogForNextDate(date);
+}

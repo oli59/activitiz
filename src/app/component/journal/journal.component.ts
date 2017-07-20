@@ -9,12 +9,14 @@ import {JournallogService} from '../../service/journallog.service';
   })
 
 export class JournalComponent {
-    dayLogs: [[Date, Journallog[]]] = this.journallogService.getJournallog();
+    dayLogs: [[Date, Journallog[]]] = this.journallogService.getNextNJournallog(new Date, 1);
     todayLogs: Journallog[];
 
 
   constructor(public dialog: MdDialog, private journallogService: JournallogService) {
     this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
+    this.dayLogs = this.journallogService.getNextNJournallog(new Date, 1)
+    console.log(this.dayLogs);
   }
 
   getBackgroundColor(status: string) {
