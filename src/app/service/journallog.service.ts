@@ -1,9 +1,13 @@
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, Response } from '@angular/http';
 import {ErrorService} from './error.service';
 import {Journallog, DAYLOGS, LOGS} from '../domain/journallog'
-import {isUndefined} from "util";
+import {Observable} from 'rxjs/Rx'
+
+// Import RxJs required methods
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class JournallogService {
@@ -26,42 +30,16 @@ export class JournallogService {
     return DAYLOGS;
   }
 
-  getNextNJournallog(date: Date, iterationsNb: number) {
-    let result: [[Date, Journallog[]]];
-    let tempDate = date;
-    let i: number;
-    let journallogList: Journallog[];
 
-    for(i = iterationsNb;  i > 0;i--) {
-      this.getNextJournallog(tempDate).then(jl => {
-        journallogList = jl;
-        if (typeof journallogList === 'undefined' || journallogList === null) {
-          return result;
-        }
-        if (journallogList.length === 0) {
-          return result;
-        }
-        tempDate = journallogList[0].date;
-        let jle: [Date, Journallog[]] = [tempDate, journallogList]
-        if (typeof result === 'undefined') {
-          result = [jle];
-        }
-        else {
-          result.push(jle);
-        }
-      })
-    }
-    console.log(result);
-    return result;
-  }
 
-  getNextJournallog(date: Date) {
-    return this.http.get(this.journallogNextUrl + "/" + this.formatDate(date))
-      .toPromise()
-      .then(response => response.json())
-      .catch(err => {
-        this.handleError(err);
+  getNextJournallog(date: Date): Observable<Journallog[]> {
+    let jl = this.http.get(this.journallogNextUrl + "/" + this.formatDate(date))
+      .map((response: Response) => { return response.json() as Journallog[]})
+      .catch((error:any) => {
+        this.handleError(error);
+        return Observable.throw(error.json().error)
       });
+    return jl;
   }
 
   save(journalLog: Journallog) {

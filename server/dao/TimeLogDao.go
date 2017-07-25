@@ -68,6 +68,7 @@ func GetTimeLogs () domain.TimeLogs {
 
 		tl = domain.TimeLog{id, date, startHour, endHour, duration, activityId, comment, ""}
 		timeLogs = append(timeLogs, tl)
+
 	}
 
 	activityIdMap = make(map[domain.JsonNullInt64] string)
@@ -84,7 +85,7 @@ func GetTimeLogs () domain.TimeLogs {
 
 	}
 
-
+  db.Close();
 
 	return timeLogs;
 }

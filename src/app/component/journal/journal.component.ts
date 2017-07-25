@@ -3,20 +3,20 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 import {JournalLogDetailComponent} from '../journallog-detail/journallog-detail.component';
 import {Journallog, DAYLOGS, LOGS} from '../../domain/journallog';
 import {JournallogService} from '../../service/journallog.service';
+import {Observable} from "rxjs/Rx";
 
 @Component({selector: 'my-journal',
   templateUrl: 'journal.component.html'
   })
 
 export class JournalComponent {
-    dayLogs: [[Date, Journallog[]]] = this.journallogService.getNextNJournallog(new Date, 1);
+    dayLogs: [[Date, Journallog[]]];
     todayLogs: Journallog[];
 
 
   constructor(public dialog: MdDialog, private journallogService: JournallogService) {
     this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
-    this.dayLogs = this.journallogService.getNextNJournallog(new Date, 1)
-    console.log(this.dayLogs);
+    this.getNextNJournallog(new Date())
   }
 
   getBackgroundColor(status: string) {
@@ -55,5 +55,30 @@ export class JournalComponent {
       }
     });
   }
+
+
+  getNextNJournallog(date: Date) {
+    let tempDate = date;
+    let journallogList: Journallog[];
+
+    this.journallogService.getNextJournallog(tempDate).subscribe(jl => {
+        journallogList = jl;
+        if (typeof journallogList === 'undefined' || journallogList === null) {
+          return;
+        }
+        if (journallogList.length === 0) {
+          return;
+        }
+        tempDate = new Date(journallogList[0].date);
+        let jle: [Date, Journallog[]] = [tempDate, journallogList]
+        if (typeof this.dayLogs === 'undefined') {
+          this.dayLogs = [jle];
+        }
+        else {
+          this.dayLogs.push(jle);
+        }
+        this.getNextNJournallog(tempDate);
+      })
+    }
 
 }
