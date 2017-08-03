@@ -24,6 +24,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {JournalLogDetailComponent} from './component/journallog-detail/journallog-detail.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {JournallogService} from './service/journallog.service';
+import {JournallogContextMenuService} from './service/journallog-contextmenu.service';
+import {JournallogContextmenuComponent} from './component/journallog-contextmenu/journallog-contextmenu.component'
 
 @NgModule({
     imports: [
@@ -48,11 +50,12 @@ import {JournallogService} from './service/journallog.service';
         DurationPipe,
         TimerComponent,
         JournalComponent,
-        JournalLogDetailComponent
+        JournalLogDetailComponent,
+        JournallogContextmenuComponent
     ],
     entryComponents: [JournalLogDetailComponent],
     providers: [
-        ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService, JournallogService
+        ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService, JournallogService, JournallogContextMenuService
     ],
     bootstrap: [ AppComponent, [] ]
 })

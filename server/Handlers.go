@@ -75,6 +75,17 @@ func GetAllParents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*Get an activity by id*/
+func ActivityGet(w http.ResponseWriter, r *http.Request) {
+  vars := mux.Vars(r)
+  activityId, _ := strconv.Atoi(vars["activity_Id"])
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusOK)
+  if err := json.NewEncoder(w).Encode(business.GetActivity(activityId)); err != nil {
+    panic(err)
+  }
+}
+
 /*Create a new activity with given parameters*/
 func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 	var activity domain.Activity

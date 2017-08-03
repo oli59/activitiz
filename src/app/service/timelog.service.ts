@@ -5,6 +5,7 @@ import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
 import {Timelog} from '../domain/timelog';
 import {TimerData} from './timer.service';
+import {serverUrl} from '../config/parameters';
 
 @Injectable()
 export class TimelogService {
@@ -13,7 +14,8 @@ export class TimelogService {
     timelog: Timelog;
     timerData: TimerData = null;
 
-    private timelogUrl = 'http://activities.chickenkiller.com:8080/time_log';
+
+    private timelogUrl = serverUrl + '/time_log';
 
     constructor(private http: Http, private errorService: ErrorService) {}
 

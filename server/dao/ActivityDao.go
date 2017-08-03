@@ -104,6 +104,8 @@ func GetActivities () domain.Activities {
 		activities = append(activities, act)
 	}
 
+  db.Close();
+
 	return activities;
 }
 
@@ -130,6 +132,8 @@ func GetAllLeafs () domain.Activities {
     act = domain.Activity{id, parentId, name, status}
     activities = append(activities, act)
   }
+
+  db.Close();
 
   return activities;
 }

@@ -13,6 +13,10 @@ func DeleteActivity (activityId int) error {
 	return dao.DeleteActivity(activityId)
 }
 
+func GetActivity (activityId int) domain.Activity {
+  return dao.GetActivity(activityId)
+}
+
 func CreateActivity (a domain.Activity) domain.Activity {
 	return dao.CreateActivity(a)
 }

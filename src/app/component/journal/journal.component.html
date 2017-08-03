@@ -7,7 +7,8 @@
         <md-card-content>
           <md-list>
             <md-list-item *ngFor="let tlog of todayLogs"
-                          [style.background]="getBackgroundColor(tlog.status)">
+                          [style.background]="getBackgroundColor(tlog.status)"
+                          (contextmenu)="contextMenu($event, tlog)">
               <md-icon md-list-avatar>{{getIcon(tlog.status)}}</md-icon>
               <h4 md-line>{{tlog.name}}</h4>
               <p md-line> 9:45 - 10:55 </p>
@@ -26,7 +27,8 @@
       <md-card-content>
         <md-list>
           <md-list-item *ngFor="let tlog of dlog[1]"
-                        [style.background]="getBackgroundColor(tlog.status)">
+                        [style.background]="getBackgroundColor(tlog.status)"
+                        (contextmenu)="contextMenu($event, tlog)">
             <md-icon md-list-avatar>{{getIcon(tlog.status)}}</md-icon>
             <h4 md-line>{{tlog.name}}</h4>
             <p md-line> 9:45 - 10:55 </p>

@@ -29,7 +29,7 @@ var routes = Routes{
 	Route{
 		"ActivitiesByParent",
 		"GET",
-		"/activities/{parentActivityId}",
+		"/activitiesByParent/{parentActivityId}",
 		ActivitiesByParent,
 	},
 	Route{
@@ -50,6 +50,13 @@ var routes = Routes{
 		"/activities",
 		ActivityCreate,
 	},
+
+  Route{
+    "ActivityGet",
+    "GET",
+    "/activities/{activity_Id}",
+    ActivityGet,
+  },
 
 	Route{
 		"ActivityUpdate",
@@ -76,6 +83,13 @@ var routes = Routes{
     "Options",
     "OPTIONS",
     "/activities",
+    Options,
+  },
+
+  Route{
+    "OptionsParentId",
+    "OPTIONS",
+    "/activitiesByParent/{activity_Id}",
     Options,
   },
 
