@@ -23,7 +23,6 @@ import { Component }       from '@angular/core';
     
     <activity-contextmenu></activity-contextmenu>
     <journallog-contextmenu></journallog-contextmenu>
-    <my-timelog></my-timelog>
 
     <router-outlet class="app_body"></router-outlet>
     

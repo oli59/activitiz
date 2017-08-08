@@ -3,6 +3,7 @@ import {Observable} from 'rxjs/Rx'
 //import internal = require("stream");
 import {Activity} from '../domain/activity';
 import {TimelogService} from './timelog.service';
+import {TimerData} from '../domain/timer-data';
 
 @Injectable()
 export class TimerService {
@@ -58,12 +59,3 @@ export class TimerService {
 
 }
 
-export class TimerData {
-    timer: Observable<number>;
-    minutes: number;
-    hours: number;
-    activity: Activity;
-    subscription;
-    isPaused: boolean;
-    pausedSeconds: number;
-}

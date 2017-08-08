@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {TimelogService} from '../../service/timelog.service';
-import {TimerService, TimerData} from '../../service/timer.service'
+import {TimerService} from '../../service/timer.service'
+import {MdDialogRef} from'@angular/material';
+import {TimerData} from '../../domain/timer-data';
 
 @Component({
     selector: 'my-timelog',
@@ -9,7 +11,7 @@ import {TimerService, TimerData} from '../../service/timer.service'
 
 
 export class LogtimeComponent {
-    constructor(private timelogService: TimelogService, private timerService: TimerService) {}
+  constructor(public dialogRef: MdDialogRef<any>, private timelogService: TimelogService, private timerService: TimerService) {}
 
     parseDate(dateString: string): Date {
         if (dateString) {

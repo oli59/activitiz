@@ -4,12 +4,13 @@ import 'rxjs/add/operator/toPromise';
 import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
 import {Timelog} from '../domain/timelog';
-import {TimerData} from './timer.service';
 import {serverUrl} from '../config/parameters';
+import {MdDialog, MdDialogRef} from '@angular/material';
+import {LogtimeComponent} from '../component/timelog/timelog.component'
+import {TimerData} from '../domain/timer-data';
 
 @Injectable()
 export class TimelogService {
-    showLogTimePanel = false;
     activity: Activity;
     timelog: Timelog;
     timerData: TimerData = null;
@@ -17,18 +18,16 @@ export class TimelogService {
 
     private timelogUrl = serverUrl + '/time_log';
 
-    constructor(private http: Http, private errorService: ErrorService) {}
+  constructor(private dialog: MdDialog, private http: Http, private errorService: ErrorService) {}
 
     abortLogtime() {
         this.timerData = null;
-        this.showLogTimePanel = false;
     }
 
     logtime() {
         this.timelog.activity_id = this.activity.id;
         this.post(this.timelog);
         this.timerData = null;
-        this.showLogTimePanel = false;
     }
 
     logtimeForActivity(activity: Activity) {
@@ -41,7 +40,7 @@ export class TimelogService {
         let minutes = this.timelog.date.getMinutes();
         this.timelog.start_hour = this.formatHourMinute(hours - 1, minutes);
         this.timelog.end_hour = this.formatHourMinute(hours, minutes);
-        this.showLogTimePanel = true;
+        console.log("test open dialog from service")
     }
 
     logtimeFromTimer(timerData: TimerData) {
@@ -58,7 +57,6 @@ export class TimelogService {
       let startMinute = (this.timelog.date.getMinutes() - minutes) + (this.timelog.date.getMinutes() >= minutes ? 0 : 60);
       this.timelog.start_hour = this.formatHourMinute(startHour, startMinute);
       this.timelog.end_hour = this.formatHourMinute(this.timelog.date.getHours(), this.timelog.date.getMinutes());
-      this.showLogTimePanel = true;
     }
 
     private formatHourMinute(hours: number, minutes: number) {

@@ -13,6 +13,7 @@ import {TruncatePipe} from './utils/pipes/truncate';
 import {ActivityDetailComponent} from './component/activity-detail/activity-detail.component';
 import {LogtimeComponent} from './component/timelog/timelog.component'
 import {TimelogService} from './service/timelog.service'
+import {TimelogDialogService} from './service/timelog-dialog.service'
 import {LogtimeListComponent} from './component/timelog-list/timelog-list.component'
 import {DurationPipe} from './utils/pipes/durationPipe'
 import {routing} from './app.routes'
@@ -53,9 +54,9 @@ import {JournallogContextmenuComponent} from './component/journallog-contextmenu
         JournalLogDetailComponent,
         JournallogContextmenuComponent
     ],
-    entryComponents: [JournalLogDetailComponent],
+    entryComponents: [JournalLogDetailComponent, LogtimeComponent],
     providers: [
-        ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService, JournallogService, JournallogContextMenuService
+        ActivityService, ErrorService, ActivityContextMenuService, TimelogService,TimelogDialogService, TimerService, JournallogService, JournallogContextMenuService
     ],
     bootstrap: [ AppComponent, [] ]
 })

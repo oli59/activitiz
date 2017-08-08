@@ -1,51 +1,45 @@
-<div *ngIf="timelogService.showLogTimePanel" class="modal fade show in danger">
-    <div class="modal-dialog">
+<h1 md-dialog-title>Log Time</h1>
+<md-dialog-content style="min-width: 50em">
+  <table>
+    <tr>
+      <td>
+        <md-input-container>
+          <input mdInput type="text" disabled placeholder="Name" value="{{timelogService.activity.name}}">
+        </md-input-container>
+      </td>
+      <td>
+        <md-input-container>
+          <input mdInput type="text" disabled placeholder="Status" value="{{timelogService.activity.status}}">
+        </md-input-container>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <md-input-container>
+          <input mdInput type="date" required placeholder="Date" [value]="timelogService.timelog.date | date:'yyyy-MM-dd'" (input)="timelogService.timelog.date=parseDate($event.target.value)">
+        </md-input-container>
+      </td>
+      <td>
+        <md-input-container>
+          <input mdInput type="time" required placeholder="Start" [(ngModel)]="timelogService.timelog.start_hour">
+        </md-input-container>
+      </td>
+      <td>
+        <md-input-container>
+          <input mdInput type="time" required placeholder="End" [(ngModel)]="timelogService.timelog.end_hour">
+        </md-input-container>
+      </td>
+    </tr>
+  </table>
+  <md-input-container style="width: 100%">
+    <input mdInput type="text" placeholder="Commentaire" style="width: 100%" [(ngModel)]="timelogService.timelog.comment">
+  </md-input-container>
+</md-dialog-content>
 
-        <div class="modal-content">
-            <div class="modal-header">
-                <button (click)="timelogService.abortLogtime()" type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Log Time</h4>
-            </div>
-            <div class="modal-body">
-                <table>
-                    <tr>
-                        <td>
-                          <md-input-container>
-                            <input mdInput type="text" disabled placeholder="Name" value="{{timelogService.activity.name}}">
-                          </md-input-container>
-                        </td>
-                        <td>
-                          <md-input-container>
-                            <input mdInput type="text" disabled placeholder="Status" value="{{timelogService.activity.status}}">
-                          </md-input-container>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                          <md-input-container>
-                            <input mdInput type="date" required placeholder="Date" [value]="timelogService.timelog.date | date:'yyyy-MM-dd'" (input)="timelogService.timelog.date=parseDate($event.target.value)">
-                            </md-input-container>
-                        </td>
-                        <td>
-                          <md-input-container>
-                            <input mdInput type="time" required placeholder="Start" [(ngModel)]="timelogService.timelog.start_hour">
-                            </md-input-container>
-                        </td>
-                        <td>
-                          <md-input-container>
-                            <input mdInput type="time" required placeholder="End" [(ngModel)]="timelogService.timelog.end_hour">
-                            </md-input-container>
-                        </td>
-                    </tr>
-                </table>
-              <md-input-container style="width: 100%">
-                <input mdInput type="text" placeholder="Commentaire" style="width: 100%" [(ngModel)]="timelogService.timelog.comment">
-                </md-input-container>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="logtime()">Log Time</button>
-                <button type="button" class="btn btn-primary" (click)="timelogService.abortLogtime()">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
+<md-dialog-actions>
+  <button type="button" md-raised-button
+          (click)="logtime()">Log Time</button>
+  <button type="button" md-button
+          (click)="dialogRef.close()">Cancel</button>
+</md-dialog-actions>
+

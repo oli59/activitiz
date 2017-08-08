@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Activity} from "../domain/activity"
 import {activityStatuses} from '../domain/activity-statuses';
 import {ActivityService} from '../service/activity.service'
-import {TimelogService} from './timelog.service'
+import {TimelogDialogService} from './timelog-dialog.service'
 import {TimerService} from './timer.service'
 
 @Injectable()
@@ -14,7 +14,7 @@ export class ActivityContextMenuService {
     private startTimerLink = 'Start Timer'
     private mouseLocation :{left:number,top:number} = {left:0,top:0};
 
-    constructor(private activityService: ActivityService, private timelogService: TimelogService, private timerService: TimerService) {}
+    constructor(private activityService: ActivityService, private timelogDialogService: TimelogDialogService, private timerService: TimerService) {}
 
     showMenu(event, activity: Activity) {
         this.activity = activity;
@@ -44,7 +44,7 @@ export class ActivityContextMenuService {
 
     menuClicked(link) {
         if (link == this.timelogLink) {
-            this.timelogService.logtimeForActivity(this.activity);
+            this.timelogDialogService.logtimeForActivity(this.activity);
         }
         else if (link == this.startTimerLink) {
             this.timerService.createTimer(this.activity);

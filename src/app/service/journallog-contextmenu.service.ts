@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Journallog} from "../domain/journallog"
 import {journallogStatuses} from '../domain/journallog-statuses';
 import {JournallogService} from '../service/journallog.service'
-import {TimelogService} from './timelog.service'
+import {TimelogDialogService} from './timelog-dialog.service'
 import {TimerService} from './timer.service'
 import {Activity} from "../domain/activity";
 import {ActivityService} from "../service/activity.service"
@@ -17,7 +17,7 @@ export class JournallogContextMenuService {
   private editLink = 'Edit'
   private mouseLocation :{left:number,top:number} = {left:0,top:0};
 
-  constructor(private journallogService: JournallogService, private timelogService: TimelogService, private timerService: TimerService,
+  constructor(private journallogService: JournallogService, private timelogDialogService: TimelogDialogService, private timerService: TimerService,
               private activityService: ActivityService) {}
 
   showMenu(event, journallog: Journallog) {
