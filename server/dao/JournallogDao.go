@@ -118,3 +118,17 @@ func GetJournallogForDate (date time.Time) domain.Journallogs {
     return GetJournallogForDate(tempDate)
 }
 
+func UpdateJournallog (jl domain.Journallog) error {
+  db, err := sql.Open("sqlite3", "./activity.db")
+  checkErr(err)
+
+  stmt, err := db.Prepare("UPDATE journallog SET jl_date = ?, jl_status = ?, jl_act_id=?, jl_timelog_id= ?, jl_name= ? WHERE jl_id=?")
+  checkErr(err)
+
+  _ , err = stmt.Exec(jl.Date.Format("20060102"), jl.Status, jl.ActivityId, jl.TimeLogId, jl.Name, jl.Id)
+  checkErr(err)
+
+  db.Close();
+
+  return nil;
+}

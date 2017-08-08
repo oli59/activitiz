@@ -56,19 +56,20 @@ export class JournallogContextMenuService {
       this.timerService.createTimer(this.activity);
     } else if (link === 'done'){
       this.journallog.status = link;
+      this.journallogService.save(this.journallog)
       //TODO si le logTime n'est pas encore présent, il faut l'ajouter
     } else if (link === 'open') {
       this.journallog.status = link;
-      //TODO remettre sur open simplement
+      this.journallogService.save(this.journallog)
     } else if (link === 'delayed') {
       this.journallog.status = link;
-      //TODO changer le statut
       //TODO choisir une nouvelle date
+      this.journallogService.save(this.journallog)
     } else if (link === 'started') {
       this.journallog.status = link;
-      //TODO changer le statut
-      //TODO si le logTime n'est pas encore présent, il faut l'ajouter
       //TODO choisir une nouvelle date
+      //TODO si le logTime n'est pas encore présent, il faut l'ajouter
+      this.journallogService.save(this.journallog)
     } else if (link === this.editLink) {
       //TODO on fera ça bien plus tard si c'est nécessaire. Sinon on oublie.
     }

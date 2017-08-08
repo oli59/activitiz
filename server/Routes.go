@@ -64,6 +64,12 @@ var routes = Routes{
 		"/activities",
 		ActivityUpdate,
 	},
+  Route{
+    "JournallogUpdate",
+    "PUT",
+    "/journal_log",
+    JournallogUpdate,
+  },
 
 	Route{
     		"ActivityDelete",

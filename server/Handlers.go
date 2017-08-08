@@ -257,3 +257,31 @@ func GetJournallogForNextDate(w http.ResponseWriter, r *http.Request) {
     panic(err)
   }
 }
+
+/*Update journallog with given parameters*/
+func JournallogUpdate(w http.ResponseWriter, r *http.Request) {
+  var journallog domain.Journallog
+  body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+  if err != nil {
+    panic(err)
+  }
+  if err := r.Body.Close(); err != nil {
+    panic(err)
+  }
+  if err := json.Unmarshal(body, &journallog); err != nil {
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.WriteHeader(422) // unprocessable entity
+    if err := json.NewEncoder(w).Encode(err); err != nil {
+      panic(err)
+    }
+  }
+
+  jl := business.UpdateJournallog(journallog)
+  w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusCreated)
+  if err := json.NewEncoder(w).Encode(jl); err != nil {
+    panic(err)
+  }
+}
