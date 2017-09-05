@@ -4,35 +4,35 @@
     <tr>
       <td>
         <md-input-container>
-          <input mdInput type="text" disabled placeholder="Name" value="{{timelogService.activity.name}}">
+          <input mdInput type="text" disabled placeholder="Name" value="{{data.activity.name}}">
         </md-input-container>
       </td>
       <td>
         <md-input-container>
-          <input mdInput type="text" disabled placeholder="Status" value="{{timelogService.activity.status}}">
+          <input mdInput type="text" disabled placeholder="Status" value="{{data.activity.status}}">
         </md-input-container>
       </td>
     </tr>
     <tr>
       <td>
         <md-input-container>
-          <input mdInput type="date" required placeholder="Date" [value]="timelogService.timelog.date | date:'yyyy-MM-dd'" (input)="timelogService.timelog.date=parseDate($event.target.value)">
+          <input mdInput type="date" required placeholder="Date" [value]="data.timelog.date | date:'yyyy-MM-dd'" (input)="data.timelog.date=parseDate($event.target.value)">
         </md-input-container>
       </td>
       <td>
         <md-input-container>
-          <input mdInput type="time" required placeholder="Start" [(ngModel)]="timelogService.timelog.start_hour">
+          <input mdInput type="time" required placeholder="Start" [(ngModel)]="data.timelog.start_hour">
         </md-input-container>
       </td>
       <td>
         <md-input-container>
-          <input mdInput type="time" required placeholder="End" [(ngModel)]="timelogService.timelog.end_hour">
+          <input mdInput type="time" required placeholder="End" [(ngModel)]="data.timelog.end_hour">
         </md-input-container>
       </td>
     </tr>
   </table>
   <md-input-container style="width: 100%">
-    <input mdInput type="text" placeholder="Commentaire" style="width: 100%" [(ngModel)]="timelogService.timelog.comment">
+    <input mdInput type="text" placeholder="Commentaire" style="width: 100%" [(ngModel)]="data.timelog.comment">
   </md-input-container>
 </md-dialog-content>
 

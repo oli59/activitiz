@@ -7,62 +7,21 @@ import {Timelog} from '../domain/timelog';
 import {serverUrl} from '../config/parameters';
 import {MdDialog, MdDialogRef} from '@angular/material';
 import {LogtimeComponent} from '../component/timelog/timelog.component'
-import {TimerData} from '../domain/timer-data';
 
 @Injectable()
 export class TimelogService {
     activity: Activity;
     timelog: Timelog;
-    timerData: TimerData = null;
 
 
     private timelogUrl = serverUrl + '/time_log';
 
   constructor(private dialog: MdDialog, private http: Http, private errorService: ErrorService) {}
 
-    abortLogtime() {
-        this.timerData = null;
+    logtime(timelog: Timelog, activity: Activity): Promise<Timelog> {
+        timelog.activity_id = activity.id;
+        return this.post(timelog);
     }
-
-    logtime() {
-        this.timelog.activity_id = this.activity.id;
-        this.post(this.timelog);
-        this.timerData = null;
-    }
-
-    logtimeForActivity(activity: Activity) {
-        this.activity = activity;
-        this.timelog = new Timelog();
-        this.timelog.id = null;
-        this.timelog.duration = null;
-        this.timelog.date = new Date(Date.now());
-        let hours = this.timelog.date.getHours();
-        let minutes = this.timelog.date.getMinutes();
-        this.timelog.start_hour = this.formatHourMinute(hours - 1, minutes);
-        this.timelog.end_hour = this.formatHourMinute(hours, minutes);
-        console.log("test open dialog from service")
-    }
-
-    logtimeFromTimer(timerData: TimerData) {
-      let hours = timerData.hours;
-      let minutes = timerData.minutes;
-
-      this.activity = timerData.activity;;
-      this.timerData = timerData;
-      this.timelog = new Timelog();
-      this.timelog.id = null;
-      this.timelog.duration = null;
-      this.timelog.date = new Date(Date.now());
-      let startHour = (this.timelog.date.getHours() - hours) - (this.timelog.date.getMinutes() >= minutes ? 0  : 1);
-      let startMinute = (this.timelog.date.getMinutes() - minutes) + (this.timelog.date.getMinutes() >= minutes ? 0 : 60);
-      this.timelog.start_hour = this.formatHourMinute(startHour, startMinute);
-      this.timelog.end_hour = this.formatHourMinute(this.timelog.date.getHours(), this.timelog.date.getMinutes());
-    }
-
-    private formatHourMinute(hours: number, minutes: number) {
-      return (hours < 10 ? '0': '') + hours + ':' + (minutes < 10 ? '0': '') + minutes;
-    }
-
 
     private post(timelog: Timelog): Promise<Timelog> {
         let headers = new Headers({
@@ -98,7 +57,5 @@ export class TimelogService {
         this.errorService.addError(errMsg);
         return Promise.reject(errMsg);
     }
-
-
 
 }

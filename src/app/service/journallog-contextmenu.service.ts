@@ -34,7 +34,9 @@ export class JournallogContextMenuService {
       })
     }
     this.links.push(this.editLink)
-    this.links.push(this.startTimerLink)
+    if (this.journallog.status === 'open' || this.journallog.status === 'event') {
+      this.links.push(this.startTimerLink)
+    }
     this.mouseLocation = {
       left:event.clientX,
       top:event.clientY
@@ -53,11 +55,16 @@ export class JournallogContextMenuService {
 
   menuClicked(link) {
     if (link === this.startTimerLink) {
-      this.timerService.createTimer(this.activity);
+      this.timerService.createTimer(this.activity).subscribe(value => {
+        this.journallog.timelog_id = value;
+        this.journallogService.save(this.journallog);
+        console.log(value);
+      });
+      //TODO il faut encore ajouter le log_time qui vient du timer au journallog => comment ?
     } else if (link === 'done'){
       this.journallog.status = link;
       this.journallogService.save(this.journallog)
-      //TODO si le logTime n'est pas encore présent, il faut l'ajouter
+      //TODO si le logTime n'est pas encore présent, il faut ouvrir la fenêtre pour logguer
     } else if (link === 'open') {
       this.journallog.status = link;
       this.journallogService.save(this.journallog)
@@ -68,7 +75,7 @@ export class JournallogContextMenuService {
     } else if (link === 'started') {
       this.journallog.status = link;
       //TODO choisir une nouvelle date
-      //TODO si le logTime n'est pas encore présent, il faut l'ajouter
+      //TODO si le logTime n'est pas encore présent, il faut ouvrir la fenêtre pour logguer
       this.journallogService.save(this.journallog)
     } else if (link === this.editLink) {
       //TODO on fera ça bien plus tard si c'est nécessaire. Sinon on oublie.

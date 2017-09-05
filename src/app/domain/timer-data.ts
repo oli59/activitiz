@@ -1,5 +1,6 @@
 import {Observable} from 'rxjs/Rx'
 import {Activity} from '../domain/activity';
+import {Subject} from 'rxjs/Subject'
 
 export class TimerData {
   timer: Observable<number>;
@@ -9,4 +10,5 @@ export class TimerData {
   subscription;
   isPaused: boolean;
   pausedSeconds: number;
+  timelog: Subject<number>;
 }
