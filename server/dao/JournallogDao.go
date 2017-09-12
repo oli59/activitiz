@@ -113,6 +113,8 @@ func GetJournallogForDate (date time.Time) domain.Journallogs {
       checkErr(err)
     }
 
+    rows.Close();
+
     db.Close();
 
     return GetJournallogForDate(tempDate)

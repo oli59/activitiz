@@ -1,11 +1,11 @@
 import {Injectable} from "@angular/core";
 import {Journallog} from "../domain/journallog"
 import {journallogStatuses} from '../domain/journallog-statuses';
-import {JournallogService} from '../service/journallog.service'
+import {JournallogService} from './journallog.service'
 import {TimelogDialogService} from './timelog-dialog.service'
 import {TimerService} from './timer.service'
-import {Activity} from "../domain/activity";
-import {ActivityService} from "../service/activity.service"
+import {Activity} from '../domain/activity';
+import {ActivityService} from './activity.service';
 
 @Injectable()
 export class JournallogContextMenuService {
@@ -34,7 +34,7 @@ export class JournallogContextMenuService {
       })
     }
     this.links.push(this.editLink)
-    if (this.journallog.status === 'open' || this.journallog.status === 'event') {
+    if ((this.journallog.status === 'open' || this.journallog.status === 'event') && this.journallog.timelog_id === null) {
       this.links.push(this.startTimerLink)
     }
     this.mouseLocation = {
@@ -58,26 +58,34 @@ export class JournallogContextMenuService {
       this.timerService.createTimer(this.activity).subscribe(value => {
         this.journallog.timelog_id = value;
         this.journallogService.save(this.journallog);
-        console.log(value);
       });
-      //TODO il faut encore ajouter le log_time qui vient du timer au journallog => comment ?
-    } else if (link === 'done'){
+    }
+    else if (link === 'done'){
       this.journallog.status = link;
       this.journallogService.save(this.journallog)
+      if (this.journallog.timelog_id === null) {
+        this.timelogDialogService.logtimeForActivity(this.activity).subscribe(value => {
+          this.journallog.timelog_id = value;
+          this.journallogService.save(this.journallog);
+        })
+      }
+    }
+    else if (link === 'open') {
+      this.journallog.status = link;
+      this.journallogService.save(this.journallog)
+    }
+    else if (link === 'delayed') {
+      this.journallog.status = link;
+      //TODO choisir une nouvelle date = créer une copie avec la nouvelle date
+      this.journallogService.save(this.journallog)
+    }
+    else if (link === 'started') {
+      this.journallog.status = link;
+      //TODO choisir une nouvelle date = créer une copie avec la nouvelle date
       //TODO si le logTime n'est pas encore présent, il faut ouvrir la fenêtre pour logguer
-    } else if (link === 'open') {
-      this.journallog.status = link;
       this.journallogService.save(this.journallog)
-    } else if (link === 'delayed') {
-      this.journallog.status = link;
-      //TODO choisir une nouvelle date
-      this.journallogService.save(this.journallog)
-    } else if (link === 'started') {
-      this.journallog.status = link;
-      //TODO choisir une nouvelle date
-      //TODO si le logTime n'est pas encore présent, il faut ouvrir la fenêtre pour logguer
-      this.journallogService.save(this.journallog)
-    } else if (link === this.editLink) {
+    }
+    else if (link === this.editLink) {
       //TODO on fera ça bien plus tard si c'est nécessaire. Sinon on oublie.
     }
     this.visible = false;

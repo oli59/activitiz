@@ -44,8 +44,7 @@ export class TimelogDialogService {
         timerData: null
       }
     });
-    dialogRef.afterClosed().subscribe(result => {
-    });
+    return dialogRef.afterClosed();
   }
 
   logtimeFromTimer(timerData: TimerData): Observable<any>{
@@ -67,7 +66,7 @@ export class TimelogDialogService {
       data: {timelog: this.timelog,
         activity: this.activity,
         timerData: this.timerData}
-    });
+});
     return dialogRef.afterClosed();
   }
 
