@@ -6,21 +6,24 @@ import {TimelogDialogService} from './timelog-dialog.service'
 import {TimerService} from './timer.service'
 import {Activity} from '../domain/activity';
 import {ActivityService} from './activity.service';
+import {MdDialog} from '@angular/material';
+import {JournalLogUpdateComponent} from '../component/journallog-update/journallog-update.component';
 
 @Injectable()
 export class JournallogContextMenuService {
-  public activity: Activity
-  public journallog: Journallog;
+  public activity:Activity
+  public journallog:Journallog;
   public visible = false;
   public links = [];
   private startTimerLink = 'Start Timer'
   private editLink = 'Edit'
-  private mouseLocation :{left:number,top:number} = {left:0,top:0};
+  private mouseLocation:{left:number,top:number} = {left: 0, top: 0};
 
-  constructor(private journallogService: JournallogService, private timelogDialogService: TimelogDialogService, private timerService: TimerService,
-              private activityService: ActivityService) {}
+  constructor(private journallogService:JournallogService, private timelogDialogService:TimelogDialogService, private timerService:TimerService,
+              private activityService:ActivityService, private dialog: MdDialog,) {
+  }
 
-  showMenu(event, journallog: Journallog) {
+  showMenu(event, journallog:Journallog) {
     this.journallog = journallog;
     this.links = [];
     if (this.journallog.status !== 'event') {
@@ -29,8 +32,8 @@ export class JournallogContextMenuService {
           this.links.push(status);
         }
       }
-    this.activityService.getActivity(journallog.activity_id).then(result => {
-      this.activity = result;
+      this.activityService.getActivity(journallog.activity_id).then(result => {
+        this.activity = result;
       })
     }
     this.links.push(this.editLink)
@@ -38,18 +41,18 @@ export class JournallogContextMenuService {
       this.links.push(this.startTimerLink)
     }
     this.mouseLocation = {
-      left:event.clientX,
-      top:event.clientY
+      left: event.clientX,
+      top: event.clientY
     }
     this.visible = true;
   }
 
-  get locationCss(){
+  get locationCss() {
     return {
-      'position':'fixed',
-      'display':this.visible ?  'block':'none',
-      left:this.mouseLocation.left + 'px',
-      top:this.mouseLocation.top + 'px',
+      'position': 'fixed',
+      'display': this.visible ? 'block' : 'none',
+      left: this.mouseLocation.left + 'px',
+      top: this.mouseLocation.top + 'px',
     };
   }
 
@@ -60,7 +63,7 @@ export class JournallogContextMenuService {
         this.journallogService.save(this.journallog);
       });
     }
-    else if (link === 'done'){
+    else if (link === 'done') {
       this.journallog.status = link;
       this.journallogService.save(this.journallog)
       if (this.journallog.timelog_id === null) {
@@ -76,20 +79,57 @@ export class JournallogContextMenuService {
     }
     else if (link === 'delayed') {
       this.journallog.status = link;
-      //TODO choisir une nouvelle date = créer une copie avec la nouvelle date
+      this.proposeNewDate();
       this.journallogService.save(this.journallog)
     }
     else if (link === 'started') {
       this.journallog.status = link;
-      //TODO choisir une nouvelle date = créer une copie avec la nouvelle date
-      //TODO si le logTime n'est pas encore présent, il faut ouvrir la fenêtre pour logguer
+      this.proposeNewDate();
+      if (this.journallog.timelog_id === null) {
+        this.timelogDialogService.logtimeForActivity(this.activity).subscribe(value => {
+          this.journallog.timelog_id = value;
+          this.journallogService.save(this.journallog);
+        })
+      }
       this.journallogService.save(this.journallog)
     }
     else if (link === this.editLink) {
-      //TODO on fera ça bien plus tard si c'est nécessaire. Sinon on oublie.
+      this.openUpdateDialog(this.journallog)
     }
     this.visible = false;
   }
+
+  proposeNewDate() {
+    var newJournalLog : Journallog = new Journallog;
+    newJournalLog.activity_id = this.journallog.id;
+    console.log(typeof this.journallog.date);
+    console.log(this.journallog.date)
+    newJournalLog.date = new Date();
+    newJournalLog.date.setDate(this.journallog.date.getDate() + 1);
+    newJournalLog.name = this.journallog.name;
+    newJournalLog.status = 'open';
+    this.openUpdateDialog(newJournalLog);
+  }
+
+
+  openUpdateDialog(inJournallog: Journallog) {
+    let dialogRef = this.dialog.open(JournalLogUpdateComponent, {
+      disableClose: true,
+      data: {
+        journallog: inJournallog
+      }
+    });
+    dialogRef.afterClosed().subscribe(journalLog => {
+      if (journalLog) {
+          //this.journallogService.save(journalLog).then(result =>
+          //this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
+        //)
+      }
+    });
+
+  }
+
+
 
 }
 

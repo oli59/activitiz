@@ -6,4 +6,5 @@ export class Journallog {
   activity_id: number;
   timelog_id: number;
   name: string;
+  hours: string;
 }

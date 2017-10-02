@@ -161,7 +161,8 @@ func ActivityDelete(w http.ResponseWriter, r *http.Request) {
 func TimeLogIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(business.GetTimeLogs()); err != nil {
+  params := r.URL.Query()
+	if err := json.NewEncoder(w).Encode(business.GetTimeLogs(params)); err != nil {
 		panic(err)
 	}
 }

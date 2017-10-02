@@ -5,6 +5,7 @@ import {Journallog} from '../../domain/journallog';
 import {JournallogService} from '../../service/journallog.service';
 import {JournallogContextMenuService} from '../../service/journallog-contextmenu.service'
 import {Observable} from "rxjs/Rx";
+import {TimelogService} from '../../service/timelog.service';
 
 @Component({selector: 'my-journal',
   templateUrl: 'journal.component.html'
@@ -16,7 +17,8 @@ export class JournalComponent {
 
 
   constructor(public dialog: MdDialog, private journallogService: JournallogService,
-              private journallogContextMenuService: JournallogContextMenuService) {
+              private journallogContextMenuService: JournallogContextMenuService,
+              private timelogService: TimelogService) {
     this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
     this.getNextNJournallog(new Date())
   }
@@ -56,6 +58,7 @@ export class JournalComponent {
         )
       }
     });
+
   }
 
   contextMenu(event, journallog: Journallog) {

@@ -1,0 +1,11 @@
+<h1 md-dialog-title>Update Journal Entry</h1>
+<md-dialog-content style="min-width: 50em">
+{{journallog.name}}
+</md-dialog-content>
+
+<md-dialog-actions>
+  <button type="button" md-raised-button
+          (click)="dialogRef.close()">Update</button>
+  <button type="button" md-button
+          (click)="dialogRef.close()">Cancel</button>
+</md-dialog-actions>

@@ -31,7 +31,12 @@ export class JournallogService {
 
   getNextJournallog(date: Date): Observable<Journallog[]> {
     let jl = this.http.get(this.journallogNextUrl + "/" + this.formatDate(date))
-      .map((response: Response) => { return response.json() as Journallog[]})
+      .map((response: Response) => {
+        var data = response.json() as Journallog[];
+        if (data != null) {
+          data.forEach((e) => e.date = new Date(e.date))
+        }
+        return data;})
       .catch((error:any) => {
         this.handleError(error);
         return Observable.throw(error.json().error)
@@ -90,7 +95,7 @@ export class JournallogService {
 
   private formatDate(date: Date) {
     return date.getUTCFullYear()
-      + (date.getUTCMonth() < 11 ? "0" : "") + (date.getUTCMonth()+1)
+      + (date.getUTCMonth() < 9 ? "0" : "") + (date.getUTCMonth()+1)
       + (date.getUTCDate() < 10 ? "0" : "") + date.getUTCDate()
   }
 }

@@ -36,9 +36,21 @@ export class TimelogService {
             });
     }
 
+    getTimelog(id: number) {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('id', id.toString());
+
+        return this.http.get(this.timelogUrl, {search: params})
+          .toPromise()
+          .then(response => response.json())
+          .catch(err => {
+            this.handleError(err);
+          });
+    }
+
     getTimelogs() {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('test', 'wow');
+        params.set('id', '3');
 
         return this.http.get(this.timelogUrl, {search: params})
             .toPromise()

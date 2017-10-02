@@ -6,6 +6,8 @@ import (
   "database/sql"
   "log"
   "time"
+  "net/url"
+  "strconv"
 )
 
 var jlNextId int
@@ -73,6 +75,7 @@ func GetJournallogForDate (date time.Time) domain.Journallogs {
     var activityId domain.JsonNullInt64
     var timelogId domain.JsonNullInt64
     var name string
+    var hours string
 
     err = rows.Scan(&id, &dateStr, &status, &activityId, &timelogId, &name)
     checkErr(err)
@@ -80,8 +83,18 @@ func GetJournallogForDate (date time.Time) domain.Journallogs {
     date, err := time.Parse("20060102", dateStr);
     checkErr(err)
 
-    journallog = domain.Journallog{id, date, status, activityId, timelogId, name}
+    hours = "-";
+
+    if timelogId.Valid {
+      v := url.Values{}
+      v.Set("id", strconv.FormatInt(timelogId.Int64,10))
+      timeLogs := GetTimeLogs(v)
+      hours = formatHours(timeLogs[0])
+    }
+
+    journallog = domain.Journallog{id, date, status, activityId, timelogId, name, hours}
     journallogs = append(journallogs, journallog)
+
   }
 
   db.Close();
@@ -133,4 +146,8 @@ func UpdateJournallog (jl domain.Journallog) error {
   db.Close();
 
   return nil;
+}
+
+func formatHours(tl domain.TimeLog) string {
+  return tl.StartHour.Format("15:04") + " - " + tl.EndHour.Format("15:04");
 }
