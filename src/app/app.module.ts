@@ -13,6 +13,7 @@ import {TruncatePipe} from './utils/pipes/truncate';
 import {ActivityDetailComponent} from './component/activity-detail/activity-detail.component';
 import {LogtimeComponent} from './component/timelog/timelog.component'
 import {TimelogService} from './service/timelog.service'
+import {TimelogDialogService} from './service/timelog-dialog.service'
 import {LogtimeListComponent} from './component/timelog-list/timelog-list.component'
 import {DurationPipe} from './utils/pipes/durationPipe'
 import {routing} from './app.routes'
@@ -24,6 +25,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {JournalLogDetailComponent} from './component/journallog-detail/journallog-detail.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {JournallogService} from './service/journallog.service';
+import {JournallogContextMenuService} from './service/journallog-contextmenu.service';
+import {JournallogContextmenuComponent} from './component/journallog-contextmenu/journallog-contextmenu.component'
+import {JournalLogUpdateComponent} from './component/journallog-update/journallog-update.component'
 
 @NgModule({
     imports: [
@@ -48,11 +52,13 @@ import {JournallogService} from './service/journallog.service';
         DurationPipe,
         TimerComponent,
         JournalComponent,
-        JournalLogDetailComponent
+        JournalLogDetailComponent,
+        JournallogContextmenuComponent,
+        JournalLogUpdateComponent
     ],
-    entryComponents: [JournalLogDetailComponent],
+    entryComponents: [JournalLogDetailComponent, LogtimeComponent, JournalLogUpdateComponent],
     providers: [
-        ActivityService, ErrorService, ActivityContextMenuService, TimelogService, TimerService, JournallogService
+        ActivityService, ErrorService, ActivityContextMenuService, TimelogService,TimelogDialogService, TimerService, JournallogService, JournallogContextMenuService
     ],
     bootstrap: [ AppComponent, [] ]
 })

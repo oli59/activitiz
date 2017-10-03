@@ -11,6 +11,7 @@ type Journallog struct {
   ActivityId  JsonNullInt64       `json:"activity_id"`
   TimeLogId   JsonNullInt64       `json:"timelog_id"`
   Name        string              `json:"name"`
+  Hours       string              `json:"hours"`
 }
 
 type Journallogs [] Journallog;

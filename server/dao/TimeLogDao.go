@@ -5,6 +5,7 @@ import ("log"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/oli59/activitiz/server/domain"
 	"time"
+  "net/url"
 )
 
 var tlNextId int
@@ -29,17 +30,38 @@ func init () {
 }
 
 
-func GetTimeLogs () domain.TimeLogs {
+func GetTimeLogs (inParams url.Values) domain.TimeLogs {
 	var timeLogs domain.TimeLogs;
 	var activityIdMap map[domain.JsonNullInt64] string;
+  params := [] interface{} {};
+  var rows *sql.Rows;
 
-	db, err := sql.Open("sqlite3", "./activity.db")
+  db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
 
-	stmt, err := db.Prepare("SELECT * FROM timelog ORDER BY tl_date DESC, tl_startHour DESC")
+  whereClause := "";
+  query := "SELECT * FROM timelog ";
+
+  if value, ok := inParams["id"]; ok {
+    whereClause = AddToWhereClause(whereClause, "tl_id = ? ")
+    params = append(params, value[0]);
+  }
+
+
+
+  query = query + whereClause + "ORDER BY tl_date DESC, tl_startHour DESC"
+
+	stmt, err := db.Prepare(query)
 	checkErr(err)
 
-	rows, err := stmt.Query()
+  if len(params) > 0 {
+	  rows, err = stmt.Query(params...)
+    checkErr(err)
+  } else {
+    rows, err = stmt.Query()
+    checkErr(err)
+  }
+
 	checkErr(err)
 
 	for rows.Next() {
@@ -68,6 +90,8 @@ func GetTimeLogs () domain.TimeLogs {
 
 		tl = domain.TimeLog{id, date, startHour, endHour, duration, activityId, comment, ""}
 		timeLogs = append(timeLogs, tl)
+
+    db.Close();
 
 	}
 

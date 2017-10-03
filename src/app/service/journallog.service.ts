@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import { Headers, Http, Response } from '@angular/http';
 import {ErrorService} from './error.service';
-import {Journallog, DAYLOGS, LOGS} from '../domain/journallog'
+import {Journallog} from '../domain/journallog'
 import {Observable} from 'rxjs/Rx'
+import {serverUrl} from '../config/parameters';
 
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
@@ -12,8 +13,9 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class JournallogService {
 
-  private journallogUrl = 'http://localhost:8080/journal_log';
-  private journallogNextUrl = 'http://localhost:8080/journal_log/next';
+
+  private journallogUrl = serverUrl + '/journal_log';
+  private journallogNextUrl = serverUrl +'/journal_log/next';
 
   constructor(private http: Http, private errorService: ErrorService) {}
 
@@ -26,15 +28,15 @@ export class JournallogService {
         });
   }
 
-  getJournallog() {
-    return DAYLOGS;
-  }
-
-
 
   getNextJournallog(date: Date): Observable<Journallog[]> {
     let jl = this.http.get(this.journallogNextUrl + "/" + this.formatDate(date))
-      .map((response: Response) => { return response.json() as Journallog[]})
+      .map((response: Response) => {
+        var data = response.json() as Journallog[];
+        if (data != null) {
+          data.forEach((e) => e.date = new Date(e.date))
+        }
+        return data;})
       .catch((error:any) => {
         this.handleError(error);
         return Observable.throw(error.json().error)
@@ -43,13 +45,27 @@ export class JournallogService {
   }
 
   save(journalLog: Journallog) {
-    console.log("save");
     if (journalLog.id) {
-      //return this.put(journalLog);
+      return this.put(journalLog);
     }
     else {
       return this.post(journalLog);
     }
+  }
+
+  private put(journalLog: Journallog) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    let url = `${this.journallogUrl}`;
+
+    return this.http
+      .put(url, JSON.stringify(journalLog), {headers: headers})
+      .toPromise()
+      .then(res => res.json())
+      .catch(err => {
+        this.handleError(err);
+      });
   }
 
   // Add JournalLog
@@ -78,7 +94,7 @@ export class JournallogService {
 
   private formatDate(date: Date) {
     return date.getUTCFullYear()
-      + (date.getUTCMonth() < 11 ? "0" : "") + (date.getUTCMonth()+1)
+      + (date.getUTCMonth() < 9 ? "0" : "") + (date.getUTCMonth()+1)
       + (date.getUTCDate() < 10 ? "0" : "") + date.getUTCDate()
   }
 }

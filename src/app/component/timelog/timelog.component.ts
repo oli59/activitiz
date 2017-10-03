@@ -1,6 +1,10 @@
-import {Component} from '@angular/core';
 import {TimelogService} from '../../service/timelog.service';
-import {TimerService, TimerData} from '../../service/timer.service'
+import {TimerService} from '../../service/timer.service'
+import {MdDialogRef} from'@angular/material';
+import {TimerData} from '../../domain/timer-data';
+import {Component, Inject} from '@angular/core';
+import {MD_DIALOG_DATA} from '@angular/material';
+import {Timelog} from '../../domain/timelog'
 
 @Component({
     selector: 'my-timelog',
@@ -9,7 +13,11 @@ import {TimerService, TimerData} from '../../service/timer.service'
 
 
 export class LogtimeComponent {
-    constructor(private timelogService: TimelogService, private timerService: TimerService) {}
+  timeLog: Timelog;
+
+  constructor(public dialogRef: MdDialogRef<any>, private timelogService: TimelogService, private timerService: TimerService, @Inject(MD_DIALOG_DATA) public  data: any) {
+    this.timeLog = data.timelog;
+  }
 
     parseDate(dateString: string): Date {
         if (dateString) {
@@ -20,9 +28,13 @@ export class LogtimeComponent {
     }
 
     logtime () {
-      let timerData = this.timelogService.timerData;
-      this.timelogService.logtime();
-      this.timerService.cancelTimer(timerData);
+      this.timelogService.logtime(this.data.timelog, this.data.activity).then(result => {
+        this.dialogRef.close(result.id);
+        if (this.data.timerData !== null) {
+          this.timerService.emitLogtimeId(this.data.timerData, result.id);
+          this.timerService.cancelTimer(this.data.timerData);
+        }
+      });
     }
 }
 

@@ -17,3 +17,7 @@ func GetJournallogForDate(date time.Time) domain.Journallogs {
 func GetJournallogForNextDate(date time.Time) domain.Journallogs {
   return dao.GetJournallogForNextDate(date);
 }
+
+func UpdateJournallog (jl domain.Journallog) error {
+  return dao.UpdateJournallog(jl)
+}

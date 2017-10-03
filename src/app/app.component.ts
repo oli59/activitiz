@@ -22,7 +22,7 @@ import { Component }       from '@angular/core';
     <my-errors></my-errors>
     
     <activity-contextmenu></activity-contextmenu>
-    <my-timelog></my-timelog>
+    <journallog-contextmenu></journallog-contextmenu>
 
     <router-outlet class="app_body"></router-outlet>
     

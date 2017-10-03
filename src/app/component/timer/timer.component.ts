@@ -1,5 +1,6 @@
 import {Component} from '@angular/core'
 import {TimerService} from '../../service/timer.service'
+import {TimelogDialogService} from '../../service/timelog-dialog.service';
 
 @Component({
   selector: 'timer',
@@ -10,7 +11,7 @@ import {TimerService} from '../../service/timer.service'
             <div style="float:right">
               <md-icon *ngIf="timer.isPaused" style="color: greenyellow; cursor: pointer" (click)="timerService.resume(timer)">play_arrow</md-icon>
               <md-icon *ngIf="!timer.isPaused" style="color: orange; cursor: pointer" (click)="timerService.pause(timer)">pause</md-icon>
-              <md-icon style="color: #fbd850; cursor: pointer" (click)="timerService.logTime(timer)">save</md-icon>
+              <md-icon style="color: #fbd850; cursor: pointer" (click)="timelogDialogService.logtimeFromTimer(timer)">save</md-icon>
               <md-icon style="color: darkred; cursor: pointer" (click)="timerService.cancelTimer(timer)">cancel</md-icon>
             </div>
         </div>
@@ -18,7 +19,6 @@ import {TimerService} from '../../service/timer.service'
 })
 export class TimerComponent {
 
-  constructor(private timerService: TimerService) {
+  constructor(private timerService: TimerService, private timelogDialogService: TimelogDialogService) {}
 
-  }
 }

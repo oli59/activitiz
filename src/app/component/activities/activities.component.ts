@@ -56,7 +56,7 @@ export class ActivitiesComponent implements OnInit{
     }
 
     getActivities () {
-        this.activityService.getActivities(this.parentActivity)
+        this.activityService.getActivitiesByParent(this.parentActivity)
             .then(activities => this.activities = activities)
             /*.catch();*/
     }

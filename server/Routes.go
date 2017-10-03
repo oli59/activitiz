@@ -29,7 +29,7 @@ var routes = Routes{
 	Route{
 		"ActivitiesByParent",
 		"GET",
-		"/activities/{parentActivityId}",
+		"/activitiesByParent/{parentActivityId}",
 		ActivitiesByParent,
 	},
 	Route{
@@ -51,12 +51,25 @@ var routes = Routes{
 		ActivityCreate,
 	},
 
+  Route{
+    "ActivityGet",
+    "GET",
+    "/activities/{activity_Id}",
+    ActivityGet,
+  },
+
 	Route{
 		"ActivityUpdate",
 		"PUT",
 		"/activities",
 		ActivityUpdate,
 	},
+  Route{
+    "JournallogUpdate",
+    "PUT",
+    "/journal_log",
+    JournallogUpdate,
+  },
 
 	Route{
     		"ActivityDelete",
@@ -76,6 +89,13 @@ var routes = Routes{
     "Options",
     "OPTIONS",
     "/activities",
+    Options,
+  },
+
+  Route{
+    "OptionsParentId",
+    "OPTIONS",
+    "/activitiesByParent/{activity_Id}",
     Options,
   },
 

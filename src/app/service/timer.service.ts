@@ -2,17 +2,20 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx'
 //import internal = require("stream");
 import {Activity} from '../domain/activity';
-import {TimelogService} from './timelog.service';
+import {TimerData} from '../domain/timer-data';
+import {Subject} from 'rxjs/Subject'
 
 @Injectable()
 export class TimerService {
 
+
     timers: TimerData[] = [];
 
-    constructor(private timelogService: TimelogService) {}
+    constructor() {}
 
-    createTimer(activity: Activity) {
+    createTimer(activity: Activity) : Subject<number> {
         let timer = Observable.timer(0, 1000);
+
 
         let timerData = new TimerData;
         timerData.timer = timer;
@@ -21,9 +24,12 @@ export class TimerService {
         timerData.hours = 0;
         timerData.pausedSeconds = 0;
         timerData.isPaused = false;
+        timerData.timelog = new Subject<number>()
         this.timers.push(timerData);
 
         timerData.subscription = timer.subscribe(t=> this.calculateMinutesHours(t, timerData));
+
+        return timerData.timelog;
     }
 
     cancelTimer(timerData: TimerData) {
@@ -42,10 +48,6 @@ export class TimerService {
       timerData.isPaused = false;
     }
 
-    logTime(timerData: TimerData) {
-       this.timelogService.logtimeFromTimer(timerData);
-    }
-
     calculateMinutesHours(seconds: number, timerData: TimerData) {
       if (timerData.isPaused) {
         timerData.pausedSeconds++;
@@ -56,14 +58,10 @@ export class TimerService {
       timerData.minutes = minutes - (60 * timerData.hours);
     }
 
+    emitLogtimeId(timerData: TimerData, val: number) {
+      timerData.timelog.next(val);
+      timerData.timelog.complete();
+    }
+
 }
 
-export class TimerData {
-    timer: Observable<number>;
-    minutes: number;
-    hours: number;
-    activity: Activity;
-    subscription;
-    isPaused: boolean;
-    pausedSeconds: number;
-}

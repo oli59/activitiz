@@ -75,6 +75,17 @@ func GetAllParents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*Get an activity by id*/
+func ActivityGet(w http.ResponseWriter, r *http.Request) {
+  vars := mux.Vars(r)
+  activityId, _ := strconv.Atoi(vars["activity_Id"])
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusOK)
+  if err := json.NewEncoder(w).Encode(business.GetActivity(activityId)); err != nil {
+    panic(err)
+  }
+}
+
 /*Create a new activity with given parameters*/
 func ActivityCreate(w http.ResponseWriter, r *http.Request) {
 	var activity domain.Activity
@@ -150,7 +161,8 @@ func ActivityDelete(w http.ResponseWriter, r *http.Request) {
 func TimeLogIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(business.GetTimeLogs()); err != nil {
+  params := r.URL.Query()
+	if err := json.NewEncoder(w).Encode(business.GetTimeLogs(params)); err != nil {
 		panic(err)
 	}
 }
@@ -243,6 +255,34 @@ func GetJournallogForNextDate(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Access-Control-Allow-Origin", "*")
   w.WriteHeader(http.StatusOK)
   if err := json.NewEncoder(w).Encode(business.GetJournallogForNextDate(date)); err != nil {
+    panic(err)
+  }
+}
+
+/*Update journallog with given parameters*/
+func JournallogUpdate(w http.ResponseWriter, r *http.Request) {
+  var journallog domain.Journallog
+  body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+  if err != nil {
+    panic(err)
+  }
+  if err := r.Body.Close(); err != nil {
+    panic(err)
+  }
+  if err := json.Unmarshal(body, &journallog); err != nil {
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.WriteHeader(422) // unprocessable entity
+    if err := json.NewEncoder(w).Encode(err); err != nil {
+      panic(err)
+    }
+  }
+
+  jl := business.UpdateJournallog(journallog)
+  w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusCreated)
+  if err := json.NewEncoder(w).Encode(jl); err != nil {
     panic(err)
   }
 }

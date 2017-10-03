@@ -2,25 +2,33 @@ import {Injectable} from '@angular/core';
 import { RequestOptions, Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Activity} from '../domain/activity';
-import {ErrorService} from './error.service'
+import {ErrorService} from './error.service';
+import {serverUrl} from '../config/parameters';
 
 @Injectable()
 export class ActivityService {
 
-    //private activitiesUrl = 'http://activities.chickenkiller.com:8080/activities';
-    //private allParentsUrl = 'http://activities.chickenkiller.com:8080/allParents';
-    //private allLeafsUrl = 'http://activities.chickenkiller.com:8080/allLeafs';
-    private activitiesUrl = 'http://localhost:8080/activities';
-    private allParentsUrl = 'http://localhost:8080/allParents';
-    private allLeafsUrl = 'http://localhost:8080/allLeafs';
+    private activitiesUrl = serverUrl + '/activities';
+    private activitiesByParent = serverUrl + '/activitiesByParent'
+    private allParentsUrl = serverUrl + '/allParents';
+    private allLeafsUrl = serverUrl + '/allLeafs';
 
     constructor(private http: Http, private errorService: ErrorService) {}
 
-    getActivities(parentActivity: Activity) {
+    getActivity(activityId: number) {
+      return this.http.get(this.activitiesUrl + "/" + activityId)
+        .toPromise()
+        .then(response => response.json())
+        .catch(err => {
+          this.handleError(err);
+        });
+    }
+
+    getActivitiesByParent(parentActivity: Activity) {
         let id = null;
         if (parentActivity != null)
             id = parentActivity.id;
-        return this.http.get(this.activitiesUrl + "/" + id)
+        return this.http.get(this.activitiesByParent + "/" + id)
             .toPromise()
             .then(response => response.json())
             .catch(err => {
@@ -29,7 +37,7 @@ export class ActivityService {
     }
 
     getAllLeafActivities() {
-      return this.http.get('http://localhost:8080/allLeafs')
+      return this.http.get(this.allLeafsUrl)
         .toPromise()
         .then(response => response.json())
         .catch(err => {

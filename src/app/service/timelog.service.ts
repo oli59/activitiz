@@ -4,65 +4,24 @@ import 'rxjs/add/operator/toPromise';
 import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
 import {Timelog} from '../domain/timelog';
-import {TimerData} from './timer.service';
+import {serverUrl} from '../config/parameters';
+import {MdDialog, MdDialogRef} from '@angular/material';
+import {LogtimeComponent} from '../component/timelog/timelog.component'
 
 @Injectable()
 export class TimelogService {
-    showLogTimePanel = false;
     activity: Activity;
     timelog: Timelog;
-    timerData: TimerData = null;
 
-    private timelogUrl = 'http://activities.chickenkiller.com:8080/time_log';
 
-    constructor(private http: Http, private errorService: ErrorService) {}
+    private timelogUrl = serverUrl + '/time_log';
 
-    abortLogtime() {
-        this.timerData = null;
-        this.showLogTimePanel = false;
+  constructor(private dialog: MdDialog, private http: Http, private errorService: ErrorService) {}
+
+    logtime(timelog: Timelog, activity: Activity): Promise<Timelog> {
+        timelog.activity_id = activity.id;
+        return this.post(timelog);
     }
-
-    logtime() {
-        this.timelog.activity_id = this.activity.id;
-        this.post(this.timelog);
-        this.timerData = null;
-        this.showLogTimePanel = false;
-    }
-
-    logtimeForActivity(activity: Activity) {
-        this.activity = activity;
-        this.timelog = new Timelog();
-        this.timelog.id = null;
-        this.timelog.duration = null;
-        this.timelog.date = new Date(Date.now());
-        let hours = this.timelog.date.getHours();
-        let minutes = this.timelog.date.getMinutes();
-        this.timelog.start_hour = this.formatHourMinute(hours - 1, minutes);
-        this.timelog.end_hour = this.formatHourMinute(hours, minutes);
-        this.showLogTimePanel = true;
-    }
-
-    logtimeFromTimer(timerData: TimerData) {
-      let hours = timerData.hours;
-      let minutes = timerData.minutes;
-
-      this.activity = timerData.activity;;
-      this.timerData = timerData;
-      this.timelog = new Timelog();
-      this.timelog.id = null;
-      this.timelog.duration = null;
-      this.timelog.date = new Date(Date.now());
-      let startHour = (this.timelog.date.getHours() - hours) - (this.timelog.date.getMinutes() >= minutes ? 0  : 1);
-      let startMinute = (this.timelog.date.getMinutes() - minutes) + (this.timelog.date.getMinutes() >= minutes ? 0 : 60);
-      this.timelog.start_hour = this.formatHourMinute(startHour, startMinute);
-      this.timelog.end_hour = this.formatHourMinute(this.timelog.date.getHours(), this.timelog.date.getMinutes());
-      this.showLogTimePanel = true;
-    }
-
-    private formatHourMinute(hours: number, minutes: number) {
-      return (hours < 10 ? '0': '') + hours + ':' + (minutes < 10 ? '0': '') + minutes;
-    }
-
 
     private post(timelog: Timelog): Promise<Timelog> {
         let headers = new Headers({
@@ -77,9 +36,21 @@ export class TimelogService {
             });
     }
 
+    getTimelog(id: number) {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('id', id.toString());
+
+        return this.http.get(this.timelogUrl, {search: params})
+          .toPromise()
+          .then(response => response.json())
+          .catch(err => {
+            this.handleError(err);
+          });
+    }
+
     getTimelogs() {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('test', 'wow');
+        params.set('id', '3');
 
         return this.http.get(this.timelogUrl, {search: params})
             .toPromise()
@@ -98,7 +69,5 @@ export class TimelogService {
         this.errorService.addError(errMsg);
         return Promise.reject(errMsg);
     }
-
-
 
 }
