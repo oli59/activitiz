@@ -16,4 +16,12 @@ export class JournalLogUpdateComponent {
     this.journallog = data.journallog;
   }
 
+  parseDate(dateString: string): Date {
+    if (dateString) {
+      return new Date(dateString);
+    } else {
+      return null;
+    }
+  }
+
 }

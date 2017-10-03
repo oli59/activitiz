@@ -45,7 +45,6 @@ export class JournallogService {
   }
 
   save(journalLog: Journallog) {
-    console.log("save");
     if (journalLog.id) {
       return this.put(journalLog);
     }

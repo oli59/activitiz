@@ -56,6 +56,7 @@ export class JournallogContextMenuService {
     };
   }
 
+
   menuClicked(link) {
     if (link === this.startTimerLink) {
       this.timerService.createTimer(this.activity).subscribe(value => {
@@ -102,8 +103,6 @@ export class JournallogContextMenuService {
   proposeNewDate() {
     var newJournalLog : Journallog = new Journallog;
     newJournalLog.activity_id = this.journallog.id;
-    console.log(typeof this.journallog.date);
-    console.log(this.journallog.date)
     newJournalLog.date = new Date();
     newJournalLog.date.setDate(this.journallog.date.getDate() + 1);
     newJournalLog.name = this.journallog.name;
@@ -119,11 +118,11 @@ export class JournallogContextMenuService {
         journallog: inJournallog
       }
     });
-    dialogRef.afterClosed().subscribe(journalLog => {
-      if (journalLog) {
-          //this.journallogService.save(journalLog).then(result =>
-          //this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
-        //)
+    dialogRef.afterClosed().subscribe(value => {
+      console.log(value);
+      if (value) {
+          this.journallogService.save(value)
+          //TODO Voir comment mettre à jour le front end (= deplacer les cartes avec la nouvelle carte créée/éditée)
       }
     });
 
