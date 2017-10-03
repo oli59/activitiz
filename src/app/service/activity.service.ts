@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { RequestOptions, Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service'
@@ -52,13 +52,13 @@ export class ActivityService {
 
     // Add new Activity
     private post(activity: Activity): Promise<Activity> {
-        let headers = new Headers({
-            'Content-Type': 'application/json'});
+        let headers = new Headers({'Content-Type': 'application/json'});
+        let options = new RequestOptions({headers: headers});
 
         console.log("activity_parent: " + activity.parent_id);
 
         return this.http
-            .post(this.activitiesUrl, JSON.stringify(activity), {headers: headers})
+            .post(this.activitiesUrl, JSON.stringify(activity), options)
             .toPromise()
             .then(res => res.json())
             .catch(err => {
@@ -77,7 +77,7 @@ export class ActivityService {
         return this.http
             .put(url, JSON.stringify(activity), {headers: headers})
             .toPromise()
-            .then(() => activity)
+            .then(res => res.json())
             .catch(err => {
                 this.handleError(err);
             });
@@ -88,11 +88,12 @@ export class ActivityService {
     delete(activity: Activity) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({headers: headers});
 
         let url = `${this.activitiesUrl}/${activity.id}`;
 
         return this.http
-            .delete(url, headers)
+            .delete(url, options)
             .toPromise()
             .catch(err => {
                 this.handleError(err);

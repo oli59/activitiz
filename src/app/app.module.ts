@@ -31,8 +31,8 @@ import {JournallogService} from './service/journallog.service';
         FormsModule,
         HttpModule,
         routing,
-        FlexLayoutModule.forRoot(),
-        MaterialModule.forRoot(),
+        FlexLayoutModule,
+        MaterialModule,
         ReactiveFormsModule,
         BrowserAnimationsModule
     ],
