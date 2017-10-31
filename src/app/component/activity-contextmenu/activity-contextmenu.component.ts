@@ -13,9 +13,9 @@ import {ActivityContextMenuService} from '../../service/activity-contextmenu.ser
 })
 export class ActivityContextmenuComponent {
 
-    constructor(private activityContextMenuService: ActivityContextMenuService) {}
+constructor(private activityContextMenuService: ActivityContextMenuService) {}
 
-    clickedOutside() {
-        this.activityContextMenuService.visible = false;
-    }
+clickedOutside() {
+  this.activityContextMenuService.visible = false;
+}
 }
