@@ -83,7 +83,6 @@ export class JournalComponent {
         let jle: [Date, Journallog[]] = [tempDate, journallogList]
         if (typeof this.dayLogs === 'undefined') {
           this.dayLogs = [jle];
-          this.dayLogs = [jle];
         }
         else {
           this.dayLogs.push(jle);
