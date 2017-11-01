@@ -69,8 +69,10 @@ export class JournallogContextMenuService {
       this.journallogService.save(this.journallog)
       if (this.journallog.timelog_id === null) {
         this.timelogDialogService.logtimeForActivity(this.activity).subscribe(value => {
-          this.journallog.timelog_id = value;
-          this.journallogService.save(this.journallog);
+          if (value !== undefined) {
+            this.journallog.timelog_id = value;
+            this.journallogService.save(this.journallog);
+          }
         })
       }
     }
@@ -88,8 +90,10 @@ export class JournallogContextMenuService {
       this.proposeNewDate();
       if (this.journallog.timelog_id === null) {
         this.timelogDialogService.logtimeForActivity(this.activity).subscribe(value => {
-          this.journallog.timelog_id = value;
-          this.journallogService.save(this.journallog);
+          if (value !== undefined) {
+            this.journallog.timelog_id = value;
+            this.journallogService.save(this.journallog);
+          }
         })
       }
       this.journallogService.save(this.journallog)
@@ -102,7 +106,7 @@ export class JournallogContextMenuService {
 
   proposeNewDate() {
     var newJournalLog : Journallog = new Journallog;
-    newJournalLog.activity_id = this.journallog.id;
+    newJournalLog.activity_id = this.journallog.activity_id;
     newJournalLog.date = new Date();
     newJournalLog.date.setDate(this.journallog.date.getDate() + 1);
     newJournalLog.name = this.journallog.name;

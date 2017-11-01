@@ -21,10 +21,15 @@ export class JournallogService {
 
   getTodayJournallog() {
       return this.http.get(this.journallogUrl + "/" + this.formatDate(new Date()))
-        .toPromise()
-        .then(response => response.json())
-        .catch(err => {
-          this.handleError(err);
+        .map((response: Response) => {
+          var data = response.json() as Journallog[];
+          if (data != null) {
+            data.forEach((e) => e.date = new Date(e.date))
+          }
+          return data;})
+        .catch((error:any) => {
+          this.handleError(error);
+          return Observable.throw(error.json().error)
         });
   }
 

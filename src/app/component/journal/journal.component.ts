@@ -19,7 +19,7 @@ export class JournalComponent {
   constructor(public dialog: MdDialog, private journallogService: JournallogService,
               private journallogContextMenuService: JournallogContextMenuService,
               private timelogService: TimelogService) {
-    this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
+    this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)
     this.getNextNJournallog(new Date())
   }
 
@@ -54,7 +54,7 @@ export class JournalComponent {
     dialogRef.afterClosed().subscribe(journalLog => {
       if (journalLog) {
         this.journallogService.save(journalLog).then(result =>
-          this.journallogService.getTodayJournallog().then(journalogs => this.todayLogs = journalogs)
+          this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)
         )
       }
     });
