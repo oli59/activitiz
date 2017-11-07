@@ -63,9 +63,13 @@ export class ActivityService {
         let headers = new Headers({
             'Content-Type': 'application/json'});
 
-        console.log("activity_parent: " + activity.parent_id);
+      //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
+      activity.typical_duration = Number(activity.typical_duration);
+      if (activity.parent_id > 0) {
+        activity.parent_id = Number(activity.parent_id);
+      }
 
-        return this.http
+      return this.http
             .post(this.activitiesUrl, JSON.stringify(activity), {headers: headers})
             .toPromise()
             .then(res => res.json())
@@ -81,6 +85,12 @@ export class ActivityService {
         headers.append('Content-Type', 'application/json');
 
         let url = `${this.activitiesUrl}`;
+
+        //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
+        activity.typical_duration = Number(activity.typical_duration);
+        if (activity.parent_id > 0) {
+          activity.parent_id = Number(activity.parent_id);
+        }
 
         return this.http
             .put(url, JSON.stringify(activity), {headers: headers})

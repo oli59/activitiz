@@ -3,7 +3,12 @@ create table activities (act_id int PRIMARY KEY,
                           act_parent_id int,
                           act_name varchar(255),
                           act_status VARCHAR(15),
-                      FOREIGN KEY(act_parent_id) REFERENCES activities(act_id)
+                          act_scheduling_mode VARCHAR(12),
+                          act_typical_duration int,
+                          act_current_points int,
+                          act_deadline TEXT,
+                          act_frequency varchar(255),
+                          FOREIGN KEY(act_parent_id) REFERENCES activities(act_id)
 );
 
 --create time_log
@@ -113,7 +118,17 @@ CREATE TEMPORARY TABLE t1_backup(id,parent,name,status);
 INSERT INTO t1_backup SELECT act_id, act_parent_id, act_name, act_status FROM activities;
 DROP TABLE activities;
 delete from activities_parent_closure;
-create table activities (act_id int PRIMARY KEY, act_parent_id int, act_name varchar(255), act_status VARCHAR(15),FOREIGN KEY(act_parent_id) REFERENCES activities(act_id));
+create table activities (act_id int PRIMARY KEY,
+                          act_parent_id int,
+                          act_name varchar(255),
+                          act_status VARCHAR(15),
+                          act_scheduling_mode VARCHAR(12),
+                          act_typical_duration int,
+                          act_current_points int,
+                          act_deadline TEXT,
+                          act_frequency varchar(255),
+                          FOREIGN KEY(act_parent_id) REFERENCES activities(act_id)
+);
 CREATE TRIGGER apc_activities_insert
    AFTER INSERT
    ON activities
@@ -176,7 +191,7 @@ BEGIN
       from activities_parent_closure p, activities_parent_closure c
       where p.apc_child_id=NEW.act_parent_id and c.apc_parent_id=NEW.act_id;
 END;
-INSERT INTO activities SELECT id, parent, name,status FROM t1_backup;
+INSERT INTO activities (SELECT id, parent, name, status FROM t1_backup), null, null, null, null, null;
 DROP TABLE t1_backup;
 COMMIT;
 
@@ -199,3 +214,10 @@ create table activities_parent_closure (apc_parent_id int, apc_child_id int, apc
 INSERT INTO activities_parent_closure SELECT parent, child, depth FROM t1_backup;
 DROP TABLE t1_backup;
 COMMIT;
+
+alter table activities add column act_scheduling_mode VARCHAR(12);
+alter table activities add column act_typical_duration int;
+alter table activities add column act_current_points int;
+alter table activities add column act_deadline TEXT;
+alter table activities add column act_frequency varchar(255);
+
