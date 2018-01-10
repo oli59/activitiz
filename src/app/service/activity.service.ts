@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { RequestOptions, Headers, Http } from '@angular/http';
+import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
@@ -60,13 +60,17 @@ export class ActivityService {
 
     // Add new Activity
     private post(activity: Activity): Promise<Activity> {
-        let headers = new Headers({'Content-Type': 'application/json'});
-        let options = new RequestOptions({headers: headers});
+        let headers = new Headers({
+            'Content-Type': 'application/json'});
 
-        console.log("activity_parent: " + activity.parent_id);
+      //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
+      activity.typical_duration = Number(activity.typical_duration);
+      if (activity.parent_id > 0) {
+        activity.parent_id = Number(activity.parent_id);
+      }
 
-        return this.http
-            .post(this.activitiesUrl, JSON.stringify(activity), options)
+      return this.http
+            .post(this.activitiesUrl, JSON.stringify(activity), {headers: headers})
             .toPromise()
             .then(res => res.json())
             .catch(err => {
@@ -82,10 +86,16 @@ export class ActivityService {
 
         let url = `${this.activitiesUrl}`;
 
+        //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
+        activity.typical_duration = Number(activity.typical_duration);
+        if (activity.parent_id > 0) {
+          activity.parent_id = Number(activity.parent_id);
+        }
+
         return this.http
             .put(url, JSON.stringify(activity), {headers: headers})
             .toPromise()
-            .then(res => res.json())
+            .then(() => activity)
             .catch(err => {
                 this.handleError(err);
             });
@@ -96,12 +106,11 @@ export class ActivityService {
     delete(activity: Activity) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        let options = new RequestOptions({headers: headers});
 
         let url = `${this.activitiesUrl}/${activity.id}`;
 
         return this.http
-            .delete(url, options)
+            .delete(url, headers)
             .toPromise()
             .catch(err => {
                 this.handleError(err);

@@ -3,14 +3,26 @@
     <div class="panel-body">
         <div>
           <md-input-container>
-            <input mdInput [(ngModel)]="activity.name" required placeholder="name">
+            <input mdInput style="width:80%" [(ngModel)]="activity.name" required placeholder="name">
           </md-input-container>
-          <p></p>
           <md-select placeholder="Status" [(ngModel)]="activity.status">
             <md-option *ngFor="let status of statuses" [value]="status">{{ status }}</md-option>
           </md-select>
+          <p></p>
         </div>
-
+        <div>
+          Scheduling
+          <br>
+          <md-radio-group [(ngModel)] = "activity.scheduling_mode">
+            <md-radio-button  *ngFor="let mode of modes" [value]="mode">{{ mode }}</md-radio-button>
+          </md-radio-group>
+        </div>
+        <md-input-container>
+          <input mdInput style="width:80%" [(ngModel)]="activity.typical_duration" required placeholder="typical_duration">
+        </md-input-container> (Minutes)
+        <md-input-container *ngIf="activity.scheduling_mode === 'Deadline'">
+          <input mdInput type="date" required placeholder="DeadLine" [value]="activity.deadline | date:'yyyy-MM-dd'" (input)="activity.deadline=parseDate($event.target.value)">
+        </md-input-container>
     </div>
     <div class="panel-footer">
         <button type="button" class="btn btn-primary" (click)="save()">Save</button>

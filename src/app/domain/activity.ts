@@ -3,4 +3,8 @@ export class Activity {
     parent_id: number;
     name: string;
     status: string;
+    scheduling_mode: string;
+    typical_duration: number;
+    current_points: number;
+    deadline: Date;
 }

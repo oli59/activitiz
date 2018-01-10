@@ -5,6 +5,7 @@ import ("log"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/oli59/activitiz/server/domain"
 	"fmt"
+  "time"
 )
 
 var nextId int
@@ -29,13 +30,25 @@ func init () {
 }
 
 func UpdateActivity (act domain.Activity) error {
+  var deadline sql.NullString;
+
 	db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
 
-	stmt, err := db.Prepare("UPDATE activities SET act_name=?, act_parent_id = ?, act_status=? WHERE act_id=?")
+	stmt, err := db.Prepare("UPDATE activities SET act_name=?, act_parent_id = ?, act_status=?, act_scheduling_mode=?, act_typical_duration=?, act_current_points=?, act_deadline=?  WHERE act_id=?")
 	checkErr(err)
 
-	_ , err = stmt.Exec(act.Name, act.ParentId, act.Status, act.Id)
+  fmt.Print("Typical ")
+  fmt.Println(act.TypicalDuration)
+
+  if (act.Deadline != nil) {
+    deadline.String = act.Deadline.Format("20060102")
+    deadline.Valid = true
+  } else {
+    deadline.Valid = false
+  }
+
+  _ , err = stmt.Exec(act.Name, act.ParentId, act.Status, act.SchedulingMode, act.TypicalDuration, act.CurrentPoints, deadline, act.Id)
 	checkErr(err)
 
 	db.Close();
@@ -60,17 +73,26 @@ func DeleteActivity (activityId int) error {
 
 
 func CreateActivity (a domain.Activity) domain.Activity {
-	db, err := sql.Open("sqlite3", "./activity.db")
+  var deadline sql.NullString;
+
+  db, err := sql.Open("sqlite3", "./activity.db")
 	checkErr(err)
 
 	fmt.Println(a.ParentId)
 
-	stmt, err := db.Prepare("INSERT INTO activities (act_id, act_parent_id, act_name, act_status) values (?,?,?,?)")
+	stmt, err := db.Prepare("INSERT INTO activities (act_id, act_parent_id, act_name, act_status, act_scheduling_mode, act_typical_duration, act_current_points, act_deadline) values (?,?,?,?,?,?,?,?)")
 	checkErr(err)
 
 	log.Print(nextId)
 
-	_ , err = stmt.Exec(nextId, a.ParentId, a.Name,a.Status)
+  if (a.Deadline != nil) {
+    deadline.String = a.Deadline.Format("20060102")
+    deadline.Valid = true
+  } else {
+    deadline.Valid = false
+  }
+
+	_ , err = stmt.Exec(nextId, a.ParentId, a.Name,a.Status, a.SchedulingMode, a.TypicalDuration, a.CurrentPoints, deadline)
 	checkErr(err)
 
 	db.Close();
@@ -93,14 +115,29 @@ func GetActivities () domain.Activities {
 	checkErr(err)
 
 	for rows.Next() {
-		var act domain.Activity
-		var name string
-		var status string
-		var id int
-		var parentId domain.JsonNullInt64
-		err = rows.Scan(&id, &parentId, &name, &status)
-		checkErr(err)
-		act = domain.Activity{id, parentId, name, status}
+    var act domain.Activity
+    var name string
+    var status string
+    var id int
+    var parentId domain.JsonNullInt64
+    var schedulingMode sql.NullString
+    var typicalDuration domain.JsonNullInt64
+    var currentPoints domain.JsonNullInt64
+    var deadlinestr sql.NullString
+    var frequency sql.NullString
+
+
+    err = rows.Scan(&id, &parentId, &name, &status, &schedulingMode, &typicalDuration, &currentPoints, &deadlinestr, &frequency);
+    checkErr(err)
+
+    var deadlinePtr *time.Time
+    if deadlinestr.Valid {
+      deadline, err := time.Parse("20060102", deadlinestr.String);
+      checkErr(err)
+      deadlinePtr = &deadline;
+    } else {deadlinePtr = nil}
+
+		act = domain.Activity{id, parentId, name, status, schedulingMode.String, typicalDuration, currentPoints, deadlinePtr}
 		activities = append(activities, act)
 	}
 
@@ -127,9 +164,24 @@ func GetAllLeafs () domain.Activities {
     var status string
     var id int
     var parentId domain.JsonNullInt64
-    err = rows.Scan(&id, &parentId, &name, &status)
+    var schedulingMode sql.NullString
+    var typicalDuration domain.JsonNullInt64
+    var currentPoints domain.JsonNullInt64
+    var deadlinestr sql.NullString
+    var frequency sql.NullString
+
+
+    err = rows.Scan(&id, &parentId, &name, &status, &schedulingMode, &typicalDuration, &currentPoints, &deadlinestr, &frequency);
     checkErr(err)
-    act = domain.Activity{id, parentId, name, status}
+
+    var deadlinePtr *time.Time
+    if deadlinestr.Valid {
+      deadline, err := time.Parse("20060102", deadlinestr.String);
+      checkErr(err)
+      deadlinePtr = &deadline;
+    } else {deadlinePtr = nil}
+
+    act = domain.Activity{id, parentId, name, status, schedulingMode.String, typicalDuration, currentPoints, deadlinePtr}
     activities = append(activities, act)
   }
 
@@ -155,13 +207,29 @@ func GetActivity (actId int) domain.Activity {
 	checkErr(err)
 
 	for rows.Next() {
-		var name string
-		var status string
-		var id int
-		var parentId domain.JsonNullInt64
-		err = rows.Scan(&id, &parentId, &name, &status)
-		checkErr(err)
-		activity = domain.Activity{id, parentId, name, status}
+    var name string
+    var status string
+    var id int
+    var parentId domain.JsonNullInt64
+    var schedulingMode sql.NullString
+    var typicalDuration domain.JsonNullInt64
+    var currentPoints domain.JsonNullInt64
+    var deadlinestr sql.NullString
+    var frequency sql.NullString
+
+
+    err = rows.Scan(&id, &parentId, &name, &status, &schedulingMode, &typicalDuration, &currentPoints, &deadlinestr, &frequency);
+    checkErr(err)
+
+    var deadlinePtr *time.Time
+    if deadlinestr.Valid {
+      deadline, err := time.Parse("20060102", deadlinestr.String);
+      checkErr(err)
+      deadlinePtr = &deadline;
+    } else {deadlinePtr = nil}
+
+    activity = domain.Activity{id, parentId, name, status, schedulingMode.String, typicalDuration, currentPoints, deadlinePtr}
+
 	}
 
 	db.Close();
@@ -193,15 +261,30 @@ func GetActivitiesByParent (actId int) domain.Activities {
 	}
 
 	for rows.Next() {
-		var act domain.Activity
-		var name string
-		var status string
-		var id int
-		var parentId domain.JsonNullInt64
-		err = rows.Scan(&id, &parentId, &name, &status)
-		checkErr(err)
-		act = domain.Activity{id, parentId, name, status}
-		activities = append(activities, act)
+    var act domain.Activity
+    var name string
+    var status string
+    var id int
+    var parentId domain.JsonNullInt64
+    var schedulingMode sql.NullString
+    var typicalDuration domain.JsonNullInt64
+    var currentPoints domain.JsonNullInt64
+    var deadlinestr sql.NullString
+    var frequency sql.NullString
+
+
+    err = rows.Scan(&id, &parentId, &name, &status, &schedulingMode, &typicalDuration, &currentPoints, &deadlinestr, &frequency);
+    checkErr(err)
+
+    var deadlinePtr *time.Time
+    if deadlinestr.Valid {
+      deadline, err := time.Parse("20060102", deadlinestr.String);
+      checkErr(err)
+      deadlinePtr = &deadline;
+    } else {deadlinePtr = nil}
+
+    act = domain.Activity{id, parentId, name, status, schedulingMode.String, typicalDuration, currentPoints, deadlinePtr}
+    activities = append(activities, act)
 	}
 
 	db.Close();
@@ -223,15 +306,30 @@ func GetAllParents (actId int) domain.Activities {
 	checkErr(err)
 
 	for rows.Next() {
-		var act domain.Activity
-		var name string
-		var status string
-		var id int
-		var parentId domain.JsonNullInt64
-		err = rows.Scan(&id, &parentId, &name, &status)
-		checkErr(err)
-		act = domain.Activity{id, parentId, name, status}
-		activities = append(activities, act)
+    var act domain.Activity
+    var name string
+    var status string
+    var id int
+    var parentId domain.JsonNullInt64
+    var schedulingMode sql.NullString
+    var typicalDuration domain.JsonNullInt64
+    var currentPoints domain.JsonNullInt64
+    var deadlinestr sql.NullString
+    var frequency sql.NullString
+
+
+    err = rows.Scan(&id, &parentId, &name, &status, &schedulingMode, &typicalDuration, &currentPoints, &deadlinestr, &frequency);
+    checkErr(err)
+
+    var deadlinePtr *time.Time
+    if deadlinestr.Valid {
+      deadline, err := time.Parse("20060102", deadlinestr.String);
+      checkErr(err)
+      deadlinePtr = &deadline;
+    } else {deadlinePtr = nil}
+
+    act = domain.Activity{id, parentId, name, status, schedulingMode.String, typicalDuration, currentPoints, deadlinePtr}
+    activities = append(activities, act)
 	}
 
 	fmt.Println(activities);

@@ -9,6 +9,7 @@ export class TimerData {
   activity: Activity;
   subscription;
   isPaused: boolean;
-  pausedSeconds: number;
   timelog: Subject<number>;
+  start_time: Date;
+  paused_time: Date;
 }

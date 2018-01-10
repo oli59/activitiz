@@ -22,12 +22,12 @@ export class TimerService {
         timerData.activity = activity;
         timerData.minutes = 0;
         timerData.hours = 0;
-        timerData.pausedSeconds = 0;
+        timerData.start_time = new Date();
         timerData.isPaused = false;
         timerData.timelog = new Subject<number>()
         this.timers.push(timerData);
 
-        timerData.subscription = timer.subscribe(t=> this.calculateMinutesHours(t, timerData));
+        timerData.subscription = timer.subscribe(t=> this.calculateMinutesHours(timerData));
 
         return timerData.timelog;
     }
@@ -42,18 +42,25 @@ export class TimerService {
 
     pause(timerData: TimerData) {
       timerData.isPaused = true;
+      timerData.paused_time = new Date();
     }
 
     resume(timerData: TimerData) {
+      let tempNewDate = new Date();
       timerData.isPaused = false;
+      tempNewDate.setTime(new Date().getTime() - (timerData.paused_time.getTime() - timerData.start_time.getTime()));
+      timerData.start_time = tempNewDate;
     }
 
-    calculateMinutesHours(seconds: number, timerData: TimerData) {
+    calculateMinutesHours(timerData: TimerData) {
+      let ellapsedMillisec: number;
       if (timerData.isPaused) {
-        timerData.pausedSeconds++;
+        return;
       }
 
-      let minutes = Math.floor((seconds - timerData.pausedSeconds) / 60 );
+      ellapsedMillisec = new Date().getTime() - timerData.start_time.getTime();
+
+      let minutes = Math.floor((ellapsedMillisec/1000) / 60 );
       timerData.hours = Math.floor(minutes / 60);
       timerData.minutes = minutes - (60 * timerData.hours);
     }

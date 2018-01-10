@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output, OnInit, OnDestroy} from '@angula
 import {Activity} from '../../domain/activity';
 import {activityStatuses} from '../../domain/activity-statuses';
 import { ActivityService } from '../../service/activity.service';
+import {schedulingModes} from '../../domain/scheduling-modes';
 
 
 
@@ -19,6 +20,7 @@ export class ActivityDetailComponent implements OnInit {
     showDeleteConfirmation = false;
     existingActivity;
     statuses = activityStatuses;
+    modes = schedulingModes;
 
     constructor (
         private activityService: ActivityService
@@ -73,4 +75,12 @@ export class ActivityDetailComponent implements OnInit {
             })
             .catch(error => this.error = error)
     }
+
+  parseDate(dateString: string): Date {
+    if (dateString) {
+      return new Date(dateString);
+    } else {
+      return null;
+    }
+  }
 }
