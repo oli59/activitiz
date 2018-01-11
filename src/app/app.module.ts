@@ -19,7 +19,6 @@ import {DurationPipe} from './utils/pipes/durationPipe'
 import {routing} from './app.routes'
 import {TimerService} from "./service/timer.service";
 import {TimerComponent} from "./component/timer/timer.component"
-import { MaterialModule } from '@angular/material';
 import {JournalComponent} from './component/journal/journal.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {JournalLogDetailComponent} from './component/journallog-detail/journallog-detail.component'
@@ -28,6 +27,7 @@ import {JournallogService} from './service/journallog.service';
 import {JournallogContextMenuService} from './service/journallog-contextmenu.service';
 import {JournallogContextmenuComponent} from './component/journallog-contextmenu/journallog-contextmenu.component'
 import {JournalLogUpdateComponent} from './component/journallog-update/journallog-update.component'
+import {MatDialogModule, MatInputModule, MatSelectModule, MatRadioModule, MatIconModule, MatCardModule, MatListModule, MatAutocompleteModule, MatButtonModule  } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -36,9 +36,17 @@ import {JournalLogUpdateComponent} from './component/journallog-update/journallo
         HttpModule,
         routing,
         FlexLayoutModule,
-        MaterialModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatDialogModule,
+        MatInputModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatIconModule,
+        MatCardModule,
+        MatListModule,
+        MatAutocompleteModule,
+        MatButtonModule
     ],
     declarations: [
         AppComponent,

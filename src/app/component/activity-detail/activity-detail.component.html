@@ -2,27 +2,27 @@
     <div  class="panel-heading">{{activity.name}}</div>
     <div class="panel-body">
         <div>
-          <md-input-container>
-            <input mdInput style="width:80%" [(ngModel)]="activity.name" required placeholder="name">
-          </md-input-container>
-          <md-select placeholder="Status" [(ngModel)]="activity.status">
-            <md-option *ngFor="let status of statuses" [value]="status">{{ status }}</md-option>
-          </md-select>
+          <mat-input-container>
+            <input matInput style="width:80%" [(ngModel)]="activity.name" required placeholder="name">
+          </mat-input-container>
+          <mat-select placeholder="Status" [(ngModel)]="activity.status">
+            <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
+          </mat-select>
           <p></p>
         </div>
         <div>
           Scheduling
           <br>
-          <md-radio-group [(ngModel)] = "activity.scheduling_mode">
-            <md-radio-button  *ngFor="let mode of modes" [value]="mode">{{ mode }}</md-radio-button>
-          </md-radio-group>
+          <mat-radio-group [(ngModel)] = "activity.scheduling_mode">
+            <mat-radio-button  *ngFor="let mode of modes" [value]="mode">{{ mode }}</mat-radio-button>
+          </mat-radio-group>
         </div>
-        <md-input-container>
-          <input mdInput style="width:80%" [(ngModel)]="activity.typical_duration" required placeholder="typical_duration">
-        </md-input-container> (Minutes)
-        <md-input-container *ngIf="activity.scheduling_mode === 'Deadline'">
-          <input mdInput type="date" required placeholder="DeadLine" [value]="activity.deadline | date:'yyyy-MM-dd'" (input)="activity.deadline=parseDate($event.target.value)">
-        </md-input-container>
+        <mat-input-container>
+          <input matInput style="width:80%" [(ngModel)]="activity.typical_duration" required placeholder="typical_duration">
+        </mat-input-container> (Minutes)
+        <mat-input-container *ngIf="activity.scheduling_mode === 'Deadline'">
+          <input matInput type="date" required placeholder="DeadLine" [value]="activity.deadline | date:'yyyy-MM-dd'" (input)="activity.deadline=parseDate($event.target.value)">
+        </mat-input-container>
     </div>
     <div class="panel-footer">
         <button type="button" class="btn btn-primary" (click)="save()">Save</button>

@@ -5,7 +5,7 @@ import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
 import {Timelog} from '../domain/timelog';
 import {serverUrl} from '../config/parameters';
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {LogtimeComponent} from '../component/timelog/timelog.component'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class TimelogService {
 
     private timelogUrl = serverUrl + '/time_log';
 
-  constructor(private dialog: MdDialog, private http: Http, private errorService: ErrorService) {}
+  constructor(private dialog: MatDialog, private http: Http, private errorService: ErrorService) {}
 
     logtime(timelog: Timelog, activity: Activity): Promise<Timelog> {
         timelog.activity_id = activity.id;
@@ -50,7 +50,7 @@ export class TimelogService {
 
     getTimelogs() {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('id', '3');
+        params.set('ids', '3');
 
         return this.http.get(this.timelogUrl, {search: params})
             .toPromise()

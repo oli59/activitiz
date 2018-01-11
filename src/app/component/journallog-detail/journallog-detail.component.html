@@ -1,29 +1,29 @@
-<h1 md-dialog-title>Create Journal Entry</h1>
-<md-dialog-content style="min-width: 50em">
-    <md-radio-group [(ngModel)]="logType">
-      <md-radio-button  value="activity">Activity</md-radio-button>
-      <md-radio-button  value="event" disabled>event</md-radio-button>
-    </md-radio-group>
+<h1 mat-dialog-title>Create Journal Entry</h1>
+<mat-dialog-content style="min-width: 50em">
+    <mat-radio-group [(ngModel)]="logType">
+      <mat-radio-button  value="activity">Activity</mat-radio-button>
+      <mat-radio-button  value="event" disabled>event</mat-radio-button>
+    </mat-radio-group>
 
   <div  *ngIf="logType === 'activity'">
 
-    <md-input-container style="width: 100%">
-      <input mdInput placeholder="Activity" [mdAutocomplete]="reactiveAuto" [formControl]="activityCtrl">
-    </md-input-container>
+    <mat-input-container style="width: 100%">
+      <input matInput placeholder="Activity" [matAutocomplete]="reactiveAuto" [formControl]="activityCtrl">
+    </mat-input-container>
 
 
-    <md-autocomplete style="width: 50em" #reactiveAuto="mdAutocomplete" [displayWith]="displayFn">
-      <md-option style="width: 50em" *ngFor="let activity of filteredActivities | async" [value]="activity" (onSelectionChange)="selected(activity)">
+    <mat-autocomplete style="width: 50em" #reactiveAuto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option style="width: 50em" *ngFor="let activity of filteredActivities | async" [value]="activity" (onSelectionChange)="selected(activity)">
         {{ activity.name }}
-      </md-option>
-    </md-autocomplete>
+      </mat-option>
+    </mat-autocomplete>
   </div>
 
-</md-dialog-content>
+</mat-dialog-content>
 
-<md-dialog-actions>
-  <button type="button" md-raised-button
+<mat-dialog-actions>
+  <button type="button" mat-raised-button
           (click)="createJournalLog()">Create</button>
-  <button type="button" md-button
+  <button type="button" mat-button
           (click)="dialogRef.close()">Cancel</button>
-</md-dialog-actions>
+</mat-dialog-actions>

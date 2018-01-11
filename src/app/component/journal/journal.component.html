@@ -1,44 +1,44 @@
 <div class="flex-container" fxlayout="row" fxLayoutAlign="start stretch" fxFill>
   <div class="flex-container" fxLayout="column" fxLayoutAlign="start" [style.background]="'lightblue'" fxFlex="50">
-      <md-card fxflex style="margin-top: 8px; margin-left: 8px; margin-right: 8px">
-        <md-card-header>
-          <md-card-title>Today</md-card-title>
-        </md-card-header>
-        <md-card-content>
-          <md-list>
-            <md-list-item *ngFor="let tlog of todayLogs"
+      <mat-card fxflex style="margin-top: 8px; margin-left: 8px; margin-right: 8px">
+        <mat-card-header>
+          <mat-card-title>Today</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item *ngFor="let tlog of todayLogs"
                           [style.background]="getBackgroundColor(tlog.status)"
                           (contextmenu)="contextMenu($event, tlog)">
-              <md-icon md-list-avatar>{{getIcon(tlog.status)}}</md-icon>
-              <h4 md-line>{{tlog.name}}</h4>
-              <p md-line> {{tlog.hours}} </p>
-            </md-list-item>
-          </md-list>
-        </md-card-content>
-        <md-card-actions fxLayout="row">
-          <button md-button (click)="openAddDialog()">Add</button>
-          <button md-button>Reschedule</button>
-        </md-card-actions>
-      </md-card>
-    <md-card *ngFor="let dlog of dayLogs" fxflex style="margin-top: 8px; margin-left: 8px; margin-right: 8px">
-      <md-card-header>
-        <md-card-title>{{dlog[0] | date: yMd}}</md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <md-list>
-          <md-list-item *ngFor="let tlog of dlog[1]"
+              <mat-icon mat-list-avatar>{{getIcon(tlog.status)}}</mat-icon>
+              <h4 mat-line>{{tlog.name}}</h4>
+              <p mat-line> {{tlog.hours}} </p>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+        <mat-card-actions fxLayout="row">
+          <button mat-button (click)="openAddDialog()">Add</button>
+          <button mat-button>Reschedule</button>
+        </mat-card-actions>
+      </mat-card>
+    <mat-card *ngFor="let dlog of dayLogs" fxflex style="margin-top: 8px; margin-left: 8px; margin-right: 8px">
+      <mat-card-header>
+        <mat-card-title>{{dlog[0] | date: ymat}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let tlog of dlog[1]"
                         [style.background]="getBackgroundColor(tlog.status)"
                         (contextmenu)="contextMenu($event, tlog)">
-            <md-icon md-list-avatar>{{getIcon(tlog.status)}}</md-icon>
-            <h4 md-line>{{tlog.name}}</h4>
-            <p md-line> {{tlog.hours}} </p>
-          </md-list-item>
-        </md-list>
-      </md-card-content>
-      <md-card-actions fxLayout="row">
-        <button md-button>Add</button>
-      </md-card-actions>
-    </md-card>
+            <mat-icon mat-list-avatar>{{getIcon(tlog.status)}}</mat-icon>
+            <h4 mat-line>{{tlog.name}}</h4>
+            <p mat-line> {{tlog.hours}} </p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions fxLayout="row">
+        <button mat-button>Add</button>
+      </mat-card-actions>
+    </mat-card>
     </div>
   <div  class="flex-container" fxLayout="column" fxLayoutAlign="start stretch" [style.background]="'#B39EB5'" fxFlex="50">
     future

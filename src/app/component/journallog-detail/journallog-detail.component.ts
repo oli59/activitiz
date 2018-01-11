@@ -1,5 +1,5 @@
 import { Component }       from '@angular/core';
-import {MdDialogRef} from'@angular/material';
+import {MatDialogRef} from'@angular/material';
 import 'rxjs/add/operator/startWith';
 import { FormControl} from '@angular/forms';
 import {Activity} from '../../domain/activity';
@@ -20,7 +20,7 @@ export class JournalLogDetailComponent {
   activities: Activity[];
   selectedActivity: Activity;
 
-  constructor(public dialogRef: MdDialogRef<any>, private activityService: ActivityService) {
+  constructor(public dialogRef: MatDialogRef<any>, private activityService: ActivityService) {
     this.logType = "activity";
     this.activityCtrl = new FormControl();
 

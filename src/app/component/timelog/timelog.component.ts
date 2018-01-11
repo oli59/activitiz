@@ -1,10 +1,9 @@
 import {TimelogService} from '../../service/timelog.service';
 import {TimerService} from '../../service/timer.service'
-import {MdDialogRef} from'@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA} from'@angular/material';
 import {TimerData} from '../../domain/timer-data';
-import {Component, Inject} from '@angular/core';
-import {MD_DIALOG_DATA} from '@angular/material';
 import {Timelog} from '../../domain/timelog'
+import { Component, Inject } from '@angular/core';
 
 @Component({
     selector: 'my-timelog',
@@ -15,7 +14,7 @@ import {Timelog} from '../../domain/timelog'
 export class LogtimeComponent {
   timeLog: Timelog;
 
-  constructor(public dialogRef: MdDialogRef<any>, private timelogService: TimelogService, private timerService: TimerService, @Inject(MD_DIALOG_DATA) public  data: any) {
+  constructor(public dialogRef: MatDialogRef<any>, private timelogService: TimelogService, private timerService: TimerService, @Inject(MAT_DIALOG_DATA) public  data: any) {
     this.timeLog = data.timelog;
   }
 

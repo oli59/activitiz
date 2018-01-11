@@ -6,7 +6,7 @@ import {TimelogService} from './timelog.service'
 
 import {Timelog} from '../domain/timelog';
 
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {LogtimeComponent} from '../component/timelog/timelog.component'
 import {TimerData} from '../domain/timer-data';
 import {Observable} from "rxjs/Rx";
@@ -19,7 +19,7 @@ export class TimelogDialogService {
 
 
 
-  constructor(private dialog: MdDialog, timeLogService: TimelogService) {}
+  constructor(private dialog: MatDialog, timeLogService: TimelogService) {}
 
   abortLogtime() {
     this.timerData = null;

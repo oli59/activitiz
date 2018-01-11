@@ -1,5 +1,5 @@
 import { Component }       from '@angular/core';
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {JournalLogDetailComponent} from '../journallog-detail/journallog-detail.component';
 import {Journallog} from '../../domain/journallog';
 import {JournallogService} from '../../service/journallog.service';
@@ -16,7 +16,7 @@ export class JournalComponent {
     todayLogs: Journallog[];
 
 
-  constructor(public dialog: MdDialog, private journallogService: JournallogService,
+  constructor(public dialog: MatDialog, private journallogService: JournallogService,
               private journallogContextMenuService: JournallogContextMenuService,
               private timelogService: TimelogService) {
     this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)

@@ -115,7 +115,7 @@ func GetJournallogForDate (date time.Time) domain.Journallogs {
     rows, err = stmt.Query(date.Format("20060102"));
     checkErr(err)
 
-    tempDate = date.AddDate(0,0,1);
+    tempDate = date.AddDate(0,0,-1);
 
     if rows.Next() {
       var dateStr string;

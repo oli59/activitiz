@@ -6,7 +6,7 @@ import {TimelogDialogService} from './timelog-dialog.service'
 import {TimerService} from './timer.service'
 import {Activity} from '../domain/activity';
 import {ActivityService} from './activity.service';
-import {MdDialog} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {JournalLogUpdateComponent} from '../component/journallog-update/journallog-update.component';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class JournallogContextMenuService {
   private mouseLocation:{left:number,top:number} = {left: 0, top: 0};
 
   constructor(private journallogService:JournallogService, private timelogDialogService:TimelogDialogService, private timerService:TimerService,
-              private activityService:ActivityService, private dialog: MdDialog,) {
+              private activityService:ActivityService, private dialog: MatDialog) {
   }
 
   showMenu(event, journallog:Journallog) {

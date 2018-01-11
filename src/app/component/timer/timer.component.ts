@@ -9,10 +9,10 @@ import {TimelogDialogService} from '../../service/timelog-dialog.service';
             {{timer.activity.name}}
             {{timer.hours}}:{{timer.minutes < 10 ? '0' : ''}}{{timer.minutes}}<p>
             <div style="float:right">
-              <md-icon *ngIf="timer.isPaused" style="color: greenyellow; cursor: pointer" (click)="timerService.resume(timer)">play_arrow</md-icon>
-              <md-icon *ngIf="!timer.isPaused" style="color: orange; cursor: pointer" (click)="timerService.pause(timer)">pause</md-icon>
-              <md-icon style="color: #fbd850; cursor: pointer" (click)="timelogDialogService.logtimeFromTimer(timer)">save</md-icon>
-              <md-icon style="color: darkred; cursor: pointer" (click)="timerService.cancelTimer(timer)">cancel</md-icon>
+              <mat-icon *ngIf="timer.isPaused" style="color: greenyellow; cursor: pointer" (click)="timerService.resume(timer)">play_arrow</mat-icon>
+              <mat-icon *ngIf="!timer.isPaused" style="color: orange; cursor: pointer" (click)="timerService.pause(timer)">pause</mat-icon>
+              <mat-icon style="color: #fbd850; cursor: pointer" (click)="timelogDialogService.logtimeFromTimer(timer)">save</mat-icon>
+              <mat-icon style="color: darkred; cursor: pointer" (click)="timerService.cancelTimer(timer)">cancel</mat-icon>
             </div>
         </div>
     `

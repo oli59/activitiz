@@ -1,7 +1,6 @@
 import { Component, Inject }       from '@angular/core';
-import {MdDialogRef} from'@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA} from'@angular/material';
 import {Journallog} from '../../domain/journallog'
-import {MD_DIALOG_DATA} from '@angular/material';
 
 
 @Component({selector: 'my-journallog-update',
@@ -12,7 +11,7 @@ import {MD_DIALOG_DATA} from '@angular/material';
 export class JournalLogUpdateComponent {
   journallog: Journallog;
 
-  constructor(public dialogRef: MdDialogRef<any>, @Inject(MD_DIALOG_DATA) public  data: any) {
+  constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public  data: any) {
     this.journallog = data.journallog;
   }
 
