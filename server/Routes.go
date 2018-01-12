@@ -99,6 +99,13 @@ var routes = Routes{
     Options,
   },
 
+  Route{
+    "OptionsSchedule",
+    "OPTIONS",
+    "/schedule/{max_activities}",
+    Options,
+  },
+
 	Route{
     		"OptionsId",
     		"OPTIONS",
@@ -170,6 +177,11 @@ var routes = Routes{
     GetJournallogForNextDate,
   },
 
-
+  Route{
+    "ScheduleJournalLogs",
+    "GET",
+    "/schedule/{max_activities}",
+    Schedule,
+  },
 
 }

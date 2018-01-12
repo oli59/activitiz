@@ -17,7 +17,7 @@
         </mat-card-content>
         <mat-card-actions fxLayout="row">
           <button mat-button (click)="openAddDialog()">Add</button>
-          <button mat-button>Reschedule</button>
+          <button mat-button (click)="schedule()">Reschedule</button>
         </mat-card-actions>
       </mat-card>
     <mat-card *ngFor="let dlog of dayLogs" fxflex style="margin-top: 8px; margin-left: 8px; margin-right: 8px">

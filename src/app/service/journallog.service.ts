@@ -16,6 +16,7 @@ export class JournallogService {
 
   private journallogUrl = serverUrl + '/journal_log';
   private journallogNextUrl = serverUrl +'/journal_log/next';
+  private scheduleUrl = serverUrl + '/schedule'
 
   constructor(private http: Http, private errorService: ErrorService) {}
 
@@ -56,6 +57,17 @@ export class JournallogService {
     else {
       return this.post(journalLog);
     }
+  }
+
+  schedule(maxActivities: number) {
+    let url = `${this.scheduleUrl + '/' + maxActivities }`
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(res => res.json())
+      .catch(err => {
+        this.handleError(err);
+      });
   }
 
   private put(journalLog: Journallog) {

@@ -91,4 +91,9 @@ export class JournalComponent {
       })
     }
 
+    schedule() {
+         this.journallogService.schedule(3).then(result =>
+           this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)
+         )
+    }
 }

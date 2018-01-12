@@ -146,6 +146,7 @@ func GetActivities () domain.Activities {
 	return activities;
 }
 
+/*get all activities without child*/
 func GetAllLeafs () domain.Activities {
   var activities domain.Activities;
 
@@ -191,6 +192,50 @@ func GetAllLeafs () domain.Activities {
 }
 
 
+/*get all schedulable activities without child*/
+func GetAllSchedulableLeafs () domain.Activities {
+  var activities domain.Activities;
+
+  db, err := sql.Open("sqlite3", "./activity.db")
+  checkErr(err)
+
+  stmt, err := db.Prepare("SELECT * FROM activities WHERE act_status = 'new' AND act_scheduling_mode = 'Automatic' AND act_id in (SELECT apc_child_id FROM activities_parent_closure WHERE apc_child_id not in (SELECT apc_parent_id FROM activities_parent_closure WHERE apc_parent_id <> apc_child_id))")
+  checkErr(err)
+
+  rows, err := stmt.Query()
+  checkErr(err)
+
+  for rows.Next() {
+    var act domain.Activity
+    var name string
+    var status string
+    var id int
+    var parentId domain.JsonNullInt64
+    var schedulingMode sql.NullString
+    var typicalDuration domain.JsonNullInt64
+    var currentPoints domain.JsonNullInt64
+    var deadlinestr sql.NullString
+    var frequency sql.NullString
+
+
+    err = rows.Scan(&id, &parentId, &name, &status, &schedulingMode, &typicalDuration, &currentPoints, &deadlinestr, &frequency);
+    checkErr(err)
+
+    var deadlinePtr *time.Time
+    if deadlinestr.Valid {
+      deadline, err := time.Parse("20060102", deadlinestr.String);
+      checkErr(err)
+      deadlinePtr = &deadline;
+    } else {deadlinePtr = nil}
+
+    act = domain.Activity{id, parentId, name, status, schedulingMode.String, typicalDuration, currentPoints, deadlinePtr}
+    activities = append(activities, act)
+  }
+
+  db.Close();
+
+  return activities;
+}
 
 /*return the activity with the given id*/
 func GetActivity (actId int) domain.Activity {

@@ -286,3 +286,15 @@ func JournallogUpdate(w http.ResponseWriter, r *http.Request) {
     panic(err)
   }
 }
+
+/*Schedule n activities today*/
+// Business support other dates too => see how to adapt interface to support it
+func Schedule(w http.ResponseWriter, r *http.Request) {
+  vars := mux.Vars(r)
+  maxActivities, _ := strconv.Atoi(vars["max_activities"])
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusOK)
+  if err := json.NewEncoder(w).Encode(business.Schedule(maxActivities, time.Now())); err != nil {
+    panic(err)
+  }
+}
