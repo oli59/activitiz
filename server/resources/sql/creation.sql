@@ -215,9 +215,3 @@ INSERT INTO activities_parent_closure SELECT parent, child, depth FROM t1_backup
 DROP TABLE t1_backup;
 COMMIT;
 
-alter table activities add column act_scheduling_mode VARCHAR(12);
-alter table activities add column act_typical_duration int;
-alter table activities add column act_current_points int;
-alter table activities add column act_deadline TEXT;
-alter table activities add column act_frequency varchar(255);
-

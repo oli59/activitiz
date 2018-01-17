@@ -5,8 +5,9 @@ import (
   "github.com/oli59/activitiz/server/dao"
   "time"
   "database/sql"
-  "fmt"
   "math/rand"
+  "errors"
+  "fmt"
 )
 
 func CreateJournallog (a domain.Journallog) domain.Journallog {
@@ -27,7 +28,7 @@ func UpdateJournallog (jl domain.Journallog) error {
 
 func Schedule(maxActivities int, date time.Time) domain.Journallogs {
   var scheduledJl domain.Journallogs
-  //journallogsForDate := GetJournallogForDate(date);
+  journallogsForDate := GetJournallogForDate(date);
   //TODO: Schedule by Frequency
 
   //TODO 1 calculate remaining time
@@ -38,18 +39,23 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
 
   //Automatic Scheduling
   schedulableActivities := dao.GetAllSchedulableLeafs();
-  //TODO supprimer de la liste toutes les activities qui sont déjà dans un journallog du jour
-  jl := ScheduleAutomatic(schedulableActivities);
+  schedulableActivities = removeAllActivities(schedulableActivities, journallogsForDate);
+  jl, error := ScheduleAutomatic(schedulableActivities);
+  if error != nil {
+    fmt.Println(error);
+    return scheduledJl;
+  }
   scheduledJl = append (scheduledJl, jl);
-  //todo retirer jl de la liste des activité schedulables
-
+  schedulableActivities = removeActivityById(schedulableActivities, jl.ActivityId.Int64);
   dao.CreateJournallog(scheduledJl[0]);
 
   return scheduledJl;
 }
 
+
 /*Schedule one automatic activity*/
-func ScheduleAutomatic(schedulableActivities domain.Activities) domain.Journallog {
+func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journallog, error) {
+  var resultJl domain.Journallog ;
   var sumCurrentPoint int64= 0;
   var sumTypicalPoint int64= 0;
 
@@ -75,14 +81,19 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) domain.Journallo
       if activity.CurrentPoints.Int64 > 0 {
         sumCurrentPoint = sumCurrentPoint + activity.CurrentPoints.Int64;
       }
-      UpdateActivity(activity);
     }
+    UpdateAutomaticallySchedulledActivityPoints();
   }
 
+
   //Randomally choose an activity (activities with bigger CurrentPoints have a bigger chance to be picked
-  var indexPoint int64 = rand.Int63n(sumCurrentPoint);
+  var indexPoint int64;
+  if (sumCurrentPoint > 0) {
+    indexPoint = rand.Int63n(sumCurrentPoint);
+  } else {return resultJl, errors.New("nothing to schedule")}
   chosenActivityIndex := -1;
-  for (indexPoint > 0) {
+
+  for (indexPoint > 0 && chosenActivityIndex < len(schedulableActivities)) {
     chosenActivityIndex += 1;
     activity := schedulableActivities[chosenActivityIndex];
     if activity.CurrentPoints.Int64 > 0 {
@@ -91,8 +102,33 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) domain.Journallo
   }
 
 
-  return domain.Journallog{1, time.Now(), "new",
+
+    resultJl = domain.Journallog{1, time.Now(), "new",
     domain.JsonNullInt64{sql.NullInt64{Int64:int64(schedulableActivities[chosenActivityIndex].Id), Valid:true}},
     domain.JsonNullInt64{sql.NullInt64{Int64:-1, Valid:false}},
     schedulableActivities[chosenActivityIndex].Name, ""};
+    return resultJl, nil;
 }
+
+/*remove (if exist) activity with Id given as a second parameter from activity table given as a first parameter*/
+func removeActivityById(s domain.Activities, actId int64) domain.Activities {
+  for i, activity := range s {
+    if int64(activity.Id) == actId {
+      s[len(s)-1], s[i] = s[i], s[len(s)-1];
+      return s[:len(s)-1];
+    }
+  }
+  return s;
+}
+
+/*remove (if exist) all activities in journallogs given as second parameter from the table given as first parameter */
+func removeAllActivities(s domain.Activities, jls domain.Journallogs) domain.Activities {
+  result := s;
+  for _, jl := range jls {
+    if jl.ActivityId.Valid {
+      result = removeActivityById(result, jl.ActivityId.Int64);
+    }
+  }
+  return result;
+}
+

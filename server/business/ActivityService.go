@@ -37,3 +37,16 @@ func GetAllLeafs () domain.Activities {
   return dao.GetAllLeafs()
 }
 
+func UpdateAutomaticallySchedulledActivityPoints() {
+  schedulableActivities := dao.GetAllSchedulableLeafs();
+  for _, activity := range schedulableActivities {
+    if activity.CurrentPoints.Valid {
+      activity.CurrentPoints.Int64 += int64(activity.TypicalDuration.Int64 / 2)
+    } else {
+      activity.CurrentPoints.Valid = true;
+      activity.CurrentPoints.Int64 = activity.TypicalDuration.Int64
+    }
+    UpdateActivity(activity);
+  }
+}
+
