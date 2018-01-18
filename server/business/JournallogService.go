@@ -93,8 +93,11 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journall
   } else {return resultJl, errors.New("nothing to schedule")}
   chosenActivityIndex := -1;
 
-  for (indexPoint > 0 && chosenActivityIndex < len(schedulableActivities)) {
+  for (indexPoint > 0 && ) {
     chosenActivityIndex += 1;
+    if chosenActivityIndex >= chosenActivityIndex < len(schedulableActivities) {
+      break;
+    }
     activity := schedulableActivities[chosenActivityIndex];
     if activity.CurrentPoints.Int64 > 0 {
       indexPoint -= activity.CurrentPoints.Int64;
