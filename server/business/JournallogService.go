@@ -106,7 +106,7 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journall
 
 
 
-    resultJl = domain.Journallog{1, time.Now(), "new",
+    resultJl = domain.Journallog{1, time.Now(), "open",
     domain.JsonNullInt64{sql.NullInt64{Int64:int64(schedulableActivities[chosenActivityIndex].Id), Valid:true}},
     domain.JsonNullInt64{sql.NullInt64{Int64:-1, Valid:false}},
     schedulableActivities[chosenActivityIndex].Name, ""};
