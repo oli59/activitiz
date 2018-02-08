@@ -4,7 +4,6 @@ import (
   "github.com/oli59/activitiz/server/domain"
 
   "database/sql"
-  "log"
   "time"
   "net/url"
   "strconv"
@@ -40,8 +39,6 @@ checkErr(err)
 
 stmt, err := db.Prepare("INSERT INTO journallog (jl_id, jl_date, jl_status, jl_act_id, jl_timelog_id, jl_name) values (?,?,?,?,?,?)")
 checkErr(err)
-
-log.Print(jlNextId)
 
 _ , err = stmt.Exec(jlNextId, jl.Date.Format("20060102"), jl.Status, jl.ActivityId, jl.TimeLogId, jl.Name)
 checkErr(err)

@@ -34,21 +34,27 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
   //TODO 1 calculate remaining time
 
   //TODO tant que il reste du temps ou que le maxActivites n'est pas dépassé
+  loopCount := 0;
+  timeIsRunningOut := false;
 
-  //TODO Random par type Auto ou DL
-
-  //Automatic Scheduling
   schedulableActivities := dao.GetAllSchedulableLeafs();
   schedulableActivities = removeAllActivities(schedulableActivities, journallogsForDate);
-  jl, error := ScheduleAutomatic(schedulableActivities);
-  if error != nil {
-    fmt.Println(error);
-    return scheduledJl;
-  }
-  scheduledJl = append (scheduledJl, jl);
-  schedulableActivities = removeActivityById(schedulableActivities, jl.ActivityId.Int64);
-  dao.CreateJournallog(scheduledJl[0]);
 
+  for (loopCount < 1 || ((loopCount + countOpenJournallogs(journallogsForDate) < maxActivities) && !timeIsRunningOut)) {
+    loopCount++;
+
+    //TODO Random par type Auto ou DL
+
+    //Automatic Scheduling
+    jl, error := ScheduleAutomatic(schedulableActivities);
+    if error != nil {
+      fmt.Println(error);
+      return scheduledJl;
+    }
+    scheduledJl = append(scheduledJl, jl);
+    schedulableActivities = removeActivityById(schedulableActivities, jl.ActivityId.Int64);
+    dao.CreateJournallog(scheduledJl[0]);
+  }
   return scheduledJl;
 }
 
@@ -93,9 +99,9 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journall
   } else {return resultJl, errors.New("nothing to schedule")}
   chosenActivityIndex := -1;
 
-  for (indexPoint > 0 && ) {
+  for (indexPoint > 0) {
     chosenActivityIndex += 1;
-    if chosenActivityIndex >= chosenActivityIndex < len(schedulableActivities) {
+    if chosenActivityIndex < len(schedulableActivities) {
       break;
     }
     activity := schedulableActivities[chosenActivityIndex];
@@ -106,7 +112,7 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journall
 
 
 
-    resultJl = domain.Journallog{1, time.Now(), "new",
+    resultJl = domain.Journallog{1, time.Now(), "open",
     domain.JsonNullInt64{sql.NullInt64{Int64:int64(schedulableActivities[chosenActivityIndex].Id), Valid:true}},
     domain.JsonNullInt64{sql.NullInt64{Int64:-1, Valid:false}},
     schedulableActivities[chosenActivityIndex].Name, ""};
@@ -132,6 +138,18 @@ func removeAllActivities(s domain.Activities, jls domain.Journallogs) domain.Act
       result = removeActivityById(result, jl.ActivityId.Int64);
     }
   }
+  return result;
+}
+
+/*count number of journallogs 'open' in a list*/
+func countOpenJournallogs(jls domain.Journallogs) int {
+  result := 0;
+  for _, jl := range jls {
+    if jl.Status == "open" {
+      result++;
+    }
+  }
+
   return result;
 }
 
