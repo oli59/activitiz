@@ -29,18 +29,29 @@ func UpdateJournallog (jl domain.Journallog) error {
 func Schedule(maxActivities int, date time.Time) domain.Journallogs {
   var scheduledJl domain.Journallogs
   journallogsForDate := GetJournallogForDate(date);
+  rand.Seed(int64(time.Now().Second()));
   //TODO: Schedule by Frequency
 
-  //TODO 1 calculate remaining time
-
-  //TODO tant que il reste du temps ou que le maxActivites n'est pas dépassé
+  //Schedule Automatic and by deadline
   loopCount := 0;
   timeIsRunningOut := false;
 
   schedulableActivities := dao.GetAllSchedulableLeafs();
   schedulableActivities = removeAllActivities(schedulableActivities, journallogsForDate);
 
-  for (loopCount < 1 || ((loopCount + countOpenJournallogs(journallogsForDate) < maxActivities) && !timeIsRunningOut)) {
+  schedulableByDeadLine := dao.GetAllSchedulableByDeadLine();
+  schedulableByDeadLine = removeAllActivities(schedulableByDeadLine, journallogsForDate);
+
+  openJournallogsCount := countOpenJournallogs(journallogsForDate);
+
+  for (loopCount < 1 || ((loopCount + openJournallogsCount < maxActivities) && !timeIsRunningOut)) {
+    //choose randomly between Automatic and by deadLine
+    rand.Intn(1);
+
+
+
+
+
     loopCount++;
 
     //TODO Random par type Auto ou DL
@@ -53,7 +64,10 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
     }
     scheduledJl = append(scheduledJl, jl);
     schedulableActivities = removeActivityById(schedulableActivities, jl.ActivityId.Int64);
-    dao.CreateJournallog(scheduledJl[0]);
+    dao.CreateJournallog(jl);
+    journallogsForDate = append(journallogsForDate, jl);
+
+    timeIsRunningOut = IsTimeRunningOut(journallogsForDate);
   }
   return scheduledJl;
 }
@@ -153,3 +167,22 @@ func countOpenJournallogs(jls domain.Journallogs) int {
   return result;
 }
 
+/*check if time is running out to add new items to the journallogs*/
+func IsTimeRunningOut(jls domain.Journallogs) bool {
+    today := time.Now();
+
+    usableDuration := 22*60 - today.Hour() * 60 - today.Minute() - 40;
+
+    for _, jl := range jls {
+      if jl.Status == "open" && jl.ActivityId.Valid {
+        act := dao.GetActivity(int(jl.ActivityId.Int64))
+        if act.TypicalDuration.Valid  {
+          usableDuration -= int(act.TypicalDuration.Int64);
+        }
+      }
+    }
+
+    fmt.Println(usableDuration);
+
+    return (usableDuration < 0);
+}
