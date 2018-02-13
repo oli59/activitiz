@@ -244,7 +244,7 @@ func GetAllSchedulableByDeadLine () domain.Activities {
   db, err := sql.Open("sqlite3", "./activity.db")
   checkErr(err)
 
-  stmt, err := db.Prepare("SELECT * FROM activities WHERE act_status = 'new' AND act_deadline is not null AND act_id in (SELECT apc_child_id FROM activities_parent_closure WHERE apc_child_id not in (SELECT apc_parent_id FROM activities_parent_closure WHERE apc_parent_id <> apc_child_id))")
+  stmt, err := db.Prepare("SELECT * FROM activities WHERE act_status = 'new' AND act_deadline is not null AND act_id in (SELECT apc_child_id FROM activities_parent_closure WHERE apc_child_id not in (SELECT apc_parent_id FROM activities_parent_closure WHERE apc_parent_id <> apc_child_id)) order by act_deadline")
   checkErr(err)
 
   rows, err := stmt.Query()

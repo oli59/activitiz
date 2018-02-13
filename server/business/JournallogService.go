@@ -7,7 +7,7 @@ import (
   "database/sql"
   "math/rand"
   "errors"
-  "fmt"
+  "log"
 )
 
 func CreateJournallog (a domain.Journallog) domain.Journallog {
@@ -29,7 +29,8 @@ func UpdateJournallog (jl domain.Journallog) error {
 func Schedule(maxActivities int, date time.Time) domain.Journallogs {
   var scheduledJl domain.Journallogs
   journallogsForDate := GetJournallogForDate(date);
-  rand.Seed(int64(time.Now().Second()));
+  rand.Seed(time.Now().UTC().UnixNano())
+
   //TODO: Schedule by Frequency
 
   //Schedule Automatic and by deadline
@@ -46,24 +47,31 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
 
   for (loopCount < 1 || ((loopCount + openJournallogsCount < maxActivities) && !timeIsRunningOut)) {
     //choose randomly between Automatic and by deadLine
-    rand.Intn(1);
-
-
-
-
-
     loopCount++;
+    randomChooser := rand.Intn(2);
+    var jl domain.Journallog;
+    var error error;
 
-    //TODO Random par type Auto ou DL
 
-    //Automatic Scheduling
-    jl, error := ScheduleAutomatic(schedulableActivities);
-    if error != nil {
-      fmt.Println(error);
-      return scheduledJl;
-    }
+    //schedule by deadline
+    if (randomChooser == 0 || len(schedulableActivities) == 0) && len(schedulableByDeadLine) > 0 {
+      jl = CreateJournallogForActivity(schedulableByDeadLine[0]);
+      schedulableByDeadLine = append(schedulableByDeadLine[:0], schedulableByDeadLine[1:]...)
+
+      //or schedule Automatic
+    } else if len(schedulableActivities) > 0 {
+
+      jl, error = ScheduleAutomatic(schedulableActivities);
+      if error != nil {
+        log.Print(error);
+        return scheduledJl;
+      }
+      schedulableActivities = removeActivityById(schedulableActivities, jl.ActivityId.Int64);
+      //no scheduling possible
+    } else {break;}
+
+    //save to db and add to returned journallog list
     scheduledJl = append(scheduledJl, jl);
-    schedulableActivities = removeActivityById(schedulableActivities, jl.ActivityId.Int64);
     dao.CreateJournallog(jl);
     journallogsForDate = append(journallogsForDate, jl);
 
@@ -115,7 +123,7 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journall
 
   for (indexPoint > 0) {
     chosenActivityIndex += 1;
-    if chosenActivityIndex < len(schedulableActivities) {
+    if chosenActivityIndex >= len(schedulableActivities) {
       break;
     }
     activity := schedulableActivities[chosenActivityIndex];
@@ -123,8 +131,6 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journall
       indexPoint -= activity.CurrentPoints.Int64;
     }
   }
-
-
 
     resultJl = domain.Journallog{1, time.Now(), "open",
     domain.JsonNullInt64{sql.NullInt64{Int64:int64(schedulableActivities[chosenActivityIndex].Id), Valid:true}},
@@ -182,7 +188,13 @@ func IsTimeRunningOut(jls domain.Journallogs) bool {
       }
     }
 
-    fmt.Println(usableDuration);
-
     return (usableDuration < 0);
+}
+
+func CreateJournallogForActivity (act domain.Activity) domain.Journallog {
+  resultJl := domain.Journallog{1, time.Now(), "open",
+    domain.JsonNullInt64{sql.NullInt64{Int64:int64(act.Id), Valid:true}},
+    domain.JsonNullInt64{sql.NullInt64{Int64:-1, Valid:false}},
+    act.Name, ""};
+  return resultJl;
 }
