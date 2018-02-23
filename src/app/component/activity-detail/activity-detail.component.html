@@ -20,6 +20,9 @@
         <mat-input-container>
           <input matInput style="width:80%" [(ngModel)]="activity.typical_duration" required placeholder="typical_duration">
         </mat-input-container> (Minutes)
+        <mat-input-container>
+          <input matInput style="width:80%" [(ngModel)]="activity.current_points" required placeholder="current_point">
+        </mat-input-container> (Minutes)
         <mat-input-container *ngIf="activity.scheduling_mode === 'Deadline'">
           <input matInput type="date" required placeholder="DeadLine" [value]="activity.deadline | date:'yyyy-MM-dd'" (input)="activity.deadline=parseDate($event.target.value)">
         </mat-input-container>
