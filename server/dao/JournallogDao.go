@@ -51,6 +51,7 @@ jl.Id=jlNextId
   return jl
 }
 
+//return aull journallogs for a given date
 func GetJournallogForDate (date time.Time) domain.Journallogs {
   var rows *sql.Rows;
   var journallogs domain.Journallogs
@@ -59,6 +60,55 @@ func GetJournallogForDate (date time.Time) domain.Journallogs {
   checkErr(err)
 
   stmt, err := db.Prepare("SELECT * FROM journallog WHERE jl_date =?")
+  checkErr(err)
+
+  rows, err = stmt.Query(date.Format("20060102"));
+  checkErr(err)
+
+  for rows.Next() {
+    var journallog domain.Journallog
+    var id int
+    var dateStr string
+    var status string
+    var activityId domain.JsonNullInt64
+    var timelogId domain.JsonNullInt64
+    var name string
+    var hours string
+
+    err = rows.Scan(&id, &dateStr, &status, &activityId, &timelogId, &name)
+    checkErr(err)
+
+    date, err := time.Parse("20060102", dateStr);
+    checkErr(err)
+
+    hours = "-";
+
+    if timelogId.Valid {
+      v := url.Values{}
+      v.Set("id", strconv.FormatInt(timelogId.Int64,10))
+      timeLogs := GetTimeLogs(v)
+      hours = formatHours(timeLogs[0])
+    }
+
+    journallog = domain.Journallog{id, date, status, activityId, timelogId, name, hours}
+    journallogs = append(journallogs, journallog)
+
+  }
+
+  db.Close();
+  return journallogs
+}
+
+
+//return all journallogs after a given date
+func GetJournallogAfterDate (date time.Time) domain.Journallogs {
+  var rows *sql.Rows;
+  var journallogs domain.Journallogs
+
+  db, err := sql.Open("sqlite3", "./activity.db")
+  checkErr(err)
+
+  stmt, err := db.Prepare("SELECT * FROM journallog WHERE jl_date >?")
   checkErr(err)
 
   rows, err = stmt.Query(date.Format("20060102"));

@@ -18,6 +18,10 @@ func GetJournallogForDate(date time.Time) domain.Journallogs {
   return dao.GetJournallogForDate(date);
 }
 
+func GetJournallogAfterDate(date time.Time) domain.Journallogs {
+  return dao.GetJournallogAfterDate(date);
+}
+
 func GetJournallogForNextDate(date time.Time) domain.Journallogs {
   return dao.GetJournallogForNextDate(date);
 }
@@ -29,6 +33,7 @@ func UpdateJournallog (jl domain.Journallog) error {
 func Schedule(maxActivities int, date time.Time) domain.Journallogs {
   var scheduledJl domain.Journallogs
   journallogsForDate := GetJournallogForDate(date);
+  journallogsAfterDate := GetJournallogAfterDate(date)
   rand.Seed(time.Now().UTC().UnixNano())
 
   //TODO: Schedule by Frequency
@@ -39,9 +44,11 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
 
   schedulableActivities := dao.GetAllSchedulableLeafs();
   schedulableActivities = removeAllActivities(schedulableActivities, journallogsForDate);
+  schedulableActivities = removeAllActivities(schedulableActivities, journallogsAfterDate);
 
   schedulableByDeadLine := dao.GetAllSchedulableByDeadLine();
   schedulableByDeadLine = removeAllActivities(schedulableByDeadLine, journallogsForDate);
+  schedulableByDeadLine = removeAllActivities(schedulableByDeadLine, journallogsAfterDate);
 
   openJournallogsCount := countOpenJournallogs(journallogsForDate);
 
