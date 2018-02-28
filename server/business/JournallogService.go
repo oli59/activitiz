@@ -150,8 +150,7 @@ func ScheduleAutomatic(schedulableActivities domain.Activities) (domain.Journall
 func removeActivityById(s domain.Activities, actId int64) domain.Activities {
   for i, activity := range s {
     if int64(activity.Id) == actId {
-      s[len(s)-1], s[i] = s[i], s[len(s)-1];
-      return s[:len(s)-1];
+      return append(s[:i], s[i+1:]...);
     }
   }
   return s;

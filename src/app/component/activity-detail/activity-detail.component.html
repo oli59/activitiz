@@ -26,6 +26,21 @@
         <mat-input-container *ngIf="activity.scheduling_mode === 'Deadline'">
           <input matInput type="date" required placeholder="DeadLine" [value]="activity.deadline | date:'yyyy-MM-dd'" (input)="activity.deadline=parseDate($event.target.value)">
         </mat-input-container>
+        <div *ngIf="activity.scheduling_mode === 'Recurrent'">
+          <div>
+            Scheduling by Frequency
+            <br>
+            <mat-radio-group [(ngModel)] = "activity.scheduling_period">
+              <mat-radio-button  *ngFor="let period of periods" [value]="period">{{ period }}</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div *ngIf="activity.scheduling_period === 'Day'">
+            Every
+            <mat-input-container style="max-width:3em">
+              <input matInput  type="number" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
+            </mat-input-container> Days
+          </div>
+        </div>
     </div>
     <div class="panel-footer">
         <button type="button" class="btn btn-primary" (click)="save()">Save</button>

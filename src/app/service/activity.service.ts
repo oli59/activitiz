@@ -66,6 +66,7 @@ export class ActivityService {
       //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
       activity.typical_duration = Number(activity.typical_duration);
       activity.current_points = Number(activity.current_points);
+      activity.scheduling_pace = Number(activity.scheduling_pace);
       if (activity.parent_id > 0) {
         activity.parent_id = Number(activity.parent_id);
       }
@@ -90,6 +91,7 @@ export class ActivityService {
         //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
         activity.typical_duration = Number(activity.typical_duration);
         activity.current_points = Number(activity.current_points);
+        activity.scheduling_pace = Number(activity.scheduling_pace);
         if (activity.parent_id > 0) {
           activity.parent_id = Number(activity.parent_id);
         }

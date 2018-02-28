@@ -25,7 +25,9 @@ export class ActivitiesComponent implements OnInit{
         scheduling_mode: 'None',
         typical_duration: 0,
         current_points: 0,
-        deadline: null
+        deadline: null,
+        scheduling_period: null,
+        scheduling_pace: null
     };
     allParents = [this.topActivity];
     links = ["one", "two"];

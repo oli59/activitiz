@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output, OnInit, OnDestroy} from '@angula
 import {Activity} from '../../domain/activity';
 import {activityStatuses} from '../../domain/activity-statuses';
 import { ActivityService } from '../../service/activity.service';
-import {schedulingModes} from '../../domain/scheduling-modes';
+import {schedulingModes, schedulingPeriods} from '../../domain/scheduling-modes';
 
 
 
@@ -21,6 +21,7 @@ export class ActivityDetailComponent implements OnInit {
     existingActivity;
     statuses = activityStatuses;
     modes = schedulingModes;
+    periods = schedulingPeriods;
 
     constructor (
         private activityService: ActivityService
