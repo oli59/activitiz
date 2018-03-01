@@ -149,7 +149,7 @@ func GetJournallogAfterDate (date time.Time) domain.Journallogs {
 }
 
 
-  func GetJournallogForNextDate (date time.Time) domain.Journallogs {
+func GetJournallogForNextDate (date time.Time) domain.Journallogs {
     var rows *sql.Rows;
     var tempDate time.Time;
 
@@ -197,4 +197,33 @@ func UpdateJournallog (jl domain.Journallog) error {
 
 func formatHours(tl domain.TimeLog) string {
   return tl.StartHour.Format("15:04") + " - " + tl.EndHour.Format("15:04");
+}
+
+func GetLastScheduledDateForActivity(activityId int) time.Time {
+  var rows *sql.Rows;
+  var tempDate time.Time;
+
+  db, err := sql.Open("sqlite3", "./activity.db")
+  checkErr(err)
+
+  stmt, err := db.Prepare("SELECT jl_date FROM journallog WHERE jl_act_id = ? ORDER BY jl_date DESC LIMIT 1")
+  checkErr(err)
+
+  rows, err = stmt.Query(activityId);
+  checkErr(err)
+
+  if rows.Next() {
+    var dateStr string;
+    err = rows.Scan(&dateStr)
+    checkErr(err)
+
+    tempDate, err = time.Parse("20060102", dateStr);
+    checkErr(err)
+  }
+
+  rows.Close();
+
+  db.Close();
+
+  return tempDate;
 }

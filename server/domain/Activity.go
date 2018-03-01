@@ -11,7 +11,8 @@ type Activity struct {
   TypicalDuration JsonNullInt64    `json:"typical_duration"`
   CurrentPoints   JsonNullInt64    `json:"current_points"`
   Deadline        *time.Time       `json:"deadline"`
-
+  SchedulingPeriod string          `json:"scheduling_period"`
+  SchedulingPace  JsonNullInt64    `json:"scheduling_pace"`
 }
 
 type Activities [] Activity;

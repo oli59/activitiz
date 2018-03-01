@@ -7,9 +7,13 @@ create table activities (act_id int PRIMARY KEY,
                           act_typical_duration int,
                           act_current_points int,
                           act_deadline TEXT,
-                          act_frequency varchar(255),
+                          act_scheduling_period varchar(12),
+                          act_scheduling_pace int,
                           FOREIGN KEY(act_parent_id) REFERENCES activities(act_id)
 );
+
+alter table activities add column act_scheduling_period varchar(12);
+alter table activities add column act_scheduling_pace int;
 
 --create time_log
 create table timelog (tl_id int PRIMARY KEY,

@@ -61,3 +61,16 @@ func (hm *HourMinute) UnmarshalJSON(b []byte) error {
 	hm.Time = ret
 	return nil
 }
+
+/*Number of days between 2 dates. Hours, minutes, ... are ignored*/
+func DiffDays(date1 time.Time, date2 time.Time) int {
+  d2 := time.Date(
+    date2.Year(), date2.Month(), date2.Day(),
+    0, 0, 0, 0, time.UTC,
+  )
+  d1 := time.Date(
+    date1.Year(), date1.Month(), date1.Day(),
+    0, 0, 0, 0, time.UTC,
+  )
+  return int(d2.Sub(d1) / (24 * time.Hour))
+}

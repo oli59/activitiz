@@ -36,7 +36,9 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
   journallogsAfterDate := GetJournallogAfterDate(date)
   rand.Seed(time.Now().UTC().UnixNano())
 
-  //TODO: Schedule by Frequency
+  /*schedule by frequency*/
+  frequencyJl := ScheduleByFrequency(date);
+  scheduledJl = append(scheduledJl, frequencyJl[0:]...);
 
   //Schedule Automatic and by deadline
   loopCount := 0;
@@ -52,7 +54,7 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
 
   openJournallogsCount := countOpenJournallogs(journallogsForDate);
 
-  for (loopCount < 1 || ((loopCount + openJournallogsCount < maxActivities) && !timeIsRunningOut)) {
+  for ((loopCount < 1 && len(scheduledJl) == 0) || ((loopCount + openJournallogsCount < maxActivities) && !timeIsRunningOut)) {
     //choose randomly between Automatic and by deadLine
     loopCount++;
     randomChooser := rand.Intn(2);
@@ -62,7 +64,7 @@ func Schedule(maxActivities int, date time.Time) domain.Journallogs {
 
     //schedule by deadline
     if (randomChooser == 0 || len(schedulableActivities) == 0) && len(schedulableByDeadLine) > 0 {
-      jl = CreateJournallogForActivity(schedulableByDeadLine[0]);
+      jl = CreateJournallogForActivity(schedulableByDeadLine[0], date);
       schedulableByDeadLine = append(schedulableByDeadLine[:0], schedulableByDeadLine[1:]...)
 
       //or schedule Automatic
@@ -197,10 +199,41 @@ func IsTimeRunningOut(jls domain.Journallogs) bool {
     return (usableDuration < 0);
 }
 
-func CreateJournallogForActivity (act domain.Activity) domain.Journallog {
-  resultJl := domain.Journallog{1, time.Now(), "open",
+/*create a new journal log for and activity (not saved in db)*/
+func CreateJournallogForActivity (act domain.Activity, date time.Time ) domain.Journallog {
+  resultJl := domain.Journallog{1, date, "open",
     domain.JsonNullInt64{sql.NullInt64{Int64:int64(act.Id), Valid:true}},
     domain.JsonNullInt64{sql.NullInt64{Int64:-1, Valid:false}},
     act.Name, ""};
   return resultJl;
+}
+
+func ScheduleByFrequency(date time.Time) domain.Journallogs {
+  var result domain.Journallogs;
+  journallogsForDate := GetJournallogForDate(date)
+
+  schedulableActivities := dao.GetAllSchedulableByFrequency();
+  schedulableActivities = removeAllActivities(schedulableActivities, journallogsForDate);
+
+  for _, act := range schedulableActivities {
+    //scheduling when period = Day
+    if (act.SchedulingPeriod == "Day") {
+      //every day => add the jl
+      if act.SchedulingPace.Valid && act.SchedulingPace.Int64 == 1 {
+        jl := CreateJournallogForActivity(act, date);
+        dao.CreateJournallog(jl)
+        result = append(result, jl);
+      // else check if we are over the pace
+      } else {
+        lastScheduled := dao.GetLastScheduledDateForActivity(act.Id);
+        if act.SchedulingPace.Valid && int64(domain.DiffDays(lastScheduled, date)) >= act.SchedulingPace.Int64 {
+          jl := CreateJournallogForActivity(act, date);
+          dao.CreateJournallog(jl)
+          result = append(result, jl);
+        }
+      }
+    }
+    // todo : scheduling by week or month
+  }
+  return result;
 }
