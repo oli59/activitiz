@@ -14,7 +14,7 @@
           Scheduling
           <br>
           <mat-radio-group [(ngModel)] = "activity.scheduling_mode">
-            <mat-radio-button  *ngFor="let mode of modes" [value]="mode">{{ mode }}</mat-radio-button>
+            <mat-radio-button style="margin-right: 30px;" *ngFor="let mode of modes" [value]="mode">{{ mode }}</mat-radio-button>
           </mat-radio-group>
         </div>
         <mat-input-container>
@@ -31,7 +31,7 @@
             Scheduling by Frequency
             <br>
             <mat-radio-group [(ngModel)] = "activity.scheduling_period">
-              <mat-radio-button  *ngFor="let period of periods" [value]="period">{{ period }}</mat-radio-button>
+              <mat-radio-button  style="margin-right: 30px;" *ngFor="let period of periods" [value]="period">{{ period }}</mat-radio-button>
             </mat-radio-group>
           </div>
           <div *ngIf="activity.scheduling_period === 'Day'">
@@ -39,6 +39,16 @@
             <mat-input-container style="max-width:3em">
               <input matInput  type="number" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
             </mat-input-container> Days
+          </div>
+          <div *ngIf="activity.scheduling_period === 'Week'">
+            Every
+            <mat-input-container style="max-width:3em">
+              <input matInput  type="number" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
+            </mat-input-container> Weeks
+            <section>
+            <mat-checkbox style="margin-right: 30px;" *ngFor="let day of days" [(ngModel)]="day.selected">{{day.name}} </mat-checkbox>
+            </section>
+            {{activity.scheduling_detail}}
           </div>
         </div>
     </div>
@@ -65,6 +75,4 @@
             </div>
         </div>
     </div>
-
-
 </div>

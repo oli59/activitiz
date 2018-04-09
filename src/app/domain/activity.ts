@@ -7,6 +7,7 @@ export class Activity {
     typical_duration: number;
     current_points: number;
     deadline: Date;
-    scheduling_period: string; 
+    scheduling_period: string;
     scheduling_pace: number;
+    scheduling_detail: string;
 }

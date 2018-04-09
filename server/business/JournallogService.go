@@ -233,7 +233,35 @@ func ScheduleByFrequency(date time.Time) domain.Journallogs {
         }
       }
     }
-    // todo : scheduling by week or month
+    //Scheduling when peiod = Week
+    if (act.SchedulingPeriod == "Week") {
+      //get the week day for the date of the scheduling
+      dayOfWeek := int(date.Weekday()) - 1;
+      if dayOfWeek == -1 {
+        dayOfWeek = 6;
+      }
+      //this activity is schedulable for this day of week, check pace
+      if (act.SchedulingDetail[dayOfWeek] == '1') {
+        //check if activity was sheduled in the last Pace weeks on the same dayOfWeek
+        found := false;
+        for i := 1; int64(i) < act.SchedulingPace.Int64 && !found; i++ {
+          dateToCheck := date.AddDate(0,0, i*-7);
+          jlsToCheck := dao.GetJournallogForDate(dateToCheck);
+          for _, jlToCheck := range jlsToCheck {
+            if jlToCheck.ActivityId.Valid && jlToCheck.ActivityId.Int64 ==int64(act.Id) {
+              found = true;
+            }
+          }
+        }
+        //not schedulated in the last Pace weeks, schedule it for this date
+        if (!found) {
+          jl := CreateJournallogForActivity(act, date);
+          dao.CreateJournallog(jl)
+          result = append(result, jl);
+        }
+      }
+    }
+    // todo : scheduling by month
   }
   return result;
 }
