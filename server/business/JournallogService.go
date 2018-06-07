@@ -8,6 +8,9 @@ import (
   "math/rand"
   "errors"
   "log"
+  "fmt"
+  "strings"
+  "strconv"
 )
 
 func CreateJournallog (a domain.Journallog) domain.Journallog {
@@ -233,7 +236,7 @@ func ScheduleByFrequency(date time.Time) domain.Journallogs {
         }
       }
     }
-    //Scheduling when peiod = Week
+    //Scheduling when period = Week
     if (act.SchedulingPeriod == "Week") {
       //get the week day for the date of the scheduling
       dayOfWeek := int(date.Weekday()) - 1;
@@ -261,7 +264,53 @@ func ScheduleByFrequency(date time.Time) domain.Journallogs {
         }
       }
     }
-    // todo : scheduling by month
+
+    //Scheduling when period = Month
+    if (act.SchedulingPeriod == "Month") {
+      //get the day of the month for the date that's being scheduled
+      dayOfMonth := date.Day();
+
+      //check if this activty is schedulable for that dayOfMonth
+      schedulingAllowedDays := strings.FieldsFunc(act.SchedulingDetail, func(r rune) bool {
+        if r == ';' {
+          return true
+        }
+        return false
+      })
+
+      found := false;
+      for _, stringDay := range schedulingAllowedDays {
+        day, err := strconv.Atoi(stringDay);
+        if err != nil {
+          panic(err)
+        }
+        if dayOfMonth == day {
+          found = true;
+          break;
+        }
+      }
+
+      //this activity is schedulable for this day of month, check pace
+      if found {
+        //check if activity was sheduled in the last Pace month on the same dayOfMonth
+        foundInMonth := false;
+        for i := 1; int64(i) < act.SchedulingPace.Int64 && !foundInMonth; i++ {
+          dateToCheck := date.AddDate(0,-1*i, 0);
+          jlsToCheck := dao.GetJournallogForDate(dateToCheck);
+          for _, jlToCheck := range jlsToCheck {
+            if jlToCheck.ActivityId.Valid && jlToCheck.ActivityId.Int64 ==int64(act.Id) {
+              foundInMonth = true;
+            }
+          }
+        }
+        //not schedulated in the last Pace months, schedule it for this date
+        if (!foundInMonth) {
+          jl := CreateJournallogForActivity(act, date);
+          dao.CreateJournallog(jl)
+          result = append(result, jl);
+        }
+      }
+    }
   }
   return result;
 }

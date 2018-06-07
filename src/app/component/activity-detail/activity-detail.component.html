@@ -18,7 +18,7 @@
           </mat-radio-group>
         </div>
         <mat-input-container>
-          <input matInput style="width:80%" [(ngModel)]="activity.typical_duration" required placeholder="typical_duration">
+          <input matInput style="width:80%" [(ngModel)]="activity.typical_duration" min="0" required placeholder="typical_duration">
         </mat-input-container> (Minutes)
         <mat-input-container>
           <input matInput style="width:80%" [(ngModel)]="activity.current_points" required placeholder="current_point">
@@ -37,18 +37,27 @@
           <div *ngIf="activity.scheduling_period === 'Day'">
             Every
             <mat-input-container style="max-width:3em">
-              <input matInput  type="number" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
+              <input matInput  type="number" min="1" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
             </mat-input-container> Days
           </div>
           <div *ngIf="activity.scheduling_period === 'Week'">
             Every
             <mat-input-container style="max-width:3em">
-              <input matInput  type="number" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
+              <input matInput  type="number" maxlength="3" min="1" [(ngModel)]="activity.scheduling_pace" required>
             </mat-input-container> Weeks
             <section>
             <mat-checkbox style="margin-right: 30px;" *ngFor="let day of days" [(ngModel)]="day.selected">{{day.name}} </mat-checkbox>
             </section>
-            {{activity.scheduling_detail}}
+          </div>
+          <div *ngIf="activity.scheduling_period === 'Month'">
+            Day(s)
+            <mat-input-container style="max-width:3em">
+              <input matInput maxlength="20" style="width: 20em;" [(ngModel)]="activity.scheduling_detail" required>
+            </mat-input-container>
+            of every
+            <mat-input-container style="max-width:3em">
+              <input matInput  type="number" min="1" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
+            </mat-input-container> Months
           </div>
         </div>
     </div>
