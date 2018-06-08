@@ -19,7 +19,9 @@ export class JournalComponent {
   constructor(public dialog: MatDialog, private journallogService: JournallogService,
               private journallogContextMenuService: JournallogContextMenuService,
               private timelogService: TimelogService) {
-    this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)
+    this.journallogService.frequencySchedule().then(result =>
+      this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)
+    )
     this.getNextNJournallog(new Date())
   }
 

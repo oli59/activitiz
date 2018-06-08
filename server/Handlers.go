@@ -298,3 +298,13 @@ func Schedule(w http.ResponseWriter, r *http.Request) {
     panic(err)
   }
 }
+
+/*Schedule by frequency the activities for today*/
+// Business support other dates too => see how to adapt interface to support it
+func FrequencySchedule(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.WriteHeader(http.StatusOK)
+  if err := json.NewEncoder(w).Encode(business.ScheduleByFrequency(time.Now())); err != nil {
+    panic(err)
+  }
+}

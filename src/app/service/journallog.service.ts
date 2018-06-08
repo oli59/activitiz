@@ -17,6 +17,7 @@ export class JournallogService {
   private journallogUrl = serverUrl + '/journal_log';
   private journallogNextUrl = serverUrl +'/journal_log/next';
   private scheduleUrl = serverUrl + '/schedule'
+  private frequencyScheduleUrl = serverUrl + '/frequency_schedule'
 
   constructor(private http: Http, private errorService: ErrorService) {}
 
@@ -63,6 +64,17 @@ export class JournallogService {
     let url = `${this.scheduleUrl + '/' + maxActivities }`
     return this.http
       .get(url)
+      .toPromise()
+      .then(res => res.json())
+      .catch(err => {
+        this.handleError(err);
+      });
+  }
+
+  //schedule by frequency
+  frequencySchedule() {
+    return this.http
+      .get(this.frequencyScheduleUrl)
       .toPromise()
       .then(res => res.json())
       .catch(err => {

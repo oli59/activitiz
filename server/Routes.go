@@ -106,6 +106,13 @@ var routes = Routes{
     Options,
   },
 
+  Route{
+    "OptionsFrequencySchedule",
+    "OPTIONS",
+    "/frequency_schedule",
+    Options,
+  },
+
 	Route{
     		"OptionsId",
     		"OPTIONS",
@@ -182,6 +189,13 @@ var routes = Routes{
     "GET",
     "/schedule/{max_activities}",
     Schedule,
+  },
+
+  Route{
+    "FrequencyScheduleJournalLogs",
+    "GET",
+    "/frequency_schedule",
+    FrequencySchedule,
   },
 
 }
