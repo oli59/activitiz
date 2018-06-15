@@ -13,10 +13,6 @@ create table activities (act_id int PRIMARY KEY,
                           FOREIGN KEY(act_parent_id) REFERENCES activities(act_id)
 );
 
-alter table activities add column act_scheduling_period varchar(12);
-alter table activities add column act_scheduling_pace int;
-alter table activities add column act_scheduling_detail varchar(100);
-
 --create time_log
 create table timelog (tl_id int PRIMARY KEY,
                       tl_date TEXT NOT NULL,
