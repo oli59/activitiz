@@ -10,6 +10,7 @@ import (
   "log"
   "strings"
   "strconv"
+  "fmt"
 )
 
 func CreateJournallog (a domain.Journallog) domain.Journallog {
@@ -218,6 +219,7 @@ func ScheduleByFrequency(date time.Time) domain.Journallogs {
   schedulableActivities = removeAllActivities(schedulableActivities, journallogsForDate);
 
   for _, act := range schedulableActivities {
+    fmt.Sprintln(act.Name);
     //scheduling when period = Day
     if (act.SchedulingPeriod == "Day") {
       //every day => add the jl

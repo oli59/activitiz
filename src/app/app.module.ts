@@ -27,7 +27,7 @@ import {JournallogService} from './service/journallog.service';
 import {JournallogContextMenuService} from './service/journallog-contextmenu.service';
 import {JournallogContextmenuComponent} from './component/journallog-contextmenu/journallog-contextmenu.component'
 import {JournalLogUpdateComponent} from './component/journallog-update/journallog-update.component'
-import {MatDialogModule, MatInputModule, MatSelectModule, MatRadioModule, MatIconModule, MatCardModule, MatListModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
+import {MatButtonToggleModule, MatListModule, MatSidenavModule, MatDialogModule, MatInputModule, MatSelectModule, MatRadioModule, MatIconModule, MatCardModule, MatListModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
 
 @NgModule({
     imports: [
@@ -47,7 +47,10 @@ import {MatDialogModule, MatInputModule, MatSelectModule, MatRadioModule, MatIco
         MatListModule,
         MatAutocompleteModule,
         MatButtonModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatSidenavModule,
+        MatButtonToggleModule,
+        MatListModule,
     ],
     declarations: [
         AppComponent,

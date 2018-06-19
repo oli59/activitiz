@@ -1,7 +1,6 @@
 package dao
 
-import ("log"
-	"database/sql"
+import ("database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/oli59/activitiz/server/domain"
 	"time"
@@ -122,8 +121,6 @@ func CreateTimeLog (tl domain.TimeLog) domain.TimeLog {
 
 	stmt, err := db.Prepare("INSERT INTO timelog (tl_id, tl_date, tl_startHour, tl_endHour, tl_duration, tl_act_id, tl_comment) values (?,?,?,?,?,?,?)")
 	checkErr(err)
-
-	log.Print(nextId)
 
 	_ , err = stmt.Exec(tlNextId, tl.Date.Format("20060102"), tl.StartHour.Time.Format("1504"), tl.EndHour.Time.Format("1504"), tl.Duration, tl.ActivityId, tl.Comment)
 	checkErr(err)

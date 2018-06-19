@@ -1,21 +1,33 @@
-<div class="activities-component">
-    <div class="navi">
-        <ul class="nav nav-pills nav-stacked" role="tablist">
-            <li *ngFor="let activity of allParents" draggable="false">
-                <a (click)="enterActivity(activity)" >{{activity.name | truncate : 15}}</a>
-            </li>
-        </ul>
-        <hr>
-        <div>
+
+<mat-sidenav-container class="activities-container">
+  <mat-sidenav mode="side" class="navi" fixedviewport="true" opened="true">
+      <mat-nav-list>
+        <mat-list-item *ngFor="let activity of allParents" (click)="enterActivity(activity)">
+          <a  >{{activity.name | truncate : 15}}</a>
+        </mat-list-item>
+      </mat-nav-list>
+
+    <mat-divider></mat-divider>
+
+    <div>
+    <label>Hide Closed</label>
+    <mat-button-toggle-group name="showOrHideActivities" aria-label="Font Style">
+      <mat-button-toggle value="on">On</mat-button-toggle>
+      <mat-button-toggle value="off">Off Closed</mat-button-toggle>
+    </mat-button-toggle-group>
+
+
+
+
             <label>Hide Closed</label>
             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" [ngModel]="hideDone" (change)="hide()">
                 <label class="onoffswitch-label" for="myonoffswitch">
                     <span class="onoffswitch-inner"></span>
                 </label>
-        </div>
-    </div>
+      </div>
+  </mat-sidenav>
 
-    <div class="canvas">
+  <mat-sidenav-content>
         <ul class="activities">
             <li *ngFor="let activity of activities" draggable="true" (contextmenu)="contextMenu($event, activity)"
                     (dblclick)="enterActivity(activity)" (click)="onSelect(activity)"
@@ -27,8 +39,9 @@
             </li>
         </ul>
 
-
-        <button (click)="addActivity()" class="round-button add-button">+</button>
+        <button mat-icon-button color="primary" (click)="addActivity()" class="add-button">
+          <mat-icon aria-label="Add an activity">add_circle</mat-icon>
+        </button>
 
         <div *ngIf="addingActivity">
             <my-activity-detail [parentActivity]="parentActivity" [activity]="null" (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
@@ -37,5 +50,7 @@
         <div *ngIf="selectedActivity">
             <my-activity-detail [activity]="selectedActivity" (savedNewActivity)="listActivitiesChanged($event);"></my-activity-detail>
         </div>
-    </div>
-</div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

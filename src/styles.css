@@ -1,15 +1,5 @@
 @import '../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-.app_title {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 250%;
-  background-color:#369;
-  color:white;
-  text-align:center;
-  pading: 5px;
-  margin: 0 0 .2em;
-}
-
 .navbar-custom {
   background-color:#369;
   border-color: #369;
@@ -55,9 +45,11 @@ html, body {
 }
 
 .app_body {
-  min-height: 90%;
-  width:100%;
-  padding-bottom:30px;
+  position: absolute;
+  top: 60px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
 }
 
 .app_footer {
@@ -72,4 +64,5 @@ html, body {
   position:absolute;
   bottom:0;
   left:0;
+  bottom: 0;
 }
