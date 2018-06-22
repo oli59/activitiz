@@ -1,5 +1,5 @@
 .hidden {
-    display: none
+    display: none !important;
 }
 .navi{
     margin: 0 0 0.5em 0.5em;
@@ -9,107 +9,53 @@
 }
 
 .activities {
-    margin: 0 0 2em 2em;
-    position: relative;
-    list-style-type: none;
-    width: 20em;
-}
-.activities li {
-    text-align: center;
+    text-align: left;
     cursor: pointer;
     position: relative;
     left: 0;
     background-color: #EEE;
     margin: .5em;
-    padding: 0.3em 0;
     height: 4em;
     border-radius: 4px;
+    width: 500px;
 }
-.activities li.done {
+.activities:hover {
+  color: #607D8B;
+  background-color: #DDD;
+  left: .1em;
+}
+
+.done {
     color:#000 !important;
     background-color:#a2cf6f !important
 }
-.activities li.cancelled {
+.cancelled {
     color:#fff !important;
     background-color:#f6665c !important
 }
-.activities li.selected {
+.selected {
     background-color: #BBD8DC !important;
     color: white;
 }
-.activities li:hover {
-    color: #607D8B;
-    background-color: #DDD;
-    left: .1em;
-}
-.activities .text {
-    position: relative;
-    top: -3px;
-}
-.details {
-    posititon:relative;
-    bottom: -5em;
-    width: 100%;
-    minimum-height: 50em;
-    border: 1px solid black;
+
+.detail {
+    position:relative;
+    /*bottom: 30px;*/
 }
 .add-button {
     position:absolute;
     top:20px;
     right:20px;
 }
-
-.onoffswitch {
-    position: relative; width: 62px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
-}
-.onoffswitch-checkbox {
-    display: none;
-}
-.onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 13px;
-}
-.onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
-}
-.onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
-    box-sizing: border-box;
-}
-.onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 10px;
-    background-color: #34A7C1; color: #FFFFFF;
-}
-.onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 10px;
-    background-color: #EEEEEE; color: #999999;
-    text-align: right;
-}
-.onoffswitch-switch {
-    display: block; width: 11px; margin: 4.5px;
-    background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
-    right: 38px;
-    border: 2px solid #999999; border-radius: 13px;
-    transition: all 0.3s ease-in 0s;
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-    margin-left: 0;
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0px;
-}
-
 .activities-container {
-  position: absolute;
+  /*position: absolute;
   top: 60px;
-  bottom: 60px;
+  bottom: 30px;
   left: 0;
-  right: 0;
+  right: 0;*/
 }
+
+
+
+
 

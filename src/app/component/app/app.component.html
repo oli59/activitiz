@@ -1,0 +1,26 @@
+<div fxLayout="column" fxLayoutAlign="stretch" style="width:100%;">
+
+  <mat-toolbar color="primary" fxFlex="none">
+    <span>{{title}}</span>
+    <a mat-button class="buttonhov" href="#" routerLink="/activities" routerLinkActive="active">Activities</a>
+    <a mat-button class="buttonhov" href="#" routerLink="/timelogs" routerLinkActive="active">Time Log</a>
+    <a mat-button class="buttonhov" href="#">Stats</a>
+    <a mat-button class="buttonhov" href="#" routerLink="/journal" routerLinkActive="active">Journal</a>
+    <timer></timer>
+  </mat-toolbar>
+
+
+  <div fxLayout="column" fxFlex="grow" style="position:relative; overflow-y: auto">
+    <my-errors fxFlex="none"></my-errors>
+
+    <activity-contextmenu fxFlex="none"></activity-contextmenu>
+    <journallog-contextmenu fxFlex="none"></journallog-contextmenu>
+
+      <router-outlet></router-outlet>
+    <mat-toolbar fxFlex="none" color="primary" class="app-footer">
+    OM  2016
+  </mat-toolbar>
+  </div>
+
+</div>
+

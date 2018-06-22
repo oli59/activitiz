@@ -2,7 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule }    from '@angular/http';
-import {AppComponent }         from './app.component';
+import {AppComponent }         from './component/app/app.component';
 import {ActivitiesComponent }      from './component/activities/activities.component';
 import {ActivityService} from './service/activity.service';
 import {ErrorService} from './service/error.service'
@@ -27,7 +27,7 @@ import {JournallogService} from './service/journallog.service';
 import {JournallogContextMenuService} from './service/journallog-contextmenu.service';
 import {JournallogContextmenuComponent} from './component/journallog-contextmenu/journallog-contextmenu.component'
 import {JournalLogUpdateComponent} from './component/journallog-update/journallog-update.component'
-import {MatButtonToggleModule, MatListModule, MatSidenavModule, MatDialogModule, MatInputModule, MatSelectModule, MatRadioModule, MatIconModule, MatCardModule, MatListModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
+import {MatMenuModule, MatSlideToggleModule, MatToolbarModule, MatButtonToggleModule, MatSidenavModule, MatDialogModule, MatInputModule, MatSelectModule, MatRadioModule, MatIconModule, MatCardModule, MatListModule, MatAutocompleteModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
 
 @NgModule({
     imports: [
@@ -50,7 +50,9 @@ import {MatButtonToggleModule, MatListModule, MatSidenavModule, MatDialogModule,
         MatCheckboxModule,
         MatSidenavModule,
         MatButtonToggleModule,
-        MatListModule,
+        MatToolbarModule,
+        MatSlideToggleModule,
+        MatMenuModule
     ],
     declarations: [
         AppComponent,

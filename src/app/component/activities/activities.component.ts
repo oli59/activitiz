@@ -9,6 +9,7 @@ import {ActivityContextMenuService} from '../../service/activity-contextmenu.ser
     selector: 'my-activities',
     templateUrl: 'activities.component.html',
     styleUrls:['activities.component.css'],
+    host: {class: 'myClass'},
 })
 
 export class ActivitiesComponent implements OnInit{
@@ -31,7 +32,6 @@ export class ActivitiesComponent implements OnInit{
         scheduling_detail: null
     };
     allParents = [this.topActivity];
-    links = ["one", "two"];
 
 
     constructor(private activityService: ActivityService, private errorService: ErrorService,
@@ -39,14 +39,14 @@ export class ActivitiesComponent implements OnInit{
 
     onSelect(activity: Activity) {
         this.selectedActivity = activity;
-        this.addingActivity = null;
+        this.addingActivity = false;
     }
 
     enterActivity(activity) {
         if (activity != this.parentActivity) {
             this.errorService.reset();
             this.selectedActivity = null;
-            this.addingActivity = null;
+            this.addingActivity = false;
             this.parentActivity = activity;
             this.getActivities();
             this.getAllParents();
@@ -55,6 +55,8 @@ export class ActivitiesComponent implements OnInit{
 
     ngOnInit(){
         this.getActivities();
+        this.hideDone = true;
+        this.allParents = [this.topActivity];
     }
 
     contextMenu(event, activity: Activity) {
@@ -93,7 +95,4 @@ export class ActivitiesComponent implements OnInit{
         this.getActivities();
     }
 
-    hide() {
-        this.hideDone = (this.hideDone) ? false : true
-    }
 }
