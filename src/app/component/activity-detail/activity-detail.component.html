@@ -1,70 +1,77 @@
-<div class="panel panel-primary">
-    <div  class="panel-heading">{{activity.name}}</div>
-    <div class="panel-body">
-        <div>
-          <mat-input-container>
-            <input matInput style="width:80%" [(ngModel)]="activity.name" required placeholder="name">
-          </mat-input-container>
-          <mat-select placeholder="Status" [(ngModel)]="activity.status">
-            <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
-          </mat-select>
-          <p></p>
+<mat-expansion-panel expanded>
+  <mat-expansion-panel-header style="background-color:#EEE">
+    <mat-panel-title>
+      {{activity.name}}
+    </mat-panel-title>
+    <mat-panel-description>
+      Edit activity
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <form>
+    <mat-form-field style="width:85%; padding-top: 20px">
+        <input matInput [(ngModel)]="activity.name" required placeholder="Name" name="name">
+    </mat-form-field>
+    <mat-form-field style="width:10%; padding-left: 2em">
+      <mat-label>Status </mat-label>
+      <mat-select placeholder="Status" [(ngModel)]="activity.status" name="status">
+        <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-radio-group style="width:100%;" [(ngModel)] = "activity.scheduling_mode" name="radio-button-group">
+      <mat-label style="font-weight: bold; padding-right: 2em">Scheduling : </mat-label>
+      <mat-radio-button style="margin-right: 30px;" *ngFor="let mode of modes" [value]="mode">{{ mode }}</mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field style="max-width:12em;">
+      <input matInput [(ngModel)]="activity.typical_duration" min="0" type="number" required placeholder="typical_duration" name="typical_duration">
+    </mat-form-field> (Minutes)
+    <mat-form-field style="padding-left: 2em; max-width:12em;">
+      <input matInput [(ngModel)]="activity.current_points" type="number" required placeholder="current_point" name="current_points">
+    </mat-form-field> (Minutes)
+    <mat-form-field style="padding-left: 2em;" *ngIf="activity.scheduling_mode === 'Deadline'" name="deadline">
+      <input matInput type="date" required placeholder="DeadLine" [value]="activity.deadline | date:'yyyy-MM-dd'" (input)="activity.deadline=parseDate($event.target.value)">
+    </mat-form-field>
+    <mat-card style="width:95%;" *ngIf="activity.scheduling_mode === 'Recurrent'">
+      <mat-card-header>
+        <mat-card-title style="font-weight: bold;">Scheduling by Frequency</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-radio-group [(ngModel)] = "activity.scheduling_period" name="sheduling_period">
+          <mat-radio-button  style="margin-right: 30px;" *ngFor="let period of periods" [value]="period">{{ period }}</mat-radio-button>
+        </mat-radio-group>
+        <div *ngIf="activity.scheduling_period === 'Day'">
+          Every
+          <mat-form-field style="max-width:3em">
+            <input matInput  type="number" min="1" maxlength="3" [(ngModel)]="activity.scheduling_pace" required name="scheduling_pace">
+          </mat-form-field> Days
         </div>
-        <div>
-          Scheduling
-          <br>
-          <mat-radio-group [(ngModel)] = "activity.scheduling_mode">
-            <mat-radio-button style="margin-right: 30px;" *ngFor="let mode of modes" [value]="mode">{{ mode }}</mat-radio-button>
-          </mat-radio-group>
+        <div *ngIf="activity.scheduling_period === 'Week'">
+          Every
+          <mat-form-field style="max-width:3em">
+            <input matInput  type="number" maxlength="3" min="1" [(ngModel)]="activity.scheduling_pace" required name="scheduling_pace">
+          </mat-form-field> Weeks
+          <mat-checkbox style="padding-left: 30px;" *ngFor="let day of days" [(ngModel)]="day.selected" [ngModelOptions]="{standalone: true}">{{day.name}} </mat-checkbox>
         </div>
-        <mat-input-container>
-          <input matInput style="width:80%" [(ngModel)]="activity.typical_duration" min="0" required placeholder="typical_duration">
-        </mat-input-container> (Minutes)
-        <mat-input-container>
-          <input matInput style="width:80%" [(ngModel)]="activity.current_points" required placeholder="current_point">
-        </mat-input-container> (Minutes)
-        <mat-input-container *ngIf="activity.scheduling_mode === 'Deadline'">
-          <input matInput type="date" required placeholder="DeadLine" [value]="activity.deadline | date:'yyyy-MM-dd'" (input)="activity.deadline=parseDate($event.target.value)">
-        </mat-input-container>
-        <div *ngIf="activity.scheduling_mode === 'Recurrent'">
-          <div>
-            Scheduling by Frequency
-            <br>
-            <mat-radio-group [(ngModel)] = "activity.scheduling_period">
-              <mat-radio-button  style="margin-right: 30px;" *ngFor="let period of periods" [value]="period">{{ period }}</mat-radio-button>
-            </mat-radio-group>
-          </div>
-          <div *ngIf="activity.scheduling_period === 'Day'">
-            Every
-            <mat-input-container style="max-width:3em">
-              <input matInput  type="number" min="1" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
-            </mat-input-container> Days
-          </div>
-          <div *ngIf="activity.scheduling_period === 'Week'">
-            Every
-            <mat-input-container style="max-width:3em">
-              <input matInput  type="number" maxlength="3" min="1" [(ngModel)]="activity.scheduling_pace" required>
-            </mat-input-container> Weeks
-            <section>
-            <mat-checkbox style="margin-right: 30px;" *ngFor="let day of days" [(ngModel)]="day.selected">{{day.name}} </mat-checkbox>
-            </section>
-          </div>
-          <div *ngIf="activity.scheduling_period === 'Month'">
-            Day(s)
-            <mat-input-container style="max-width:3em">
-              <input matInput maxlength="20" style="width: 20em;" [(ngModel)]="activity.scheduling_detail" required>
-            </mat-input-container>
-            of every
-            <mat-input-container style="max-width:3em">
-              <input matInput  type="number" min="1" maxlength="3" [(ngModel)]="activity.scheduling_pace" required>
-            </mat-input-container> Months
-          </div>
+        <div *ngIf="activity.scheduling_period === 'Month'">
+          Day(s)
+          <mat-form-field style="max-width:20em">
+            <input matInput maxlength="20" style="width: 20em;" [(ngModel)]="activity.scheduling_detail" name="scheduling_detail" required>
+          </mat-form-field>
+          of every
+          <mat-form-field style="max-width:3em">
+            <input matInput  type="number" min="1" maxlength="3" [(ngModel)]="activity.scheduling_pace" name="scheduling_pace" required>
+          </mat-form-field> Months
         </div>
+      </mat-card-content>
+    </mat-card>
+    <div style="padding-top: 20px">
+      <button mat-raised-button (click)="save()">Save</button>
+      <button mat-raised-button *ngIf="existingActivity" (click)="deleteConfirmation()">Delete</button>
     </div>
-    <div class="panel-footer">
-        <button type="button" class="btn btn-primary" (click)="save()">Save</button>
-        <button type="button" class="btn btn-primary" *ngIf="existingActivity" (click)="deleteConfirmation()">Delete</button>
-    </div>
+  </form>
+
+</mat-expansion-panel>
+
 
     <div *ngIf="showDeleteConfirmation" class="modal fade show in danger">
         <div class="modal-dialog">
@@ -84,4 +91,4 @@
             </div>
         </div>
     </div>
-</div>
+

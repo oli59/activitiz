@@ -13,8 +13,9 @@
 
   </mat-sidenav>
 
-  <mat-sidenav-content style="padding-left: 20px;">
+  <mat-sidenav-content style="padding-left: 20px;" fxLayout="column" fxLayoutAlign="stretch">
 
+    <div fxFlex="grow">
     <mat-list>
       <mat-list-item *ngFor="let activity of activities" draggable="true" (contextmenu)="contextMenu($event, activity)"
                      (dblclick)="enterActivity(activity)" (click)="onSelect(activity)" class="activities"
@@ -25,6 +26,7 @@
         {{activity.name}}
       </mat-list-item>
     </mat-list>
+    </div>
 
     <button mat-icon-button color="primary" (click)="addActivity()" class="add-button">
       <mat-icon aria-label="Add an activity">add_circle</mat-icon>
