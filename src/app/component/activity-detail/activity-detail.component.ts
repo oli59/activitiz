@@ -4,6 +4,7 @@ import {activityStatuses} from '../../domain/activity-statuses';
 import { ActivityService } from '../../service/activity.service';
 import {schedulingModes, schedulingPeriods} from '../../domain/scheduling-modes';
 import {selector} from "rxjs/operator/publish";
+import {MatDialog, MatDialogRef} from "@angular/material";
 
 
 
@@ -18,7 +19,6 @@ export class ActivityDetailComponent implements OnInit {
     @Input() parentActivity;
     @Output() savedNewActivity = new EventEmitter();
     error: any;
-    showDeleteConfirmation = false;
     existingActivity;
     statuses = activityStatuses;
     modes = schedulingModes;
@@ -26,6 +26,7 @@ export class ActivityDetailComponent implements OnInit {
     days: [{name: string, selected: boolean}];
 
     constructor (
+        public dialog: MatDialog,
         private activityService: ActivityService
     ) {}
 
@@ -72,19 +73,19 @@ export class ActivityDetailComponent implements OnInit {
             .catch(error => this.error = error)
     }
 
-    deleteConfirmation() {
-        this.showDeleteConfirmation = true;
-    }
-
-    abortDelete() {
-        this.showDeleteConfirmation = false;
+    openDeleteConfirmation() {
+       const dialogRef = this.dialog.open(DeleteConfirmationDialog);
+       dialogRef.afterClosed().subscribe(result => {
+         if (result == true) {
+           this.delete();
+         }
+       });
     }
 
     delete() {
         this.activityService
             .delete(this.activity)
             .then(response => {
-                this.showDeleteConfirmation = false;
                 this.savedNewActivity.emit({
                     value: this.activity
                 });
@@ -134,3 +135,22 @@ export class ActivityDetailComponent implements OnInit {
     }
   }
 }
+
+
+@Component({
+  selector: 'delete-confirmation-dialog',
+  templateUrl: 'delete-confirmation-dialog.component.html',
+})
+export class DeleteConfirmationDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<DeleteConfirmationDialog>) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+
+

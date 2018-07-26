@@ -10,7 +10,7 @@ import {ActivityContextMenuService} from './service/activity-contextmenu.service
 import {ErrorsComponent} from './component/errors/errors.component';
 import {ActivityContextmenuComponent} from './component/activity-contextmenu/activity-contextmenu.component';
 import {TruncatePipe} from './utils/pipes/truncate';
-import {ActivityDetailComponent} from './component/activity-detail/activity-detail.component';
+import {ActivityDetailComponent, DeleteConfirmationDialog} from './component/activity-detail/activity-detail.component';
 import {LogtimeComponent} from './component/timelog/timelog.component'
 import {TimelogService} from './service/timelog.service'
 import {TimelogDialogService} from './service/timelog-dialog.service'
@@ -69,9 +69,10 @@ import {MatExpansionModule, MatMenuModule, MatSlideToggleModule, MatToolbarModul
         JournalComponent,
         JournalLogDetailComponent,
         JournallogContextmenuComponent,
-        JournalLogUpdateComponent
+        JournalLogUpdateComponent,
+        DeleteConfirmationDialog
     ],
-    entryComponents: [JournalLogDetailComponent, LogtimeComponent, JournalLogUpdateComponent],
+    entryComponents: [JournalLogDetailComponent, LogtimeComponent, JournalLogUpdateComponent, DeleteConfirmationDialog],
     providers: [
         ActivityService, ErrorService, ActivityContextMenuService, TimelogService,TimelogDialogService, TimerService, JournallogService, JournallogContextMenuService
     ],
