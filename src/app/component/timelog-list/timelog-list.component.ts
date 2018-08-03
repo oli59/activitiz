@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {OnInit} from '@angular/core'
 import {TimelogService} from '../../service/timelog.service';
 import {Timelog} from "../../domain/timelog";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
     selector: 'my-timelog-list',
@@ -12,6 +13,7 @@ import {Timelog} from "../../domain/timelog";
 
 export class LogtimeListComponent implements OnInit {
     timelogs: Timelog[];
+    dateSource: MatTableDataSource<Timelog>;
 
     constructor(private timelogService: TimelogService) {}
 
@@ -20,11 +22,10 @@ export class LogtimeListComponent implements OnInit {
     }
 
     getTimelogs() {
-        this.timelogService.getTimelogs().then(timelogs => this.timelogs = timelogs)
+        this.timelogService.getTimelogs().then(timelogs => {
+          this.timelogs = timelogs;
+          this.dateSource=new MatTableDataSource(timelogs);
+        })
         /*.catch();*/
     }
-
-
-
-
 }
