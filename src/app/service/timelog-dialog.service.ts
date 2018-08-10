@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http, URLSearchParams} from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+
 import {Activity} from '../domain/activity';
 import {TimelogService} from './timelog.service'
 
@@ -9,7 +8,7 @@ import {Timelog} from '../domain/timelog';
 import {MatDialog} from '@angular/material';
 import {LogtimeComponent} from '../component/timelog/timelog.component'
 import {TimerData} from '../domain/timer-data';
-import {Observable} from "rxjs/Rx";
+import { Observable} from 'rxjs';
 
 @Injectable()
 export class TimelogDialogService {

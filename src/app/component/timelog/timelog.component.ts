@@ -27,7 +27,7 @@ export class LogtimeComponent {
     }
 
     logtime () {
-      this.timelogService.logtime(this.data.timelog, this.data.activity).then(result => {
+      this.timelogService.logtime(this.data.timelog, this.data.activity).subscribe((result: Timelog) => {
         this.dialogRef.close(result.id);
         if (this.data.timerData !== null) {
           this.timerService.emitLogtimeId(this.data.timerData, result.id);

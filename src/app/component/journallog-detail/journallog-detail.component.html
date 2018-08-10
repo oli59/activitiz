@@ -7,9 +7,9 @@
 
   <div  *ngIf="logType === 'activity'">
 
-    <mat-input-container style="width: 100%">
+    <mat-form-field style="width: 100%">
       <input matInput placeholder="Activity" [matAutocomplete]="reactiveAuto" [formControl]="activityCtrl">
-    </mat-input-container>
+    </mat-form-field>
 
 
     <mat-autocomplete style="width: 50em" #reactiveAuto="matAutocomplete" [displayWith]="displayFn">

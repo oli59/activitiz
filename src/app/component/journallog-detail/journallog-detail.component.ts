@@ -1,10 +1,12 @@
 import { Component }       from '@angular/core';
 import {MatDialogRef} from'@angular/material';
-import 'rxjs/add/operator/startWith';
+
 import { FormControl} from '@angular/forms';
 import {Activity} from '../../domain/activity';
 import {ActivityService} from '../../service/activity.service';
 import {Journallog} from '../../domain/journallog'
+import {startWith, map} from 'rxjs/operators'
+
 
 
 @Component({selector: 'my-journallog-detail',
@@ -24,12 +26,13 @@ export class JournalLogDetailComponent {
     this.logType = "activity";
     this.activityCtrl = new FormControl();
 
-    activityService.getAllLeafActivities()
-      .then(activities => {this.activities = activities});
+    activityService.getAllLeafActivities().subscribe((activities: Activity[]) => {this.activities = activities;});
 
-    this.filteredActivities = this.activityCtrl.valueChanges
-      .startWith(null)
-      .map(name => this.filterActivities(name));
+
+    this.filteredActivities = this.activityCtrl.valueChanges.pipe(
+      startWith(null),
+      map(name => this.filterActivities(name))
+    );
   }
 
   filterActivities(val: string) {

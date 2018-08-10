@@ -65,13 +65,11 @@ export class ActivitiesComponent implements OnInit{
     }
 
     getActivities () {
-        this.activityService.getActivitiesByParent(this.parentActivity)
-            .then(activities => this.activities = activities)
-            /*.catch();*/
+        this.activityService.getActivitiesByParent(this.parentActivity).subscribe((activities: Activity[]) => this.activities = activities);
     }
 
     getAllParents() {
-        this.activityService.getAllParents(this.parentActivity).then(activities => {
+        this.activityService.getAllParents(this.parentActivity).subscribe((activities:Activity[]) => {
                 if (activities != null) {
                     this.allParents = activities;
                     this.allParents.unshift(this.topActivity);
@@ -80,8 +78,7 @@ export class ActivitiesComponent implements OnInit{
                     this.allParents = [];
                     this.allParents.unshift(this.topActivity);
                 }
-            }
-        )/*.catch()*/;
+            });
     }
 
     addActivity() {

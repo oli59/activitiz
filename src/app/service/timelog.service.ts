@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http, URLSearchParams} from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http'
+
 import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
 import {Timelog} from '../domain/timelog';
 import {serverUrl} from '../config/parameters';
 import {MatDialog} from '@angular/material';
-import {LogtimeComponent} from '../component/timelog/timelog.component'
+import {catchError} from "rxjs/internal/operators/catchError";
+
 
 @Injectable()
 export class TimelogService {
@@ -16,58 +17,38 @@ export class TimelogService {
 
     private timelogUrl = serverUrl + '/time_log';
 
-  constructor(private dialog: MatDialog, private http: Http, private errorService: ErrorService) {}
+  constructor(private httpClient: HttpClient, private dialog: MatDialog, private errorService: ErrorService) {}
 
-    logtime(timelog: Timelog, activity: Activity): Promise<Timelog> {
+    logtime(timelog: Timelog, activity: Activity) {
         timelog.activity_id = activity.id;
-        return this.post(timelog);
+        return this.post(timelog)
+          .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
     }
 
-    private post(timelog: Timelog): Promise<Timelog> {
-        let headers = new Headers({
-            'Content-Type': 'application/json'});
+    private post(timelog: Timelog) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+        })
+      };
 
-        return this.http
-            .post(this.timelogUrl, JSON.stringify(timelog), {headers: headers})
-            .toPromise()
-            .then(res => res.json())
-            .catch(err => {
-                this.handleError(err);
-            });
+        return this.httpClient
+            .post(this.timelogUrl, JSON.stringify(timelog), httpOptions)
+          .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
     }
 
     getTimelog(id: number) {
-        let params: URLSearchParams = new URLSearchParams();
-        params.set('id', id.toString());
+      const options = { params: new HttpParams().set('id', id.toString()) };
 
-        return this.http.get(this.timelogUrl, {search: params})
-          .toPromise()
-          .then(response => response.json())
-          .catch(err => {
-            this.handleError(err);
-          });
+        return this.httpClient.get(this.timelogUrl, options)
+          .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
     }
 
     getTimelogs() {
-        let params: URLSearchParams = new URLSearchParams();
-        params.set('ids', '3');
+      const options = { params: new HttpParams().set('ids', '3') };
 
-        return this.http.get(this.timelogUrl, {search: params})
-            .toPromise()
-            .then(response => response.json())
-            .catch(err => {
-                this.handleError(err);
-            });
-    }
-
-    private handleError(error: any) {
-        console.error('An error occurred', error);
-
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server did not reply';
-
-        this.errorService.addError(errMsg);
-        return Promise.reject(errMsg);
+      return this.httpClient.get(this.timelogUrl, options)
+        .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
     }
 
 }

@@ -22,7 +22,7 @@ export class LogtimeListComponent implements OnInit {
     }
 
     getTimelogs() {
-        this.timelogService.getTimelogs().then(timelogs => {
+        this.timelogService.getTimelogs().subscribe((timelogs: Timelog[]) => {
           this.timelogs = timelogs;
           this.dateSource=new MatTableDataSource(timelogs);
         })

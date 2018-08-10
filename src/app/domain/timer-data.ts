@@ -1,6 +1,6 @@
-import {Observable} from 'rxjs/Rx'
+import { Observable} from 'rxjs';
 import {Activity} from '../domain/activity';
-import {Subject} from 'rxjs/Subject'
+import {Subject} from 'rxjs'
 
 export class TimerData {
   timer: Observable<number>;

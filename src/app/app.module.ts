@@ -1,7 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { HttpModule }    from '@angular/http';
+import { HttpClientModule }    from '@angular/common/http';
 import {AppComponent }         from './component/app/app.component';
 import {ActivitiesComponent }      from './component/activities/activities.component';
 import {ActivityService} from './service/activity.service';
@@ -34,7 +34,7 @@ import {CdkTableModule} from '@angular/cdk/table';
     imports: [
         BrowserModule,
         FormsModule,
-        HttpModule,
+        HttpClientModule,
         routing,
         FlexLayoutModule,
         ReactiveFormsModule,

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Rx'
-//import internal = require("stream");
+
 import {Activity} from '../domain/activity';
 import {TimerData} from '../domain/timer-data';
-import {Subject} from 'rxjs/Subject'
+import {Subject, timer} from 'rxjs'
+
 
 @Injectable()
 export class TimerService {
@@ -14,11 +14,11 @@ export class TimerService {
     constructor() {}
 
     createTimer(activity: Activity) : Subject<number> {
-        let timer = Observable.timer(0, 1000);
+        let timerObs = timer(0, 1000);
 
 
         let timerData = new TimerData;
-        timerData.timer = timer;
+        timerData.timer = timerObs;
         timerData.activity = activity;
         timerData.minutes = 0;
         timerData.hours = 0;
@@ -27,7 +27,7 @@ export class TimerService {
         timerData.timelog = new Subject<number>()
         this.timers.push(timerData);
 
-        timerData.subscription = timer.subscribe(t=> this.calculateMinutesHours(timerData));
+        timerData.subscription = timerObs.subscribe(t=> this.calculateMinutesHours(timerData));
 
         return timerData.timelog;
     }

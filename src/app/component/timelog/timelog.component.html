@@ -3,37 +3,37 @@
   <table>
     <tr>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="text" disabled placeholder="Name" value="{{data.activity.name}}">
-        </mat-input-container>
+        </mat-form-field>
       </td>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="text" disabled placeholder="Status" value="{{data.activity.status}}">
-        </mat-input-container>
+        </mat-form-field>
       </td>
     </tr>
     <tr>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="date" required placeholder="Date" [value]="data.timelog.date | date:'yyyy-MM-dd'" (input)="data.timelog.date=parseDate($event.target.value)">
-        </mat-input-container>
+        </mat-form-field>
       </td>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="time" required placeholder="Start" [(ngModel)]="data.timelog.start_hour">
-        </mat-input-container>
+        </mat-form-field>
       </td>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="time" required placeholder="End" [(ngModel)]="data.timelog.end_hour">
-        </mat-input-container>
+        </mat-form-field>
       </td>
     </tr>
   </table>
-  <mat-input-container style="width: 100%">
+  <mat-form-field style="width: 100%">
     <input matInput type="text" placeholder="Commentaire" style="width: 100%" [(ngModel)]="data.timelog.comment">
-  </mat-input-container>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions>

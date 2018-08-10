@@ -1,146 +1,121 @@
 import {Injectable} from '@angular/core';
-import { RequestOptions, Headers, Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
+import {HttpClient, HttpHeaders} from '@angular/common/http'
+
 import {Activity} from '../domain/activity';
 import {ErrorService} from './error.service';
 import {serverUrl} from '../config/parameters';
+import {catchError } from "rxjs/internal/operators";
 
 @Injectable()
 export class ActivityService {
 
-    private activitiesUrl = serverUrl + '/activities';
-    private activitiesByParent = serverUrl + '/activitiesByParent'
-    private allParentsUrl = serverUrl + '/allParents';
-    private allLeafsUrl = serverUrl + '/allLeafs';
+  private activitiesUrl = serverUrl + '/activities';
+  private activitiesByParent = serverUrl + '/activitiesByParent'
+  private allParentsUrl = serverUrl + '/allParents';
+  private allLeafsUrl = serverUrl + '/allLeafs';
 
-    constructor(private http: Http, private errorService: ErrorService) {}
+  constructor(private httpClient:HttpClient, private errorService:ErrorService) {
+  }
 
-    getActivity(activityId: number) {
-      return this.http.get(this.activitiesUrl + "/" + activityId)
-        .toPromise()
-        .then(response => response.json())
-        .catch(err => {
-          this.handleError(err);
-        });
+  getActivity(activityId:number) {
+    return this.httpClient.get(this.activitiesUrl + "/" + activityId)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
+  }
+
+  getActivitiesByParent(parentActivity:Activity) {
+    let id = null;
+    if (parentActivity != null)
+      id = parentActivity.id;
+
+    return this.httpClient.get(this.activitiesByParent + "/" + id)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
+  }
+
+  getAllLeafActivities() {
+    return this.httpClient.get(this.allLeafsUrl)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
+  }
+
+  getAllParents(activity:Activity) {
+    let id = null;
+    if (activity != null)
+      id = activity.id;
+    return this.httpClient.get(this.allParentsUrl + "/" + id)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
+  }
+
+
+  // Add new Activity
+  private post(activity:Activity) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+
+    //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
+    activity.typical_duration = Number(activity.typical_duration);
+    activity.current_points = Number(activity.current_points);
+    activity.scheduling_pace = Number(activity.scheduling_pace);
+    if (activity.parent_id > 0) {
+      activity.parent_id = Number(activity.parent_id);
     }
 
-    getActivitiesByParent(parentActivity: Activity) {
-        let id = null;
-        if (parentActivity != null)
-            id = parentActivity.id;
-        return this.http.get(this.activitiesByParent + "/" + id)
-            .toPromise()
-            .then(response => response.json())
-            .catch(err => {
-                this.handleError(err);
-            });
+    return this.httpClient
+      .post(this.activitiesUrl, JSON.stringify(activity), httpOptions)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
+  }
+
+
+  //Update activity
+  private put(activity:Activity) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+
+    let url = `${this.activitiesUrl}`;
+
+    //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
+    activity.typical_duration = Number(activity.typical_duration);
+    activity.current_points = Number(activity.current_points);
+    activity.scheduling_pace = Number(activity.scheduling_pace);
+    if (activity.parent_id > 0) {
+      activity.parent_id = Number(activity.parent_id);
     }
 
-    getAllLeafActivities() {
-      return this.http.get(this.allLeafsUrl)
-        .toPromise()
-        .then(response => response.json())
-        .catch(err => {
-          this.handleError(err);
-        });
+    return this.httpClient
+      .put(url, JSON.stringify(activity), httpOptions)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
+  }
+
+
+  //physically delete an activity
+  delete(activity:Activity) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+
+    let url = `${this.activitiesUrl}/${activity.id}`;
+
+    return this.httpClient
+      .delete(url, httpOptions)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
+  }
+
+
+  save(activity:Activity) {
+    console.log("save");
+    if (activity.id) {
+      return this.put(activity);
     }
-
-    getAllParents(activity: Activity) {
-        let id = null;
-        if (activity != null)
-            id = activity.id;
-        return this.http.get(this.allParentsUrl + "/" + id)
-            .toPromise()
-            .then(response => response.json())
-            .catch(err => {
-                this.handleError(err);
-            });
+    else {
+      activity.status = 'new';
+      return this.post(activity);
     }
+  }
 
-
-    // Add new Activity
-    private post(activity: Activity): Promise<Activity> {
-        let headers = new Headers({'Content-Type': 'application/json'});
-        let options = new RequestOptions({headers: headers});
-
-      //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
-      activity.typical_duration = Number(activity.typical_duration);
-      activity.current_points = Number(activity.current_points);
-      activity.scheduling_pace = Number(activity.scheduling_pace);
-      if (activity.parent_id > 0) {
-        activity.parent_id = Number(activity.parent_id);
-      }
-
-        return this.http
-            .post(this.activitiesUrl, JSON.stringify(activity), options)
-            .toPromise()
-            .then(res => res.json())
-            .catch(err => {
-                this.handleError(err);
-            });
-    }
-
-
-    //Update activity
-    private put(activity: Activity) {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-        let url = `${this.activitiesUrl}`;
-
-        //Cast as number as a workaround because json stringify method sometimes detect it as a string (Weird !!) => backend server error
-        activity.typical_duration = Number(activity.typical_duration);
-        activity.current_points = Number(activity.current_points);
-        activity.scheduling_pace = Number(activity.scheduling_pace);
-        if (activity.parent_id > 0) {
-          activity.parent_id = Number(activity.parent_id);
-        }
-
-        return this.http
-            .put(url, JSON.stringify(activity), {headers: headers})
-            .toPromise()
-            .then(res => res.json())
-            .catch(err => {
-                this.handleError(err);
-            });
-    }
-
-
-    //physically delete an activity
-    delete(activity: Activity) {
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        let options = new RequestOptions({headers: headers});
-
-        let url = `${this.activitiesUrl}/${activity.id}`;
-
-        return this.http
-            .delete(url, options)
-            .toPromise()
-            .catch(err => {
-                this.handleError(err);
-            });
-    }
-
-
-    save(activity: Activity): Promise<Activity>  {
-        console.log("save");
-        if (activity.id) {
-            return this.put(activity);
-        }
-        else {
-            activity.status = 'new';
-            return this.post(activity);
-        }
-    }
-
-    private handleError(error: any) {
-        console.error('An error occurred', error);
-
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server did not reply';
-
-        this.errorService.addError(errMsg);
-        return Promise.reject(errMsg);
-    }
 }

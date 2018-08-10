@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/toPromise';
-import { Headers, Http, Response } from '@angular/http';
+
+import {HttpClient, HttpHeaders} from '@angular/common/http'
 import {ErrorService} from './error.service';
 import {Journallog} from '../domain/journallog'
-import {Observable} from 'rxjs/Rx'
+import { Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
 import {serverUrl} from '../config/parameters';
+import {catchError} from "rxjs/internal/operators/catchError";
 
-// Import RxJs required methods
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class JournallogService {
@@ -19,35 +18,31 @@ export class JournallogService {
   private scheduleUrl = serverUrl + '/schedule'
   private frequencyScheduleUrl = serverUrl + '/frequency_schedule'
 
-  constructor(private http: Http, private errorService: ErrorService) {}
+  constructor(private httpClient: HttpClient, private errorService: ErrorService) {}
 
   getTodayJournallog() {
-      return this.http.get(this.journallogUrl + "/" + this.formatDate(new Date()))
-        .map((response: Response) => {
-          var data = response.json() as Journallog[];
+      return this.httpClient.get(this.journallogUrl + "/" + this.formatDate(new Date()))
+        .pipe(
+        map((response) => {
+          var data = response as Journallog[];
           if (data != null) {
             data.forEach((e) => e.date = new Date(e.date))
           }
-          return data;})
-        .catch((error:any) => {
-          this.handleError(error);
-          return Observable.throw(error.json().error)
-        });
+          return data;}),
+          catchError(this.errorService.handleHttpError.bind(this.errorService)));
   }
 
 
   getNextJournallog(date: Date): Observable<Journallog[]> {
-    let jl = this.http.get(this.journallogNextUrl + "/" + this.formatDate(date))
-      .map((response: Response) => {
-        var data = response.json() as Journallog[];
+    let jl = this.httpClient.get(this.journallogNextUrl + "/" + this.formatDate(date))
+      .pipe(
+        map((response) => {
+        var data = response as Journallog[];
         if (data != null) {
           data.forEach((e) => e.date = new Date(e.date))
         }
         return data;})
-      .catch((error:any) => {
-        this.handleError(error);
-        return Observable.throw(error.json().error)
-      });
+      , catchError(this.errorService.handleHttpError.bind(this.errorService)));
     return jl;
   }
 
@@ -62,64 +57,47 @@ export class JournallogService {
 
   schedule(maxActivities: number) {
     let url = `${this.scheduleUrl + '/' + maxActivities }`
-    return this.http
-      .get(url)
-      .toPromise()
-      .then(res => res.json())
-      .catch(err => {
-        this.handleError(err);
-      });
+    return this.httpClient.get(url)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
   }
 
   //schedule by frequency
   frequencySchedule() {
-    return this.http
+    return this.httpClient
       .get(this.frequencyScheduleUrl)
-      .toPromise()
-      .then(res => res.json())
-      .catch(err => {
-        this.handleError(err);
-      });
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
   }
 
   private put(journalLog: Journallog) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
+
+    console.log("put jounallog")
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
 
     let url = `${this.journallogUrl}`;
 
-    return this.http
-      .put(url, JSON.stringify(journalLog), {headers: headers})
-      .toPromise()
-      .then(res => res.json())
-      .catch(err => {
-        this.handleError(err);
-      });
+    return this.httpClient
+      .put(url, JSON.stringify(journalLog), httpOptions)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
   }
 
   // Add JournalLog
-  private post(journalLog: Journallog): Promise<Journallog> {
-    let headers = new Headers({
-      'Content-Type': 'application/json'});
+  private post(journalLog: Journallog) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
 
-    return this.http
-      .post(this.journallogUrl, JSON.stringify(journalLog), {headers: headers})
-      .toPromise()
-      .then(res => res.json())
-      .catch(err => {
-        this.handleError(err);
-      });
+    return this.httpClient
+      .post(this.journallogUrl, JSON.stringify(journalLog), httpOptions)
+      .pipe(catchError(this.errorService.handleHttpError.bind(this.errorService)));
   }
 
-  private handleError(error: any) {
-    console.error('An error occurred', error);
-
-    let errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server did not reply';
-
-    this.errorService.addError(errMsg);
-    return Promise.reject(errMsg);
-  }
 
   private formatDate(date: Date) {
     return date.getUTCFullYear()

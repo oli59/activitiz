@@ -3,7 +3,6 @@ import {Activity} from '../../domain/activity';
 import {activityStatuses} from '../../domain/activity-statuses';
 import { ActivityService } from '../../service/activity.service';
 import {schedulingModes, schedulingPeriods} from '../../domain/scheduling-modes';
-import {selector} from "rxjs/operator/publish";
 import {MatDialog, MatDialogRef} from "@angular/material";
 
 
@@ -23,7 +22,7 @@ export class ActivityDetailComponent implements OnInit {
     statuses = activityStatuses;
     modes = schedulingModes;
     periods = schedulingPeriods;
-    days: [{name: string, selected: boolean}];
+    days;
 
     constructor (
         public dialog: MatDialog,
@@ -64,13 +63,12 @@ export class ActivityDetailComponent implements OnInit {
         }
         this.activityService
             .save(this.activity)
-            .then(activity => {
+            .subscribe((activity: Activity) => {
                 this.activity=activity;
                 this.savedNewActivity.emit({
                     value: activity
                 });
             })
-            .catch(error => this.error = error)
     }
 
     openDeleteConfirmation() {
@@ -85,12 +83,11 @@ export class ActivityDetailComponent implements OnInit {
     delete() {
         this.activityService
             .delete(this.activity)
-            .then(response => {
+            .subscribe(response => {
                 this.savedNewActivity.emit({
                     value: this.activity
                 });
             })
-            .catch(error => this.error = error)
     }
 
   parseDate(dateString: string): Date {

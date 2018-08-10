@@ -51,7 +51,7 @@ export class ActivityContextMenuService {
         }
         else {
             this.activity.status = link;
-            this.activityService.save(this.activity);
+            this.activityService.save(this.activity).subscribe();
         }
         this.visible = false;
     }

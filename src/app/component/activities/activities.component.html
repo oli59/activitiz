@@ -1,5 +1,5 @@
 <mat-sidenav-container class="activities-container" fxFlex="grow" style="width:100vw">
-  <mat-sidenav mode="side" class="navi" fixedviewport="true" opened="true">
+  <mat-sidenav mode="side" class="navi" opened="true">
     <mat-nav-list>
       <mat-list-item name="parentNav" *ngFor="let activity of allParents" (click)="enterActivity(activity)">
         <a>{{activity.name | truncate : 15}}</a>
@@ -13,7 +13,7 @@
 
   </mat-sidenav>
 
-  <mat-sidenav-content style="padding-left: 20px;" fxLayout="column" fxLayoutAlign="stretch">
+  <mat-sidenav-content style="padding-left: 20px;" fxLayout="row" fxLayoutAlign="stretch">
 
     <div fxFlex="grow">
     <mat-list>

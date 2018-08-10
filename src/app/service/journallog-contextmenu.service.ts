@@ -32,9 +32,7 @@ export class JournallogContextMenuService {
           this.links.push(status);
         }
       }
-      this.activityService.getActivity(journallog.activity_id).then(result => {
-        this.activity = result;
-      })
+      this.activityService.getActivity(journallog.activity_id).subscribe((result: Activity) => this.activity = result);
     }
     this.links.push(this.editLink)
     if ((this.journallog.status === 'open' || this.journallog.status === 'event') && this.journallog.timelog_id === null) {
@@ -61,29 +59,29 @@ export class JournallogContextMenuService {
     if (link === this.startTimerLink) {
       this.timerService.createTimer(this.activity).subscribe(value => {
         this.journallog.timelog_id = value;
-        this.journallogService.save(this.journallog);
+        this.journallogService.save(this.journallog).subscribe();
       });
     }
     else if (link === 'done') {
       this.journallog.status = link;
-      this.journallogService.save(this.journallog)
+      this.journallogService.save(this.journallog).subscribe()
       if (this.journallog.timelog_id === null) {
         this.timelogDialogService.logtimeForActivity(this.activity).subscribe(value => {
           if (value !== undefined) {
             this.journallog.timelog_id = value;
-            this.journallogService.save(this.journallog);
+            this.journallogService.save(this.journallog).subscribe();
           }
         })
       }
     }
     else if (link === 'open') {
       this.journallog.status = link;
-      this.journallogService.save(this.journallog)
+      this.journallogService.save(this.journallog).subscribe()
     }
     else if (link === 'delayed') {
       this.journallog.status = link;
       this.proposeNewDate();
-      this.journallogService.save(this.journallog)
+      this.journallogService.save(this.journallog).subscribe()
     }
     else if (link === 'started') {
       this.journallog.status = link;
@@ -92,11 +90,11 @@ export class JournallogContextMenuService {
         this.timelogDialogService.logtimeForActivity(this.activity).subscribe(value => {
           if (value !== undefined) {
             this.journallog.timelog_id = value;
-            this.journallogService.save(this.journallog);
+            this.journallogService.save(this.journallog).subscribe();
           }
         })
       }
-      this.journallogService.save(this.journallog)
+      this.journallogService.save(this.journallog).subscribe()
     }
     else if (link === this.editLink) {
       this.openUpdateDialog(this.journallog)

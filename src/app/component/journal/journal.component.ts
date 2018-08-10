@@ -4,7 +4,7 @@ import {JournalLogDetailComponent} from '../journallog-detail/journallog-detail.
 import {Journallog} from '../../domain/journallog';
 import {JournallogService} from '../../service/journallog.service';
 import {JournallogContextMenuService} from '../../service/journallog-contextmenu.service'
-import {Observable} from "rxjs/Rx";
+import { Observable} from 'rxjs';
 import {TimelogService} from '../../service/timelog.service';
 
 @Component({selector: 'my-journal',
@@ -19,9 +19,9 @@ export class JournalComponent {
   constructor(public dialog: MatDialog, private journallogService: JournallogService,
               private journallogContextMenuService: JournallogContextMenuService,
               private timelogService: TimelogService) {
-    this.journallogService.frequencySchedule().then(result => {
+    this.journallogService.frequencySchedule().subscribe(result => {
       this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs);
-      this.getNextNJournallog(new Date());
+      this.getNextNJournallog(new Date(), 5);
       }
     )
   }
@@ -56,7 +56,7 @@ export class JournalComponent {
     let dialogRef = this.dialog.open(JournalLogDetailComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe(journalLog => {
       if (journalLog) {
-        this.journallogService.save(journalLog).then(result =>
+        this.journallogService.save(journalLog).subscribe(result =>
           this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)
         )
       }
@@ -70,16 +70,17 @@ export class JournalComponent {
   }
 
 
-  getNextNJournallog(date: Date) {
+  getNextNJournallog(date: Date, limit: number) {
     let tempDate = date;
     let journallogList: Journallog[];
 
     this.journallogService.getNextJournallog(tempDate).subscribe(jl => {
+        limit -= 1;
         journallogList = jl;
         if (typeof journallogList === 'undefined' || journallogList === null) {
           return;
         }
-        if (journallogList.length === 0) {
+        if (limit === 0 || journallogList.length === 0 ) {
           return;
         }
         tempDate = new Date(journallogList[0].date);
@@ -90,12 +91,12 @@ export class JournalComponent {
         else {
           this.dayLogs.push(jle);
         }
-        this.getNextNJournallog(tempDate);
+        this.getNextNJournallog(tempDate, limit - 1);
       })
     }
 
     schedule() {
-         this.journallogService.schedule(3).then(result =>
+         this.journallogService.schedule(3).subscribe(result =>
            this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs)
          )
     }

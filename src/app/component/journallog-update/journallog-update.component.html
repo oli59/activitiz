@@ -3,21 +3,21 @@
   <table>
     <tr>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="text" disabled placeholder="Name" value="{{journallog.name}}">
-        </mat-input-container>
+        </mat-form-field>
       </td>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="text" disabled placeholder="Status" value="{{journallog.status}}">
-        </mat-input-container>
+        </mat-form-field>
       </td>
     </tr>
     <tr>
       <td>
-        <mat-input-container>
+        <mat-form-field>
           <input matInput type="date" required placeholder="Date" [value]="journallog.date | date:'yyyy-MM-dd'" (input)="journallog.date=parseDate($event.target.value)">
-        </mat-input-container>
+        </mat-form-field>
       </td>
     </tr>
   </table>
