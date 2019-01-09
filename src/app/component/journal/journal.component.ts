@@ -21,7 +21,7 @@ export class JournalComponent {
               private timelogService: TimelogService) {
     this.journallogService.frequencySchedule().subscribe(result => {
       this.journallogService.getTodayJournallog().subscribe(journalogs => this.todayLogs = journalogs);
-      this.getNextNJournallog(new Date(), 5);
+      this.getNextNJournallog(new Date(), 60);
       }
     )
   }
@@ -75,7 +75,6 @@ export class JournalComponent {
     let journallogList: Journallog[];
 
     this.journallogService.getNextJournallog(tempDate).subscribe(jl => {
-        limit -= 1;
         journallogList = jl;
         if (typeof journallogList === 'undefined' || journallogList === null) {
           return;

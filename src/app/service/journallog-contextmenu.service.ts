@@ -123,7 +123,8 @@ export class JournallogContextMenuService {
     dialogRef.afterClosed().subscribe(value => {
       console.log(value);
       if (value) {
-          this.journallogService.save(value)
+          this.journallogService.save(value).subscribe(result => {}
+          )
           //TODO Voir comment mettre à jour le front end (= deplacer les cartes avec la nouvelle carte créée/éditée)
       }
     });
